@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import com.mb.kids_mind.R;
 
 public class SketchMenu extends Fragment {
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -33,6 +32,7 @@ public class SketchMenu extends Fragment {
 			@Override
 			protected void onPostExecute(View result) {
 				ViewPager pager = (ViewPager) result.findViewById(R.id.menu_pager);
+				pager.setOffscreenPageLimit(5);
 				pager.setAdapter(new ScreenSlidePagerAdapter(getFragmentManager()));
 				super.onPostExecute(result);
 			}
