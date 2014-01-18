@@ -1,17 +1,13 @@
 package com.mb.kids_mind;
 
 
-import com.mb.kids_mind.R;
-import com.mb.kids_mind.fragment.SketchMenu;
-import com.mb.kids_mind.listener.MainSideMenuListener;
-
-import android.os.Bundle;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.Menu;
 
 import com.mb.kids_mind.fragment.SketchMenu;
+import com.mb.kids_mind.listener.MainSideMenuListener;
 
 public class MainActivity extends Activity {
 	FragmentManager fm=null;
