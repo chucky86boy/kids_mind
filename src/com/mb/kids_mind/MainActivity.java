@@ -1,19 +1,20 @@
 package com.mb.kids_mind;
 
-import com.mb.kids_mind.R;
-import com.mb.kids_mind.fragment.SketchMenu;
-
-import android.os.Bundle;
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.os.Bundle;
 import android.view.Menu;
 
-public class MainActivity extends Activity {
+import com.mb.kids_mind.fragment.SketchMenu;
 
+public class MainActivity extends Activity {
+	FragmentManager fm=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getFragmentManager().beginTransaction().add(R.id.fragmentHolder,new SketchMenu()).commit();
+        fm=getFragmentManager();
+        fm.beginTransaction().add(R.id.fragmentHolder,new SketchMenu()).commit();
     }
 
 

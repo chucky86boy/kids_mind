@@ -37,7 +37,7 @@ public class SketchMenu extends Fragment {
 				super.onPostExecute(result);
 			}
 			
-		}.execute(view);
+		}.execute(view); 
 		
 		return view ;
 	}
@@ -56,6 +56,7 @@ public class SketchMenu extends Fragment {
 		public Fragment getItem(int position) {
 			SingleSketchMenu frag = new SingleSketchMenu();
 			frag.setPosition(position);
+			
 			return frag;
 		}
 	}	

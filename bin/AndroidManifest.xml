@@ -23,6 +23,7 @@
         </activity>
         <activity android:name="com.mb.kids_mind.MainActivity">
         </activity>
+        <activity android:name=".KidsMindDrawActivity"></activity>
     </application>
 
 </manifest>

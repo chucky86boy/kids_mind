@@ -1,29 +1,43 @@
 package com.mb.kids_mind.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 
 import com.mb.kids_mind.R;
+import com.mb.kids_mind.Dialog.MyDialog;
 
 public class SingleSketchMenu extends Fragment{
+	
 	private int[] menuImage = {R.drawable.menu_01,R.drawable.menu_02,R.drawable.menu_03,R.drawable.menu_04};
 	private int position;
+	Activity activity;
 	
+	FragmentManager fm;
+	MyDialog dialog=new MyDialog();
 	public void setPosition(int position) {
 		this.position = position;
 	}
-
+	 @Override
+		public void onAttach(Activity activity) {
+			this.activity = activity;
+			super.onAttach(activity);
+		}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.menu_sketch, null);
+		activity.getFragmentManager();
 		Display display = getActivity().getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
@@ -31,6 +45,36 @@ public class SingleSketchMenu extends Fragment{
 		LayoutParams layoutParams = imageView.getLayoutParams();
 		layoutParams.height = (int)(size.y * 0.7);
 		imageView.setImageDrawable(getActivity().getResources().getDrawable(menuImage[position]));
+		imageView.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				switch(event.getAction()){
+				case MotionEvent.ACTION_DOWN:
+
+					//doAction(v);
+					break;
+				case MotionEvent.ACTION_UP:
+					switch (position)
+					{
+					case 0:
+						break;
+					case 1:
+						break;
+					case 2:
+						break;
+					case 3:
+						break;
+					}
+					break;
+				case MotionEvent.ACTION_MOVE:
+					
+					break;
+				
+			}
+				return false;
+			}
+		});
 		return view;
 	}
 	
