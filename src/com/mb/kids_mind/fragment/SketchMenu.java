@@ -1,5 +1,6 @@
 package com.mb.kids_mind.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.AsyncTask;
@@ -13,6 +14,12 @@ import android.view.ViewGroup;
 import com.mb.kids_mind.R;
 
 public class SketchMenu extends Fragment {
+	Activity activity;
+	  @Override
+		public void onAttach(Activity activity) {
+			this.activity = activity;
+			super.onAttach(activity);
+		}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

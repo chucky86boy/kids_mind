@@ -36,20 +36,21 @@
         android:layout_height="match_parent"
         android:id="@+id/mainBody">
 
-        <LinearLayout
+        
+    	<FrameLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:id="@+id/fragmentHolder"/>   
+	    <LinearLayout
             android:id="@+id/sideMenu"
             android:layout_width="300px"
             android:layout_height="match_parent"
             android:background="@android:color/darker_gray"
             android:orientation="vertical"
-            android:visibility="visible"
+            android:visibility="invisible"
             tools:ignore="PxUsage" >
             
-        </LinearLayout>
-    	<FrameLayout 
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:id="@+id/fragmentHolder"/>    
+        </LinearLayout> 
     </FrameLayout>
             
 </LinearLayout>
