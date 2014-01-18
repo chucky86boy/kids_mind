@@ -12,6 +12,7 @@
         android:background="@drawable/navi_bar"
         android:gravity="center_vertical">
         <ImageView 
+            android:id="@+id/menuToggler"
             android:contentDescription="@string/menu_toggler_img_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,9 +31,25 @@
             tools:ignore="PxUsage" />
 
     </LinearLayout>
-    
     <FrameLayout 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/fragmentHolder"/>        
+        android:id="@+id/mainBody">
+
+        <LinearLayout
+            android:id="@+id/sideMenu"
+            android:layout_width="300px"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"
+            android:orientation="vertical"
+            android:visibility="visible"
+            tools:ignore="PxUsage" >
+            
+        </LinearLayout>
+    	<FrameLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:id="@+id/fragmentHolder"/>    
+    </FrameLayout>
+            
 </LinearLayout>
