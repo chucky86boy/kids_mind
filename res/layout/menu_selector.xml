@@ -36,6 +36,6 @@
             android:layout_width="230dp"
         	android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal" />
-    </com.example.kids_mind.view.PagerContainer>
+    </com.mb.kids_mind.view.PagerContainer>
 
 </LinearLayout>
