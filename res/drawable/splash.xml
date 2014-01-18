@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:id="@+id/loadingPic" android:oneshot="true"> 
+    <item android:drawable="@drawable/sp_0" android:duration="100" />
+    <item android:drawable="@drawable/sp_1" android:duration="100" />
+    <item android:drawable="@drawable/sp_2" android:duration="100" />
+    <item android:drawable="@drawable/sp_3" android:duration="100" />
+    <item android:drawable="@drawable/sp_4" android:duration="100" />
+    <item android:drawable="@drawable/sp_5" android:duration="100" />
+    <item android:drawable="@drawable/sp_6" android:duration="100" />
+    <item android:drawable="@drawable/sp_7" android:duration="100" />
+    <item android:drawable="@drawable/sp_8" android:duration="100" />
+</animation-list>

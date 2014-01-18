@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_00">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/navi_bar"
+        android:gravity="center_vertical">
+        <ImageView 
+            android:contentDescription="@string/menu_toggler_img_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/menu_toggler"/>
+		<TextView
+		    android:layout_width="0dp"
+		    android:layout_weight="1"
+		    android:layout_height="match_parent"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20px"
+            android:contentDescription="@string/doctor_consult_btn_img_desc"
+            android:src="@drawable/nav_btn02"
+            tools:ignore="PxUsage" />
+
+    </LinearLayout>
+    
+    <FrameLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragmentHolder"/>        
+</LinearLayout>

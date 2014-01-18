@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">kids_mind</string>
+    <string name="action_settings">Settings</string>
+    <string name="splash_img_desc">Splash image for start page</string>
+    <string name="doctor_instruction_img_desc">Doctor image that gives instruction</string>
+    <string name="menu_toggler_img_desc">Menu toggler image for main page</string>
+    <string name="doctor_consult_btn_img_desc">Btn image that triggers to Doctor consulting page</string>
+    <string name="click_to_consult">
+        Kids Mind는 아이의 심리. 정서적 상태에 대한 그림 테스트를 할 수 있는 서비스를 제공합니다.
+                  자세한 상담을 원하시면 저를 눌러 주세요.
+    </string>
+
+</resources>
