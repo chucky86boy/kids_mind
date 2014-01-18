@@ -1,6 +1,6 @@
 package com.mb.kids_mind;
 
-import com.example.kids_mind.R;
+import com.mb.kids_mind.R;
 import com.mb.kids_mind.fragment.SketchMenu;
 
 import android.os.Bundle;

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 
-import com.example.kids_mind.R;
+import com.mb.kids_mind.R;
 
 public class SingleSketchMenu extends Fragment{
 	private int[] menuImage = {R.drawable.menu_01,R.drawable.menu_02,R.drawable.menu_03,R.drawable.menu_04};
