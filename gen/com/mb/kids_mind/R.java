@@ -46,13 +46,16 @@ public final class R {
         public static final int splash=0x7f020016;
     }
     public static final class id {
-        public static final int action_settings=0x7f080006;
-        public static final int fragmentHolder=0x7f080000;
-        public static final int loadingPic=0x7f080005;
-        public static final int menu_pager=0x7f080002;
-        public static final int pager_container=0x7f080001;
-        public static final int singeMenu=0x7f080003;
-        public static final int splashImg=0x7f080004;
+        public static final int action_settings=0x7f080009;
+        public static final int fragmentHolder=0x7f080003;
+        public static final int loadingPic=0x7f080008;
+        public static final int mainBody=0x7f080001;
+        public static final int menuToggler=0x7f080000;
+        public static final int menu_pager=0x7f080005;
+        public static final int pager_container=0x7f080004;
+        public static final int sideMenu=0x7f080002;
+        public static final int singeMenu=0x7f080006;
+        public static final int splashImg=0x7f080007;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
