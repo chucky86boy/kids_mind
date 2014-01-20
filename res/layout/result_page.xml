@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/doctor_instruction_img_desc"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/btn_doctor" />
+    <FrameLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+        	android:layout_height="match_parent"
+       		android:orientation="vertical">
+			<com.mb.kids_mind.view.PagerContainer
+		        android:id="@+id/pager_container"
+		        android:layout_width="match_parent"
+		        android:layout_height="0dp"
+		        android:layout_weight="1"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginBottom="10dp">
+		        <android.support.v4.view.ViewPager
+		            android:id="@+id/menu_pager"
+		            android:layout_width="230dp"
+		        	android:layout_height="wrap_content"
+		            android:layout_gravity="center_horizontal"/>
+	   		</com.mb.kids_mind.view.PagerContainer>
+	   		<TextView 
+	   		    android:layout_width="match_parent"
+	   		    android:layout_height="wrap_content"
+	   		    android:background="@drawable/bg_rp_speaking"
+	   		    android:gravity="center"
+	   		    android:paddingLeft="200px"
+	   		    android:text="현실 접촉이 상실될 지도 모른다는 위기의식을 반영합니다."
+	   		    android:textColor="@android:color/white"
+	   		    android:textSize="14sp"/>
+        </LinearLayout>
+        <ImageView 
+            android:contentDescription="@string/doctor_explain_img_desc"
+            android:layout_gravity="bottom|left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/re_dotor1"/>
+    </FrameLayout>
+
+</LinearLayout>

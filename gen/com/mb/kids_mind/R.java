@@ -28,6 +28,7 @@ public final class R {
     }
     public static final class drawable {
         public static final int albumbtn=0x7f020000;
+<<<<<<< HEAD
         public static final int back=0x7f020001;
         public static final int bg_00=0x7f020002;
         public static final int bg_sketch=0x7f020003;
@@ -193,6 +194,42 @@ public final class R {
         public static final int swatch_yo_on=0x7f0200a3;
         public static final int testimg=0x7f0200a4;
         public static final int undo=0x7f0200a5;
+=======
+        public static final int bg_00=0x7f020001;
+        public static final int bg_rp_speaking=0x7f020002;
+        public static final int box_popup=0x7f020003;
+        public static final int btn_album=0x7f020004;
+        public static final int btn_album_push=0x7f020005;
+        public static final int btn_ca=0x7f020006;
+        public static final int btn_ca_push=0x7f020007;
+        public static final int btn_doctor=0x7f020008;
+        public static final int btn_doctor_balloon=0x7f020009;
+        public static final int btn_paint=0x7f02000a;
+        public static final int btn_paint_push=0x7f02000b;
+        public static final int camerabtn=0x7f02000c;
+        public static final int ic_launcher=0x7f02000d;
+        public static final int menu_01=0x7f02000e;
+        public static final int menu_02=0x7f02000f;
+        public static final int menu_03=0x7f020010;
+        public static final int menu_04=0x7f020011;
+        public static final int menu_toggler=0x7f020012;
+        public static final int nav_btn02=0x7f020013;
+        public static final int navi_bar=0x7f020014;
+        public static final int navi_btn01=0x7f020015;
+        public static final int navi_btn01_on=0x7f020016;
+        public static final int paintbtn=0x7f020017;
+        public static final int re_dotor1=0x7f020018;
+        public static final int sp_0=0x7f020019;
+        public static final int sp_1=0x7f02001a;
+        public static final int sp_2=0x7f02001b;
+        public static final int sp_3=0x7f02001c;
+        public static final int sp_4=0x7f02001d;
+        public static final int sp_5=0x7f02001e;
+        public static final int sp_6=0x7f02001f;
+        public static final int sp_7=0x7f020020;
+        public static final int sp_8=0x7f020021;
+        public static final int splash=0x7f020022;
+>>>>>>> aa0ee766060ded1ba4e3b063f9423e33e9084de1
     }
     public static final class id {
         public static final int LinearLayout1=0x7f090020;
@@ -241,6 +278,7 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
+<<<<<<< HEAD
         public static final int color=0x7f030001;
         public static final int draw=0x7f030002;
         public static final int drawmain=0x7f030003;
@@ -254,11 +292,19 @@ public final class R {
         public static final int scan=0x7f03000b;
         public static final int splash=0x7f03000c;
         public static final int transparent=0x7f03000d;
+=======
+        public static final int menu_selector=0x7f030001;
+        public static final int menu_sketch=0x7f030002;
+        public static final int mydialog=0x7f030003;
+        public static final int result_page=0x7f030004;
+        public static final int splash=0x7f030005;
+>>>>>>> aa0ee766060ded1ba4e3b063f9423e33e9084de1
     }
     public static final class menu {
         public static final int main=0x7f080000;
     }
     public static final class string {
+<<<<<<< HEAD
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
         public static final int click_to_consult=0x7f060006;
@@ -266,6 +312,16 @@ public final class R {
         public static final int doctor_instruction_img_desc=0x7f060003;
         public static final int menu_toggler_img_desc=0x7f060004;
         public static final int splash_img_desc=0x7f060002;
+=======
+        public static final int action_settings=0x7f050001;
+        public static final int app_name=0x7f050000;
+        public static final int click_to_consult=0x7f050007;
+        public static final int doctor_consult_btn_img_desc=0x7f050005;
+        public static final int doctor_explain_img_desc=0x7f050006;
+        public static final int doctor_instruction_img_desc=0x7f050003;
+        public static final int menu_toggler_img_desc=0x7f050004;
+        public static final int splash_img_desc=0x7f050002;
+>>>>>>> aa0ee766060ded1ba4e3b063f9423e33e9084de1
     }
     public static final class style {
         /** 
