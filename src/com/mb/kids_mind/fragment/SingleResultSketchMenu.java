@@ -15,7 +15,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 
 import com.mb.kids_mind.R;
-import com.mb.kids_mind.Dialog.MyDialog;
 
 public class SingleResultSketchMenu extends Fragment{
 	
@@ -24,7 +23,7 @@ public class SingleResultSketchMenu extends Fragment{
 	Activity activity;
 	
 	FragmentManager fm;
-	MyDialog dialog=new MyDialog();
+	//MyDialog dialog=new MyDialog();
 	public void setPosition(int position) {
 		this.position = position;
 	}
