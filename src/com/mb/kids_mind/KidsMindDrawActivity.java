@@ -166,6 +166,8 @@ public class KidsMindDrawActivity extends FragmentActivity {
 				editor.putString("savename", savename);
 				editor.commit();
 				Intent i=new Intent(KidsMindDrawActivity.this,KidsMindAnalyzeActivity.class);
+				i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+				
 				i.putExtra("savename",savename);
 				i.putExtra("where","1");
 				//i.putExtra("img",bitmap2);

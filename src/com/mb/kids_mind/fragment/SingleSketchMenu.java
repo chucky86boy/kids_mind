@@ -12,6 +12,8 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
@@ -19,7 +21,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Images;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Display;
@@ -40,7 +41,7 @@ public class SingleSketchMenu extends Fragment{
 private static final String TAG="MainActivity";
 	private int[] menuImage = {R.drawable.menu_01,R.drawable.menu_02,R.drawable.menu_03,R.drawable.menu_04};
 	private int position;
-
+	public ImageView img; 
 
 	FragmentManager fm;
 	Activity activity;
@@ -49,6 +50,7 @@ private static final String TAG="MainActivity";
 	static Uri uri;
 	String bpath;
 	Dialog dialog;
+	public float iscale;
 	View.OnClickListener bHandler =new View.OnClickListener() {
 
 		@Override
@@ -92,7 +94,7 @@ private static final String TAG="MainActivity";
 				bpath=String.valueOf(System.currentTimeMillis()) + ".jpg";
 				editor.putString("bpath", bpath);
 				editor.commit();
-				String url = "/MindDrawing/" +bpath;
+				String url = "/KidsMind/" +bpath;
 				uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), url));
 
 				intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
@@ -112,6 +114,7 @@ private static final String TAG="MainActivity";
 
 				break;
 			case R.id.picture:
+				
 				Intent i=new Intent(activity,KidsMindDrawActivity.class);
 
 				startActivity(i);
@@ -141,11 +144,13 @@ private static final String TAG="MainActivity";
 		Display display = getActivity().getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
-		ImageView imageView = (ImageView) view.findViewById(R.id.singeMenu);
-		LayoutParams layoutParams = imageView.getLayoutParams();
+		img = (ImageView) view.findViewById(R.id.singeMenu);
+		Log.v(TAG,"iscale"+iscale+"");
+		//img.setScaleX(iscale);
+		LayoutParams layoutParams = img.getLayoutParams();
 		layoutParams.height = (int)(size.y * 0.7);
-		imageView.setImageDrawable(getActivity().getResources().getDrawable(menuImage[position]));
-		imageView.setOnTouchListener(new OnTouchListener() {
+		img.setImageDrawable(getActivity().getResources().getDrawable(menuImage[position]));
+		img.setOnTouchListener(new OnTouchListener() {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -155,6 +160,7 @@ private static final String TAG="MainActivity";
 					//doAction(v);
 					break;
 				case MotionEvent.ACTION_UP:
+					
 					SharedPreferences pref=activity.getSharedPreferences("pref",activity.MODE_PRIVATE);
 					SharedPreferences.Editor editor=pref.edit();
 					editor.putInt("qposition", position);
@@ -216,26 +222,62 @@ private static final String TAG="MainActivity";
 		if(resultCode==activity.RESULT_OK){
 			if(requestCode==0){
 
-				//Uri currImageURI=uri;
+				//Uri currImageURI=data.getData();
 				Intent intent2=new Intent(activity,KidsMindAnalyzeActivity.class);
-				//intent2.setData(currImageURI);
+			//	intent2.setData(currImageURI);
 				String where ="2";
 				intent2.putExtra("where",where);
 				SharedPreferences pref=activity.getSharedPreferences("pref",activity.MODE_PRIVATE);
 				SharedPreferences.Editor editor=pref.edit();
 				String bpath2=pref.getString("bpath", "0");
+				
 				intent2.putExtra("path", bpath2);
+				intent2.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+				
 				startActivity(intent2);
 				dialog.dismiss();
 			}
 			else if(requestCode==1){
 				Uri mImageCaptureUri = data.getData(); // 갤러리에서 선택된 사진의 Uri 리턴
-				try {
-					Log.v(TAG,"1");
-					Bitmap photo = Images.Media.getBitmap(activity.getContentResolver(), mImageCaptureUri);
-					Log.v(TAG,"2");
-					Save(photo,fos);
-					Log.v(TAG,"3");
+				BitmapFactory.Options options =new BitmapFactory.Options(); 
+				options.inJustDecodeBounds=true;
+				String [] proj={MediaStore.Images.Media.DATA};   
+
+			        Cursor cursor =activity.managedQuery( mImageCaptureUri,   
+
+			                proj, // Which columns to return   
+
+			                null,       // WHERE clause; which rows to return (all rows)   
+
+			                null,       // WHERE clause selection arguments (none)   
+
+			                null); // Order-by clause (ascending by name)   
+
+			        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);   
+
+			        cursor.moveToFirst();   
+
+			        
+
+			        mImageCaptureUri = Uri.parse(cursor.getString(column_index)); 
+
+			      String  uploadImagePath = mImageCaptureUri.getEncodedPath(); 
+
+			        Bitmap displayBitmap = BitmapFactory.decodeFile(uploadImagePath, options); 
+
+			      
+			          
+
+			        options = getBitmapSize(options); 
+
+			        displayBitmap = BitmapFactory.decodeFile(uploadImagePath, options); 
+			        Save(displayBitmap,fos);
+			        
+//					Log.v(TAG,"1");
+//					Bitmap photo = Images.Media.getBitmap(activity.getContentResolver(), mImageCaptureUri);
+//					Log.v(TAG,"2");
+//					Save(photo,fos);
+//					Log.v(TAG,"3");
 					Intent intent2=new Intent(activity,KidsMindAnalyzeActivity.class);
 					//intent2.setData(currImageURI);
 					String where ="2";
@@ -245,21 +287,71 @@ private static final String TAG="MainActivity";
 					String bpath2=pref.getString("bpath", "0");
 					intent2.putExtra("path", bpath2);
 					
+					intent2.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 					//Log.v(Debugc.getTagd(),"�̹�����δ� 111111"+bpath2);
 					startActivity(intent2);
 					dialog.dismiss();
 
 					//Bitmap photo = Images.Media.getBitmap(getContentResolver(), mImageCaptureUri); // Uri로 이미지 가져오기
 					//Log.e(TAG, "PICK_FROM_ALBUM : " + photo.getHeight() * photo.getWidth()); // 확인코드
-				} catch (Exception e) {
-					//Log.e(TAG, "PICK_FROM_ALBUM : " + e.toString());
-					return;
-				}
-
+				
 
 			}
 
 		}
+	}
+	public Options getBitmapSize(Options options){ 
+
+        int targetWidth = 0; 
+
+        int targetHeight = 0; 
+
+          
+
+        if(options.outWidth > options.outHeight){     
+
+            targetWidth = (int)(600 * 1.3); 
+
+            targetHeight = 600; 
+
+        }else{ 
+
+            targetWidth = 600; 
+
+            targetHeight = (int)(600 * 1.3); 
+
+        } 
+
+  
+
+        Boolean scaleByHeight = Math.abs(options.outHeight - targetHeight) >= Math.abs(options.outWidth - targetWidth); 
+
+        if(options.outHeight * options.outWidth * 2 >= 16384){ 
+
+            double sampleSize = scaleByHeight 
+
+                ? options.outHeight / targetHeight 
+
+                : options.outWidth / targetWidth; 
+
+            options.inSampleSize = (int) Math.pow(2d, Math.floor(Math.log(sampleSize)/Math.log(2d))); 
+
+        } 
+
+        options.inJustDecodeBounds = false; 
+
+        options.inTempStorage = new byte[16*1024]; 
+
+          
+
+        return options; 
+
+    }
+	public void scaleImage(float scale) {
+		// TODO Auto-generated method stub
+		Log.v(TAG,"scale"+scale+"");
+		this.img.setScaleX(scale);
+		iscale=scale;
 	}
 
 	public void Save(Bitmap mBitmap,OutputStream outstream) {

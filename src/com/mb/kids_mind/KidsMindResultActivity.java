@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -82,7 +84,11 @@ public class KidsMindResultActivity extends Activity {
 
 			//DbUse dbuse=new DbUse(MindDrawingResultActivity.this);
 			//insertRec2(path2, "0");
-			bitmap=BitmapFactory.decodeFile(path2);
+			BitmapFactory.Options options =new BitmapFactory.Options();
+			options.inJustDecodeBounds=true;
+			bitmap=BitmapFactory.decodeFile(path2,options);
+			options =getBitmapSize(options);
+			bitmap=BitmapFactory.decodeFile(path2,options);
 			Log.v(TAG,"이미지를 읽어오기위한 경로2"+path2);
 
 			if(bitmap!=null){
@@ -94,6 +100,53 @@ public class KidsMindResultActivity extends Activity {
 
 		}
 	}
+	 public Options getBitmapSize(Options options){ 
+
+	        int targetWidth = 0; 
+
+	        int targetHeight = 0; 
+
+	          
+
+	        if(options.outWidth > options.outHeight){     
+
+	            targetWidth = (int)(600 * 1.3); 
+
+	            targetHeight = 600; 
+
+	        }else{ 
+
+	            targetWidth = 600; 
+
+	            targetHeight = (int)(600 * 1.3); 
+
+	        } 
+
+	  
+
+	        Boolean scaleByHeight = Math.abs(options.outHeight - targetHeight) >= Math.abs(options.outWidth - targetWidth); 
+
+	        if(options.outHeight * options.outWidth * 2 >= 16384){ 
+
+	            double sampleSize = scaleByHeight 
+
+	                ? options.outHeight / targetHeight 
+
+	                : options.outWidth / targetWidth; 
+
+	            options.inSampleSize = (int) Math.pow(2d, Math.floor(Math.log(sampleSize)/Math.log(2d))); 
+
+	        } 
+
+	        options.inJustDecodeBounds = false; 
+
+	        options.inTempStorage = new byte[16*1024]; 
+
+	          
+
+	        return options; 
+
+	    }
 	void fillSomeData()
 	{		
 		

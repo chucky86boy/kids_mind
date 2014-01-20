@@ -34,6 +34,8 @@ import com.mb.kids_mind.R;
 
 public class SketchMenu extends Fragment {
 	Activity activity;
+	public ViewPager pager; 
+	public ScreenSlidePagerAdapter mPagerAdapter;
 	@Override
 		public void onAttach(Activity activity) {
 			this.activity = activity;
@@ -57,9 +59,10 @@ public class SketchMenu extends Fragment {
 
 			@Override
 			protected void onPostExecute(View result) {
-				ViewPager pager = (ViewPager) result.findViewById(R.id.menu_pager);
+				 pager = (ViewPager) result.findViewById(R.id.menu_pager);
 				pager.setOffscreenPageLimit(5);
-				pager.setAdapter(new ScreenSlidePagerAdapter(getFragmentManager()));
+				mPagerAdapter=new ScreenSlidePagerAdapter(getFragmentManager()); 
+				pager.setAdapter(mPagerAdapter);
 				super.onPostExecute(result);
 			}
 			
@@ -68,7 +71,8 @@ public class SketchMenu extends Fragment {
 		return view ;
 	}
 
-	private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+	public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+		public ViewPager pager2; 
 		public ScreenSlidePagerAdapter(FragmentManager fm) {
 			super(fm);
         }
@@ -86,5 +90,7 @@ public class SketchMenu extends Fragment {
 			return frag;
 		}
 	}
+
+
 	
 }

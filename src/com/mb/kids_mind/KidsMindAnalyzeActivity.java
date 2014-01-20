@@ -1,24 +1,14 @@
 package com.mb.kids_mind;
 
 import android.app.Activity;
-import android.os.Bundle;
-
-
-
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-
-
-
-import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -67,6 +57,7 @@ public class KidsMindAnalyzeActivity extends Activity {
 	private static final int PICK_FROM_ALBUM = 1;
 	private static final int CROP_FROM_CAMERA = 2;
 	LinearLayout linear;
+	ImageView imgView;
 	//private Bitmap photo;
 	private Uri mImageCaptureUri; // 이미지가 있는 곳의 Uri
 
@@ -101,6 +92,8 @@ public class KidsMindAnalyzeActivity extends Activity {
 
 		//	} else{
 		//	mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+
+		popupImage(this);
 		DisplayMetrics metrics = new DisplayMetrics();
 
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -129,11 +122,8 @@ public class KidsMindAnalyzeActivity extends Activity {
 		//	linear.setBackgroundDrawable(bit);
 
 		//	frambg.setBackgroundResource(R.drawable.image);    
-		ImageView imgView = (ImageView) findViewById(R.id.imageView3);
-		imgView.setVisibility(ImageView.VISIBLE);
-		imgView.setBackgroundResource(R.anim.loading2);		
-		AnimationDrawable frameAnimation = (AnimationDrawable) imgView.getBackground();
-		frameAnimation.start();
+	//	imgView = (ImageView) findViewById(R.id.imageView3);
+		
 		img=(ImageView)findViewById(R.id.imageView1);
 
 
@@ -237,6 +227,25 @@ public class KidsMindAnalyzeActivity extends Activity {
 	}
 	// TODO Auto-generated method stub
 	//}
+	
+	void popupImage(Activity context)
+	{
+		// Create dialog
+			final Dialog dialog = new Dialog(context);
+			  dialog.getWindow().setBackgroundDrawable
+
+	             (new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+		dialog.setContentView(R.layout.transparent);
+		dialog.findViewById(R.id.imageView1);
+		dialog.findViewById(R.id.imageView1).setVisibility(ImageView.VISIBLE);
+		dialog.findViewById(R.id.imageView1).setBackgroundResource(R.anim.loading2);
+		
+		AnimationDrawable frameAnimation = (AnimationDrawable) dialog.findViewById(R.id.imageView1).getBackground();
+		frameAnimation.start();
+		//라디오 버튼 
+		dialog.show();
+	}
 	void readimage(String path){
 		if ( Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 			String path2 = Environment.getExternalStorageDirectory()+"/KidsMind/"+path;
@@ -245,7 +254,11 @@ public class KidsMindAnalyzeActivity extends Activity {
 
 			//DbUse dbuse=new DbUse(MindDrawingResultActivity.this);
 			//insertRec2(path2, "0");
-			bitmap=BitmapFactory.decodeFile(path2);
+			BitmapFactory.Options options =new BitmapFactory.Options();
+			options.inJustDecodeBounds=true;
+			bitmap=BitmapFactory.decodeFile(path2,options);
+			options =getBitmapSize(options);
+			bitmap=BitmapFactory.decodeFile(path2,options);
 			Log.v(TAG,"이미지를 읽어오기위한 경로2"+path2);
 
 			if(bitmap!=null){
@@ -258,6 +271,53 @@ public class KidsMindAnalyzeActivity extends Activity {
 
 		}
 	}
+	 public Options getBitmapSize(Options options){ 
+
+	        int targetWidth = 0; 
+
+	        int targetHeight = 0; 
+
+	          
+
+	        if(options.outWidth > options.outHeight){     
+
+	            targetWidth = (int)(600 * 1.3); 
+
+	            targetHeight = 600; 
+
+	        }else{ 
+
+	            targetWidth = 600; 
+
+	            targetHeight = (int)(600 * 1.3); 
+
+	        } 
+
+	  
+
+	        Boolean scaleByHeight = Math.abs(options.outHeight - targetHeight) >= Math.abs(options.outWidth - targetWidth); 
+
+	        if(options.outHeight * options.outWidth * 2 >= 16384){ 
+
+	            double sampleSize = scaleByHeight 
+
+	                ? options.outHeight / targetHeight 
+
+	                : options.outWidth / targetWidth; 
+
+	            options.inSampleSize = (int) Math.pow(2d, Math.floor(Math.log(sampleSize)/Math.log(2d))); 
+
+	        } 
+
+	        options.inJustDecodeBounds = false; 
+
+	        options.inTempStorage = new byte[16*1024]; 
+
+	          
+
+	        return options; 
+
+	    }
 	//	public void getColorRGB(){
 	//		Mat rgba =ex;
 	//		Size sizeRgba =ex.size();
