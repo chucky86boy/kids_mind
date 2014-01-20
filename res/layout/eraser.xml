@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+   
+    android:background="@drawable/dot_pop_up"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="지우개 크기"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#000000" />
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:gravity="center"
+    android:orientation="horizontal" >
+    
+ <Button
+     android:id="@+id/first1"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:background="@drawable/sizeelectbutton"
+     android:height="50dp"
+     android:width="50dp" />
+
+     <Button
+         android:id="@+id/second1"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:background="@drawable/sizeelectbutton1"
+         android:height="50dp"
+         android:width="50dp" />
+    
+      <Button
+          android:id="@+id/third1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/sizeelectbutton2"
+          android:height="50dp"
+          android:width="50dp" />
+    
+       <Button
+           android:id="@+id/forth1"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:background="@drawable/sizeelectbutton3"
+           android:height="50dp"
+           android:width="50dp" />
+    
+
+    
+</LinearLayout>
+    
+</LinearLayout>

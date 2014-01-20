@@ -22,7 +22,6 @@ public class MainActivity extends Activity {
         fm=getFragmentManager();
         fm.beginTransaction().add(R.id.fragmentHolder,new SketchMenu()).commit();
         findViewById(R.id.menuToggler).setOnClickListener(new MainSideMenuListener());
-        getFragmentManager().beginTransaction().add(R.id.fragmentHolder,new SketchMenu()).commit();
     }
 
 

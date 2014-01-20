@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/swatch_pop_up_2"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="20dp" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="색"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+ <Button
+     android:id="@+id/first"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     
+     android:background="@drawable/colorselectbutton1"
+     android:height="50dp"
+     android:width="50dp" />
+
+ <Button
+     android:id="@+id/second"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:background="@drawable/colorselectbutton1"
+     android:height="50dp"
+     android:width="50dp" />
+    
+      <Button
+          android:id="@+id/third"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/colorselectbutton2"
+          android:height="50dp"
+          android:width="50dp" />
+    
+       <Button
+           android:id="@+id/forth"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:background="@drawable/colorselectbutton3"
+           android:height="50dp"
+           android:width="50dp" />
+    
+        <Button
+            android:id="@+id/fifth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/colorselectbutton4"
+            android:height="50dp"
+            android:width="50dp" />
+    
+</LinearLayout>
+    
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_margin="5dp"
+               android:gravity="center"
+               android:orientation="horizontal" >
+
+ <Button
+     android:id="@+id/first1"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:background="@drawable/colorselectbutton5"
+     android:height="50dp"
+     android:width="50dp" />
+
+     <Button
+         android:id="@+id/second1"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:background="@drawable/colorselectbutton6"
+         android:height="50dp"
+         android:width="50dp" />
+    
+      <Button
+          android:id="@+id/third1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/colorselectbutton7"
+          android:height="50dp"
+          android:width="50dp" />
+    
+       <Button
+           android:id="@+id/forth1"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:background="@drawable/colorselectbutton8"
+           android:height="50dp"
+           android:width="50dp" />
+    
+        <Button
+            android:id="@+id/fifth1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/colorselectbutton9"
+            android:height="50dp"
+            android:width="50dp" />
+    
+</LinearLayout>
+    
+    </LinearLayout>
