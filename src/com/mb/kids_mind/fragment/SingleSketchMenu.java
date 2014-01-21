@@ -132,8 +132,7 @@ private static final String TAG="MainActivity";
 		this.activity = activity;
 		dialog=new Dialog(activity);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setCancelable(false);
-		dialog.setCanceledOnTouchOutside(false);
+	
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 		super.onAttach(activity);

@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
@@ -227,7 +228,30 @@ public class KidsMindAnalyzeActivity extends Activity {
 	}
 	// TODO Auto-generated method stub
 	//}
-	
+	 
+	@Override 
+
+
+	 public boolean onKeyDown(int keyCode, KeyEvent event) { 
+
+
+	     switch (keyCode) { 
+
+
+	     case KeyEvent.KEYCODE_BACK: 
+
+
+	         return true; 
+
+
+	     } 
+
+
+	     return super.onKeyDown(keyCode, event); 
+
+
+	 } 
+
 	void popupImage(Activity context)
 	{
 		// Create dialog
@@ -235,7 +259,8 @@ public class KidsMindAnalyzeActivity extends Activity {
 			  dialog.getWindow().setBackgroundDrawable
 
 	             (new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
+				dialog.setCancelable(false);
+				dialog.setCanceledOnTouchOutside(false);
 		dialog.setContentView(R.layout.transparent);
 		dialog.findViewById(R.id.imageView1);
 		dialog.findViewById(R.id.imageView1).setVisibility(ImageView.VISIBLE);

@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.mb.kids_mind.Adapter.SiteAdapter;
 import com.mb.kids_mind.Item.KidsMindResultItem;
+import com.mb.kids_mind.listener.KidsMindCheckListener;
 
 public class KidsMindResultActivity extends Activity {
 	static final String TAG="TAG";
@@ -62,6 +63,7 @@ public class KidsMindResultActivity extends Activity {
 		btn.setOnClickListener(bHandler);
 		siteListView = (ListView) findViewById(R.id.listView1);
 		siteListView.setDivider(null);
+		
         adapter =new SiteAdapter(KidsMindResultActivity.this, R.layout.resultlist, siteList);
         // Assign adapter to HorizontalListView
         siteListView.setAdapter(adapter);

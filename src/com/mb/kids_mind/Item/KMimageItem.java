@@ -11,6 +11,13 @@ public class KMimageItem implements Serializable {
 
 	String sort;
 	int imgres;
+	int position;
+	public int getPosition() {
+		return position;
+	}
+	public void setPosition(int position) {
+		this.position = position;
+	}
 	boolean flag;
 	public int getImgres() {
 		return imgres;

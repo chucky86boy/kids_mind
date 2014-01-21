@@ -65,7 +65,7 @@ public class KidsMindDrawActivity extends FragmentActivity {
 			case R.id.penBtn:
 				MyDialogpen dialog2=new MyDialogpen();
 				dialog2.show(fm, "bbb");
-
+   
               MyDialogpen.listener = new OnPenSelectedListener() { 
                     public void onPenSelected(int size) { 
                         mSize = size; 
