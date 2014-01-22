@@ -94,7 +94,7 @@ public class KidsMindAnalyzeActivity extends Activity {
 		//	} else{
 		//	mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
 
-		popupImage(this);
+		popupImage(KidsMindAnalyzeActivity.this);
 		DisplayMetrics metrics = new DisplayMetrics();
 
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);

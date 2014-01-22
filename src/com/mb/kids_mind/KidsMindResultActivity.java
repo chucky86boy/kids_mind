@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.mb.kids_mind.Adapter.SiteAdapter;
 import com.mb.kids_mind.Item.KidsMindResultItem;
-import com.mb.kids_mind.listener.KidsMindCheckListener;
+
 
 public class KidsMindResultActivity extends Activity {
 	static final String TAG="TAG";

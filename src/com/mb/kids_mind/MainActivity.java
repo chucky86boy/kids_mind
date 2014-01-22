@@ -3,6 +3,7 @@ package com.mb.kids_mind;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -18,6 +19,14 @@ public class MainActivity extends Activity {
         fm=getFragmentManager();
         fm.beginTransaction().add(R.id.fragmentHolder,new SketchMenu()).commit();
         findViewById(R.id.menuToggler).setOnClickListener(new MainSideMenuListener());
+        SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
+		SharedPreferences.Editor editor=pref.edit();
+		editor.putInt("abs", 0);
+		editor.putString("list", "");
+		editor.putInt("temp", 0);
+		editor.commit();
+		
+		
     }
 
 
