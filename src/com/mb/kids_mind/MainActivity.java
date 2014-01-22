@@ -13,7 +13,9 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -24,12 +26,16 @@ import com.mb.kids_mind.listener.MainSideMenuListener;
 
 public class MainActivity extends Activity {
 	FragmentManager fm=null;
-   @Override
+	SQLiteDatabase db;
+	KidsMindDBHelper myDbHelper=null;
+    private static final String TAG="MainActivity";
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         fm=getFragmentManager();
         fm.beginTransaction().add(R.id.fragmentHolder,new SketchMenu()).commit();
+        
         findViewById(R.id.menuToggler).setOnClickListener(new MainSideMenuListener());
 //        findViewById(R.id.linear).setOnTouchListener(new OnTouchListener() {
 //			
@@ -59,21 +65,21 @@ public class MainActivity extends Activity {
 		editor.putString("list", "");
 		editor.putInt("temp", 0);
 		editor.commit();
-		KidsMindDBHelper myDbHelper=new KidsMindDBHelper(MainActivity.this);
+		 myDbHelper=new KidsMindDBHelper(MainActivity.this);
 		try{
 			myDbHelper.createDataBase();
 		}catch(IOException ioe){
 			throw new Error("error");
 		}
-		try{
-			myDbHelper.openDataBase();
-		}catch(SQLException sqle){
-			throw sqle;
-		}
+//		try{
+//			myDbHelper.openDataBase();
+//		}catch(SQLException sqle){
+//			throw sqle;
+//		}
 //		if(!checkDB(MainActivity.this)){
 //			dumpDB(MainActivity.this);
 //		}
-		
+		//selectAll();
     }
 //   public boolean checkDB(Context mContext){
 //
@@ -85,7 +91,30 @@ public class MainActivity extends Activity {
 //
 //}
 
-
+	void selectAll(){
+		openDB();
+		//諛⑸쾿 1
+		String sql ="select * from km_question_detail;";
+		Cursor c=null;
+		try{
+			c=db.rawQuery(sql, null);
+			Log.v(TAG,"숫자:"+c.getCount());
+			while(c.moveToNext()){
+				//c.getString(c.getColumnIndex("question_id"));
+			Log.v(TAG, c.getString(0)+ c.getString(1)+ c.getString(2)+c.getString(3)+c.getString(4));
+				//	c.getString(0);
+			}
+			
+			
+		}catch(SQLException e){
+		}finally{
+			if(c!=null){
+			c.close();
+			}
+		}
+		
+		closeDB();
+	}
 
 // Dump DB
 
@@ -175,7 +204,18 @@ public void dumpDB(Context mContext){
 
 }
 
-
+void openDB(){
+//	db = openOrCreateDatabase("sample.db", wi, null);
+	db = myDbHelper.getWritableDatabase();
+}
+// dbClose();
+void closeDB(){
+	if(db != null){
+		if(db.isOpen()){
+			db.close();
+		}
+	}
+}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-   android:id="@+id/linear"
-    android:layout_width="match_parent"
+    android:id="@+id/linear"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:background="@drawable/bg_00"
     android:orientation="vertical" >
@@ -15,10 +15,11 @@
 
         <CheckBox
             android:id="@+id/menuToggler"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/menu_toggler_img_desc"
-            android:button="@drawable/menu_toggler" />
+            android:button="@drawable/menu_toggler"
+            />
+
     </LinearLayout>
 
     <FrameLayout

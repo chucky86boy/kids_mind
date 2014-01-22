@@ -3,6 +3,7 @@ package com.mb.kids_mind;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
@@ -126,8 +127,18 @@ public class KidsMindAnalyzeActivity extends Activity {
 	//	imgView = (ImageView) findViewById(R.id.imageView3);
 		
 		img=(ImageView)findViewById(R.id.imageView1);
-
-
+		SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
+		SharedPreferences.Editor editor =pref.edit();
+		editor.putString("list", "");
+		editor.putString("list2", "");
+		editor.putString("list3", "");
+		editor.putString("list4", "");
+		editor.putString("list5", "");
+		editor.putString("list6", "");
+		editor.putString("list7", "");
+		editor.putString("list8", "");
+		editor.putString("list9", "");
+		editor.commit();
 		Animation ani =null;
 		ani = new TranslateAnimation(0, width, 0, 0);
 		ani.setDuration(2500);
