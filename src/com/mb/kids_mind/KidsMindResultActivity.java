@@ -29,6 +29,7 @@ public class KidsMindResultActivity extends Activity {
 	ArrayList<KidsMindResultItem> siteList = new ArrayList<KidsMindResultItem>();
 	ListView siteListView;
    SiteAdapter adapter;
+   String savename;
 	
 	View.OnClickListener bHandler = new View.OnClickListener() {
 		
@@ -37,7 +38,9 @@ public class KidsMindResultActivity extends Activity {
 			// TODO Auto-generated method stub
 			switch(v.getId()){
 			case R.id.button1:
-				Intent in =new Intent(KidsMindResultActivity.this,KidsMindDrawActivity.class);
+				Intent in =new Intent(KidsMindResultActivity.this,KidsMindTotalResultActivity.class);
+				in.putExtra("savename",savename);
+				in.putExtra("where","1");
 				startActivity(in);
 			break;
 			case R.id.button2:
@@ -56,9 +59,9 @@ public class KidsMindResultActivity extends Activity {
 		//if("1".equals(intent.getStringExtra("where"))){
 		// Bitmap bit=intent.getParcelableExtra("img");
 		// img.setImageBitmap(bit);
-		String image_id=intent.getStringExtra("savename");
+		savename=intent.getStringExtra("savename");
 
-		readimage(image_id);
+		readimage(savename);
 		
 		btn.setOnClickListener(bHandler);
 		siteListView = (ListView) findViewById(R.id.listView1);

@@ -13,12 +13,13 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.mb.kids_mind.R;
 
 public class SingleResultSketchMenu extends Fragment{
 	
-	int[] menuImage;
+	int[] menuImage={R.drawable.d001,R.drawable.d002,R.drawable.d004,R.drawable.d003};
 	private int position;
 	Activity activity;
 	
@@ -35,14 +36,16 @@ public class SingleResultSketchMenu extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.menu_sketch, null);
+		View view = inflater.inflate(R.layout.result_sketch, null);
 		activity.getFragmentManager();
 		Display display = getActivity().getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
 		ImageView imageView = (ImageView) view.findViewById(R.id.singeMenu);
+		TextView title=(TextView)view.findViewById(R.id.resulttitle);
+		
 		LayoutParams layoutParams = imageView.getLayoutParams();
-		layoutParams.height = (int)(size.y * 0.7);
+		//layoutParams.height = (int)(size.y * 0.7);
 		imageView.setImageDrawable(getActivity().getResources().getDrawable(menuImage[position]));
 		imageView.setOnTouchListener(new OnTouchListener() {
 			

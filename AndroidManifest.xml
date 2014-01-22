@@ -32,6 +32,7 @@
         <activity android:name=".KidsMindDrawActivity"></activity>
         <activity android:name="KidsMindAnalyzeActivity"></activity>
         <activity android:name="KidsMindResultActivity"></activity>
+        <activity android:name="KidsMindTotalResultActivity"></activity>
     </application>
 
 </manifest>

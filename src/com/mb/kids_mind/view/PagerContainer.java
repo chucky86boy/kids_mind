@@ -22,13 +22,21 @@
  */
 package com.mb.kids_mind.view;
 
+import com.mb.kids_mind.KidsMindTotalResultActivity;
+import com.mb.kids_mind.Dialog.MyDialogColor;
+import com.mb.kids_mind.listener.OnColorSelectedListener;
+import com.mb.kids_mind.listener.PageChagedListener;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
  
 /**
  * PagerContainer: A layout that displays a ViewPager with its children that are outside
@@ -38,10 +46,15 @@ public class PagerContainer extends FrameLayout implements ViewPager.OnPageChang
  
     private ViewPager mPager;
     boolean mNeedsRedraw = false;
- 
-    public PagerContainer(Context context) {
+    private int currentPage;
+    ImageView img;
+    SharedPreferences pref;
+    public PagerContainer(Context context,ImageView image) {
         super(context);
+        img=image;
         init();
+         pref=context.getSharedPreferences("pref",context.MODE_PRIVATE);
+		
     }
  
     public PagerContainer(Context context, AttributeSet attrs) {
@@ -109,9 +122,35 @@ public class PagerContainer extends FrameLayout implements ViewPager.OnPageChang
         //Without this the outer pages render initially and then stay static
         if (mNeedsRedraw) invalidate();
     }
- 
+ private static final String TAG="MainActivity";
+ public static PageChagedListener listener;
     @Override
-    public void onPageSelected(int position) { }
+    public void onPageSelected(int position) { 
+    	Log.v(TAG,"poposisition"+position);
+    	if (PagerContainer.listener != null) {
+    		//	Log.v(d.getTaga(),"������ Į��"+color+"");
+    		PagerContainer.listener.onPageChange(position);
+    		}
+//    	if(img!=null){
+//    	switch(position){
+//		case 0:
+//			img.setImageResource(R.drawable.re_dotor1);
+//			break;
+//		case 1:img.setImageResource(R.drawable.re_dotor2);
+//			break;
+//		case 2:
+//			img.setImageResource(R.drawable.re_dotor2);
+//			break;
+//		case 3:
+//			img.setImageResource(R.drawable.re_dotor1);
+//			break;
+//		}
+//    	}
+	}
+    
+    public int getCurrentPage(){
+    	return currentPage;
+    }
  
     @Override
     public void onPageScrollStateChanged(int state) {
