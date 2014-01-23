@@ -1,9 +1,14 @@
 package com.mb.kids_mind;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
@@ -12,16 +17,14 @@ import android.os.Environment;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mb.kids_mind.Dialog.MyDialogColor;
+import com.mb.kids_mind.Helper.KidsMindDBHelper;
+import com.mb.kids_mind.Helper.MyHelper;
+import com.mb.kids_mind.Item.DetailListItem;
 import com.mb.kids_mind.fragment.SingleResultSketchMenu;
-import com.mb.kids_mind.fragment.SingleSketchMenu;
-import com.mb.kids_mind.listener.OnColorSelectedListener;
 import com.mb.kids_mind.listener.PageChagedListener;
 import com.mb.kids_mind.view.PagerContainer;
 
@@ -31,6 +34,13 @@ public class KidsMindTotalResultActivity extends Activity {
 	public ScreenSlidePagerAdapter mPagerAdapter;
 	private ImageView img,drawimage;
 	private int currentPage;
+	private MyHelper helper;
+	private KidsMindDBHelper khelper;
+	SQLiteDatabase db,db2;
+	private String detail_id;
+	private ArrayList<DetailListItem>list=new ArrayList<DetailListItem>() ;
+	DetailListItem item;
+	TextView contents;
 	boolean mNeedsRedraw = false;
 	/** Called when the activity is first created. */
 	@Override
@@ -39,13 +49,29 @@ public class KidsMindTotalResultActivity extends Activity {
 	    setContentView(R.layout.result_page);
 	    img=(ImageView)findViewById(R.id.doctor);
 		drawimage=(ImageView)findViewById(R.id.drawimage);
-	    Intent intent=getIntent();
+	    contents=(TextView)findViewById(R.id.contents);
+		Intent intent=getIntent();
 		//if("1".equals(intent.getStringExtra("where"))){
 		// Bitmap bit=intent.getParcelableExtra("img");
 		// img.setImageBitmap(bit);
+	   khelper=new KidsMindDBHelper(KidsMindTotalResultActivity.this);
+		helper = new MyHelper(this, "kidsmind.db", null, 1);
 		String image_id=intent.getStringExtra("savename");
 
 		readimage(image_id);
+		selectAll(image_id);
+		
+		String[] detail=detail_id.split(",");
+		for(String cha:detail){
+			Log.v(TAG,"자른아이디"+cha);
+			selectDb(cha);
+
+		}
+		if(list.size()!=0)
+		contents.setText(list.get(0).getDetail_content());
+		Log.v(TAG,"here");
+		
+		
        // TODO Auto-generated method stub
 	    pager = (ViewPager)findViewById(R.id.menu_pager);
 		pager.setOffscreenPageLimit(5);
@@ -57,20 +83,16 @@ public class KidsMindTotalResultActivity extends Activity {
 			
 			@Override
 			public void onPageChange(int position) {
-			
+			DetailListItem ditem= list.get(position);
+			contents.setText(ditem.getDetail_content());
 				Log.v(TAG,"position listener"+position);
-				switch(position){
+				switch(position%2){
 				case 0:
 					img.setImageResource(R.drawable.re_dotor1);
 					break;
 				case 1:img.setImageResource(R.drawable.re_dotor2);
 					break;
-				case 2:
-					img.setImageResource(R.drawable.re_dotor2);
-					break;
-				case 3:
-					img.setImageResource(R.drawable.re_dotor1);
-					break;
+				
 				}
 		
 				}
@@ -115,6 +137,92 @@ public class KidsMindTotalResultActivity extends Activity {
 //			
 //			
 //		});
+	}
+	public void selectDb(String cha){
+
+		openDB();
+		//Log.v(TAG,"dbopen");
+		//String sql ="select tag_name from md_question_tag where question_id=Q"+po+";";
+		Cursor c=null;
+		String wStr="detail_id=?";
+		String[] wherStr={cha};
+		String[] colNames={"detail_image","detail_title","detail_content"};
+		
+		try{
+			c=db2.query("km_question_detail", colNames, wStr, wherStr, null, null, null);
+			//c=db.rawQuery(sql, null);
+			while(c.moveToNext()){
+				item=new DetailListItem();
+				item.setDetail_image(c.getString(c.getColumnIndex("detail_image")));
+				item.setDetail_tilte(c.getString(c.getColumnIndex("detail_title")));
+				item.setDetail_content(c.getString(c.getColumnIndex("detail_content")));
+				list.add(item);
+				Log.v(TAG,"listsize"+list.size()+"");
+				//titem=new TagList();
+				/*titem.setTag_id(c.getString(c.getColumnIndex("tag_id")));
+					titem.setTag_name(c.getString(c.getColumnIndex("tag_name")));
+					tlist.add(titem);
+				 */
+				
+				//Log.v(Debugc.getTaga(), c.getString(0)+ c.getString(1)+ c.getString(2)+c.getString(3)+c.getString(4));
+				//	c.getString(0);
+			}
+			}catch(SQLException e){
+				Log.v(TAG,"selec error"+e);
+			}finally{
+				Log.v(TAG,"dbopen3");
+				closeDB();
+				if(c!=null){
+					c.close();
+				}
+			}
+		}
+
+	public void selectAll(String image){
+		openDB();
+	
+		//String sql ="select tag_name from md_question_tag where question_id=Q"+po+";";
+		Cursor c=null;
+		String wStr="fName=?";
+		String[] wherStr={image};
+		String[] colNames={"fName","detail_id","detail_check"};
+		try{
+			c=db.query("km_check", colNames, wStr, wherStr, null, null, null);
+			while(c.moveToNext()){
+			detail_id=c.getString(c.getColumnIndex("detail_id"));
+			Log.v(TAG,"detail_id DB"+detail_id);
+			}
+
+
+
+		}catch(SQLException e){
+			Log.v(TAG,"selec error"+e);
+		}finally{
+			if(c!=null){
+				c.close();
+			}
+		}
+		
+
+	}
+	public void openDB() {
+		// db = openOrCreateDatabase("sample.db", wi, null);
+		db2 = khelper.getWritableDatabase();
+		db=helper.getWritableDatabase();
+	}
+
+	// dbClose();
+	public void closeDB() {
+		if (db2 != null) {
+			if (db2.isOpen()) {
+				db2.close();
+			}
+		}
+		if (db != null) {
+			if (db.isOpen()) {
+				db.close();
+			}
+		}
 	}
 	Bitmap bitmap;
 	void readimage(String path){
@@ -197,7 +305,7 @@ public class KidsMindTotalResultActivity extends Activity {
 	
         @Override
         public int getCount() {
-            return 4;
+            return list.size();
         }
 
 		@Override
@@ -205,17 +313,12 @@ public class KidsMindTotalResultActivity extends Activity {
 		
 		
 			SingleResultSketchMenu frag = new SingleResultSketchMenu();
-			
+			frag.setData(list);
 			frag.setPosition(position);
 			
 			return frag;
 		}
 
-		@Override
-		public int getItemPosition(Object object) {
-			// TODO Auto-generated method stub
-			Log.v(TAG,"getItemposition"+super.getItemPosition(object)+"");
-			return super.getItemPosition(object);
-		}
+		
 	}
 }

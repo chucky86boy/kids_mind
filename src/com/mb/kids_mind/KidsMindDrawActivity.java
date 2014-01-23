@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -159,12 +161,17 @@ public class KidsMindDrawActivity extends FragmentActivity {
 				
 				
 			case R.id.transfor://����Ʈ �ѱ��
-				Bitmap bitmap2=board.Save(fos);
+				
+				//ft(R.id.boardLayout, frag5);
+				
+		        Bitmap bitmap2=board.Save(fos);
 				savename=board.startActivity();
 				SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
 				SharedPreferences.Editor editor=pref.edit();
 				editor.putString("savename", savename);
 				editor.commit();
+				
+				
 				Intent i=new Intent(KidsMindDrawActivity.this,KidsMindAnalyzeActivity.class);
 				i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				
@@ -172,7 +179,7 @@ public class KidsMindDrawActivity extends FragmentActivity {
 				i.putExtra("where","1");
 				//i.putExtra("img",bitmap2);
 				startActivity(i);
-			
+				
 				
 				
 				break;
@@ -186,7 +193,7 @@ public class KidsMindDrawActivity extends FragmentActivity {
     LinearLayout addedLayout; 
     Button colorLegendBtn; 
     TextView sizeLegendTxt; 
-  
+    FragmentTransaction ft;
     int mColor = 0xff000000; 
     int mSize = 2; 
     int oldColor; 
@@ -196,14 +203,20 @@ public class KidsMindDrawActivity extends FragmentActivity {
     boolean eraserSelected = false; 
     FileOutputStream fos;
 
-    /** Called when the activity is first created. */
+    
+
+
+
+
+
+	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState); 
         this.overridePendingTransition(0, 0);
 
         setContentView(R.layout.drawmain); 
-        fm=getSupportFragmentManager();
+        
         //LinearLayout toolsLayout = (LinearLayout) findViewById(R.id.toolsLayout); 
        // LinearLayout boardLayout = (LinearLayout) findViewById(R.id.boardLayout); 
         fram=(FrameLayout)findViewById(R.id.boardLayout);
@@ -226,8 +239,8 @@ public class KidsMindDrawActivity extends FragmentActivity {
         // RadioButton referenced 
         frag5=new DrawFragment();
         board=new BestPaintBoard(this);
-        
-        FragmentTransaction ft =fm.beginTransaction();
+        fm=getSupportFragmentManager();
+        ft =fm.beginTransaction();
         ft.add(R.id.boardLayout, frag5);
         ft.commit();
         
@@ -284,7 +297,49 @@ public class KidsMindDrawActivity extends FragmentActivity {
      
   
   
-    public int getChosenColor() { 
+    @Override
+	protected void onPause() {
+    	((ViewGroup)(board.getParent())).removeView(board);
+    	Log.v(TAG,"activityonpause");
+    	fm=getSupportFragmentManager();
+        ft =fm.beginTransaction();
+        ft.remove(frag5);
+        ft.commit();
+        
+		super.onPause();
+	}
+
+
+
+
+
+	@Override
+	protected void onDestroy() {
+		Log.v(TAG,"activityondestory");
+		super.onDestroy();
+	}
+
+
+
+
+
+	@Override
+	protected void onResume() {
+    	frag5=new DrawFragment();
+        board=new BestPaintBoard(this);
+        fm=getSupportFragmentManager();
+        ft =fm.beginTransaction();
+        ft.add(R.id.boardLayout, frag5);
+        ft.commit();
+        
+		super.onResume();
+	}
+
+
+
+
+
+	public int getChosenColor() { 
         return mColor; 
     } 
   
@@ -304,13 +359,7 @@ public class KidsMindDrawActivity extends FragmentActivity {
 
 
 
-*//**
- * �ձ۾��� ���ų� ��ġ�� �׸��� �׸� �� �ִ� ����Ʈ���带 ����� ��� ���� �� �� �ֽ��ϴ�.
- * �ڵ�� �ܰ躰�� �����˴ϴ�. ���� ���� ��Ƽ��Ƽ�� �ܰ躰�� �����غ� �� �ִ� ��ư�� �ֽ��ϴ�.
- * 
- * @author Mike
- *
- *//*
+
 public class BestPaintBoardActivity extends Activity {
  
 	 */

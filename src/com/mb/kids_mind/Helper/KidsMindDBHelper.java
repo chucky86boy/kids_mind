@@ -8,9 +8,9 @@ import java.io.OutputStream;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class KidsMindDBHelper extends SQLiteOpenHelper {
 
@@ -24,7 +24,7 @@ public class KidsMindDBHelper extends SQLiteOpenHelper {
 
  
 
-    private SQLiteDatabase myDataBase; 
+    public SQLiteDatabase myDataBase; 
 
  
 
@@ -64,8 +64,8 @@ public class KidsMindDBHelper extends SQLiteOpenHelper {
 
  
 
-    	boolean dbExist = checkDataBase();
-
+    //	boolean dbExist = checkDataBase();
+boolean dbExist =false;
  
 
     	if(dbExist){
@@ -117,7 +117,7 @@ public class KidsMindDBHelper extends SQLiteOpenHelper {
      * @return true if it exists, false if it doesn't
 
      */
-
+private static final String TAG="MainActivity";
     private boolean checkDataBase(){
 
  
@@ -136,7 +136,7 @@ public class KidsMindDBHelper extends SQLiteOpenHelper {
 
     	}catch(SQLiteException e){
 
- 
+    		Log.v(TAG,"erroer"+e);
 
     		//database does't exist yet.
 
@@ -234,7 +234,7 @@ public class KidsMindDBHelper extends SQLiteOpenHelper {
 
     	myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
 
- 
+    	
 
     }
 

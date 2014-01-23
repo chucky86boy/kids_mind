@@ -66,10 +66,12 @@ public class MainActivity extends Activity {
 		editor.putInt("temp", 0);
 		editor.commit();
 		 myDbHelper=new KidsMindDBHelper(MainActivity.this);
+		 
 		try{
 			myDbHelper.createDataBase();
+			closeDB();
 		}catch(IOException ioe){
-			throw new Error("error");
+			Log.v(TAG,"error"+ioe);
 		}
 //		try{
 //			myDbHelper.openDataBase();

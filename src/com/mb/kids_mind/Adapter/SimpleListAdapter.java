@@ -46,18 +46,19 @@ public class SimpleListAdapter extends BaseAdapter {
 	ArrayList<DetailListItem> list;
 	ArrayList<KidsMindFlagItem> checkflag;
 	Hashtable<String,Integer>map=new Hashtable<String,Integer>();
-public int temp,si;
-SharedPreferences pref;
-SharedPreferences.Editor editor;
+	public int temp,si;
+	SharedPreferences pref;
+	SharedPreferences.Editor editor;
 
 
 	int layout;
 	int size;
 	String a=null;
-	List<Integer> list0,list1,list2,tempList,list3,list4,list5,list6,list7,list8;
-			public SimpleListAdapter(Context context, int layout,ArrayList<DetailListItem> list,int size) {
-	
-				this.mContext = context;
+	List<Integer> list0,list1,list2,list3,list4,list5,list6,list7,list8;
+	List<String> checklist;
+	public SimpleListAdapter(Context context, int layout,ArrayList<DetailListItem> list,int size) {
+
+		this.mContext = context;
 		this.layout = layout;
 		this.list=list;
 		this.size=size;
@@ -71,14 +72,14 @@ SharedPreferences.Editor editor;
 		list6=new ArrayList<Integer>();
 		list7=new ArrayList<Integer>();
 		list8=new ArrayList<Integer>();
-		tempList=new ArrayList<Integer>();
-		 pref=mContext.getSharedPreferences("pref",mContext.MODE_PRIVATE);
-		 setHashMap();
+		
+		pref=mContext.getSharedPreferences("pref",mContext.MODE_PRIVATE);
+		setHashMap();
 	}
 
 
 
-	
+
 
 
 
@@ -117,7 +118,7 @@ SharedPreferences.Editor editor;
 		ViewHolder holder = null;
 		final DetailListItem contents=list.get(position);
 
-		SharedPreferences pref=mContext.getSharedPreferences("pref",mContext.MODE_PRIVATE);
+		final SharedPreferences pref=mContext.getSharedPreferences("pref",mContext.MODE_PRIVATE);
 		final SharedPreferences.Editor editor=pref.edit();
 		if (cView == null) {
 			//cView=View.inflate(mContext, layout,null);
@@ -127,46 +128,91 @@ SharedPreferences.Editor editor;
 			holder.title=(Button)cView.findViewById(R.id.checkBox1);
 			holder.sort=(TextView)cView.findViewById(R.id.textView1);
 			holder.sort.setTextColor(0xff000000);
-			
+
 			cView.setTag(holder);
-		//	Log.v(TAG,"cvew==null");
+			//	Log.v(TAG,"cvew==null");
 		} else {
-			
+
 			holder = (ViewHolder) cView.getTag();
-		//	Log.v(TAG,"cvew!=null");
+			//	Log.v(TAG,"cvew!=null");
 		}
 		if(contents.isFlag()){
 			holder.sort.setTextColor(0xffffffff);
 		}else{
 			holder.sort.setTextColor(0xff000000);
-			
+
 		}
-		
+
 		holder.sort.setText(contents.getDetail_tilte());
 		String image = contents.getDetail_image();
 		//String ImageUrl = Const.QUESTION_IMAGE_PATH;
 		Integer key=map.get(image);
 		if(key!=null){
-			
+
 			holder.frame.setBackgroundResource((int)key);
-				
+
 		}else
 			holder.frame.setBackgroundResource(R.drawable.box_thumbnail);
-//		holder.frame.setBackgroundResource(contents.getImgres());
+		//		holder.frame.setBackgroundResource(contents.getImgres());
 
-		
+
 		holder.title.setOnClickListener(new OnClickListener() {
 
-			
+
 			@Override
 			public void onClick(View view) {
 				contents.setFlag(!contents.isFlag());
 				if(contents.isFlag()){
-					
-					switch (contents.getPosition()){
-				case 0:
+					//먼저 불러와서 시작
+					String checkedlist = pref.getString("checked", "");
+					//holder.itemAdapter.list0.clear();
+					//list0.clear();
+				checklist = new ArrayList<String>();
+					String[] detail = checkedlist.split(",");
+					for (String cha : detail) {
+						Log.v(TAG, "자른아이디0" + cha);
+						try {
 							
-					 int size =list0.size();
+							checklist.add(cha);
+						} catch (Exception e) {
+							checklist.removeAll(checklist);
+						}
+						
+
+					}
+					
+					
+					
+					
+					int checksize=checklist.size();
+					
+					
+					if(checksize!=0){
+						for(int i=1;i<size+1;i++){
+							if(!checklist.contains(contents.getDetail_id())){
+								checklist.add(contents.getDetail_id());
+
+							}
+
+
+						}	
+					}else{
+						checklist.add(contents.getDetail_id());
+					}
+
+					String checked = "";
+					for (int i = 0; i < checklist.size(); i++) {
+						Log.v(TAG, "체크된 리스트 봅아준다" + checklist.get(i));
+						checked += checklist.get(i) + ",";
+					}
+					Log.v(TAG, "checked" + checked);
+					editor.putString("checked", checked);
+					editor.commit();
+
+					switch (contents.getPosition()){
+					case 0:
+
+						int size =list0.size();
 						Log.v(TAG,"size"+size+"");
 						//doSetList(size,list0,position);
 						if(size!=0){
@@ -175,439 +221,474 @@ SharedPreferences.Editor editor;
 							for(int i=1;i<size+1;i++){
 								if(!list0.contains(position)){
 									list0.add(position);
-									
+
 								}
-								
+
 
 							}	
-							}else{
-								list0.add(position);
-							}
-							Collections.sort(list0);
-			//				else {
-								String str = "";
-								for (int i = 0; i < list0.size(); i++) {
-									Log.v(TAG, "평상시" + list0.get(i).intValue() + "");
-									str += list0.get(i).intValue() + "" + ",";
+						}else{
+							list0.add(position);
+						}
+						Collections.sort(list0);
+						//				else {
+						String str = "";
+						for (int i = 0; i < list0.size(); i++) {
+							Log.v(TAG, "평상시" + list0.get(i).intValue() + "");
+							str += list0.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr" + str);
+						editor.putString("list", str);
+						editor.commit();
+						//			}
+
+
+
+						break;
+
+					case 1:
+
+						int size2 =list1.size();
+						Log.v(TAG,"size"+size2+"");
+						//doSetList(size,list0,position);
+						if(size2!=0){
+							//list0=new LinkedList<Integer>();
+
+							for(int i=1;i<size2+1;i++){
+								if(!list1.contains(position)){
+									list1.add(position);
+
 								}
-								Log.v(TAG, "strstr" + str);
-								editor.putString("list", str);
-								editor.commit();
-				//			}
-						
-					 
-					 
-					break;
-					
-				case 1:
-					
-					int size2 =list1.size();
-					Log.v(TAG,"size"+size2+"");
-					//doSetList(size,list0,position);
-					if(size2!=0){
-						//list0=new LinkedList<Integer>();
 
-						for(int i=1;i<size2+1;i++){
-							if(!list1.contains(position)){
-								list1.add(position);
-								
-							}
-							
 
-						}	
+							}	
 						}else{
 							list1.add(position);
 						}
 						Collections.sort(list1);
-		//				else {
-							String str2 = "";
-							for (int i = 0; i < list1.size(); i++) {
-								Log.v(TAG, "평상시" + list1.get(i).intValue() + "");
-								str2 += list1.get(i).intValue() + "" + ",";
-							}
-							Log.v(TAG, "strstr" + str2);
-							editor.putString("list2", str2);
-							editor.commit();
-			//			}
-					
-					break;
-				case 2:
-					
-					int size3 =list2.size();
-					Log.v(TAG,"size"+size3+"");
-					//doSetList(size,list0,position);
-					if(size3!=0){
-						//list0=new LinkedList<Integer>();
+						//				else {
+						String str2 = "";
+						for (int i = 0; i < list1.size(); i++) {
+							Log.v(TAG, "평상시" + list1.get(i).intValue() + "");
+							str2 += list1.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr" + str2);
+						editor.putString("list2", str2);
+						editor.commit();
+						//			}
 
-						for(int i=1;i<size3+1;i++){
-							if(!list2.contains(position)){
-								list2.add(position);
-								
-							}
-							
+						break;
+					case 2:
 
-						}	
+						int size3 =list2.size();
+						Log.v(TAG,"size"+size3+"");
+						//doSetList(size,list0,position);
+						if(size3!=0){
+							//list0=new LinkedList<Integer>();
+
+							for(int i=1;i<size3+1;i++){
+								if(!list2.contains(position)){
+									list2.add(position);
+
+								}
+
+
+							}	
 						}else{
 							list2.add(position);
 						}
 						Collections.sort(list2);
-		//				else {
-							String str3 = "";
-							for (int i = 0; i < list2.size(); i++) {
-								Log.v(TAG, "평상시" + list2.get(i).intValue() + "");
-								str3 += list2.get(i).intValue() + "" + ",";
-							}
-							Log.v(TAG, "strstr" + str3);
-							editor.putString("list3", str3);
-							editor.commit();
-			//			}
-					
-						
-					break;
-					
-				case 3:
-					int size4 =list3.size();
-					Log.v(TAG,"size"+size4+"");
-					//doSetList(size,list0,position);
-					if(size4!=0){
-						//list0=new LinkedList<Integer>();
+						//				else {
+						String str3 = "";
+						for (int i = 0; i < list2.size(); i++) {
+							Log.v(TAG, "평상시" + list2.get(i).intValue() + "");
+							str3 += list2.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr" + str3);
+						editor.putString("list3", str3);
+						editor.commit();
+						//			}
 
-						for(int i=1;i<size4+1;i++){
-							if(!list3.contains(position)){
-								list3.add(position);
-								
-							}
-							
 
-						}	
+						break;
+
+					case 3:
+						int size4 =list3.size();
+						Log.v(TAG,"size"+size4+"");
+						//doSetList(size,list0,position);
+						if(size4!=0){
+							//list0=new LinkedList<Integer>();
+
+							for(int i=1;i<size4+1;i++){
+								if(!list3.contains(position)){
+									list3.add(position);
+
+								}
+
+
+							}	
 						}else{
 							list3.add(position);
 						}
 						Collections.sort(list3);
-		//				else {
-							String str4 = "";
-							for (int i = 0; i < list3.size(); i++) {
-								Log.v(TAG, "평상시" + list3.get(i).intValue() + "");
-								str4 += list3.get(i).intValue() + "" + ",";
-							}
-							Log.v(TAG, "strstr" + str4);
-							editor.putString("list4", str4);
-							editor.commit();
-			//			}
-						
-						
-					break;
-				case 4:
-					int size5 =list4.size();
-					Log.v(TAG,"size"+size5+"");
-					//doSetList(size,list0,position);
-					if(size5!=0){
-						//list0=new LinkedList<Integer>();
+						//				else {
+						String str4 = "";
+						for (int i = 0; i < list3.size(); i++) {
+							Log.v(TAG, "평상시" + list3.get(i).intValue() + "");
+							str4 += list3.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr" + str4);
+						editor.putString("list4", str4);
+						editor.commit();
+						//			}
 
-						for(int i=1;i<size5+1;i++){
-							if(!list4.contains(position)){
-								list4.add(position);
-								
-							}
-							
 
-						}	
+						break;
+					case 4:
+						int size5 =list4.size();
+						Log.v(TAG,"size"+size5+"");
+						//doSetList(size,list0,position);
+						if(size5!=0){
+							//list0=new LinkedList<Integer>();
+
+							for(int i=1;i<size5+1;i++){
+								if(!list4.contains(position)){
+									list4.add(position);
+
+								}
+
+
+							}	
 						}else{
 							list4.add(position);
 						}
 						Collections.sort(list4);
-		//				else {
-							String str5 = "";
-							for (int i = 0; i < list4.size(); i++) {
-								Log.v(TAG, "평상시" + list4.get(i).intValue() + "");
-								str5 += list4.get(i).intValue() + "" + ",";
-							}
-							Log.v(TAG, "strstr" + str5);
-							editor.putString("list5", str5);
-							editor.commit();
-			//			}
-					
-						
-					break;
-				case 5:
-					int size6 =list5.size();
-					Log.v(TAG,"size"+size6+"");
-					//doSetList(size,list0,position);
-					if(size6!=0){
-						//list0=new LinkedList<Integer>();
+						//				else {
+						String str5 = "";
+						for (int i = 0; i < list4.size(); i++) {
+							Log.v(TAG, "평상시" + list4.get(i).intValue() + "");
+							str5 += list4.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr" + str5);
+						editor.putString("list5", str5);
+						editor.commit();
+						//			}
 
-						for(int i=1;i<size6+1;i++){
-							if(!list5.contains(position)){
-								list5.add(position);
-								
-							}
-							
 
-						}	
+						break;
+					case 5:
+						int size6 =list5.size();
+						Log.v(TAG,"size"+size6+"");
+						//doSetList(size,list0,position);
+						if(size6!=0){
+							//list0=new LinkedList<Integer>();
+
+							for(int i=1;i<size6+1;i++){
+								if(!list5.contains(position)){
+									list5.add(position);
+
+								}
+
+
+							}	
 						}else{
 							list5.add(position);
 						}
 						Collections.sort(list5);
-		//				else {
-							String str6 = "";
-							for (int i = 0; i < list5.size(); i++) {
-								Log.v(TAG, "평상시" + list5.get(i).intValue() + "");
-								str6 += list5.get(i).intValue() + "" + ",";
-							}
-							Log.v(TAG, "strstr" + str6);
-							editor.putString("list6", str6);
-							editor.commit();
-			//			}
-					
-						
-					break;
-				case 6:
-					int size7 =list6.size();
-					Log.v(TAG,"size"+size7+"");
-					//doSetList(size,list0,position);
-					if(size7!=0){
-						//list0=new LinkedList<Integer>();
+						//				else {
+						String str6 = "";
+						for (int i = 0; i < list5.size(); i++) {
+							Log.v(TAG, "평상시" + list5.get(i).intValue() + "");
+							str6 += list5.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr" + str6);
+						editor.putString("list6", str6);
+						editor.commit();
+						//			}
 
-						for(int i=1;i<size7+1;i++){
-							if(!list6.contains(position)){
-								list6.add(position);
-								
-							}
-							
 
-						}	
+						break;
+					case 6:
+						int size7 =list6.size();
+						Log.v(TAG,"size"+size7+"");
+						//doSetList(size,list0,position);
+						if(size7!=0){
+							//list0=new LinkedList<Integer>();
+
+							for(int i=1;i<size7+1;i++){
+								if(!list6.contains(position)){
+									list6.add(position);
+
+								}
+
+
+							}	
 						}else{
 							list6.add(position);
 						}
 						Collections.sort(list6);
-		//				else {
-							String str7 = "";
-							for (int i = 0; i < list6.size(); i++) {
-								Log.v(TAG, "평상시" + list6.get(i).intValue() + "");
-								str7 += list6.get(i).intValue() + "" + ",";
-							}
-							Log.v(TAG, "strstr" + str7);
-							editor.putString("list7", str7);
-							editor.commit();
-			//			}
+						//				else {
+						String str7 = "";
+						for (int i = 0; i < list6.size(); i++) {
+							Log.v(TAG, "평상시" + list6.get(i).intValue() + "");
+							str7 += list6.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr" + str7);
+						editor.putString("list7", str7);
+						editor.commit();
+						//			}
 
-						
-					break;
-				case 7:
-					int size8 =list7.size();
-					Log.v(TAG,"size"+size8+"");
-					//doSetList(size,list0,position);
-					if(size8!=0){
-						//list0=new LinkedList<Integer>();
 
-						for(int i=1;i<size8+1;i++){
-							if(!list7.contains(position)){
-								list7.add(position);
-								
-							}
-							
+						break;
+					case 7:
+						int size8 =list7.size();
+						Log.v(TAG,"size"+size8+"");
+						//doSetList(size,list0,position);
+						if(size8!=0){
+							//list0=new LinkedList<Integer>();
 
-						}	
+							for(int i=1;i<size8+1;i++){
+								if(!list7.contains(position)){
+									list7.add(position);
+
+								}
+
+
+							}	
 						}else{
 							list7.add(position);
 						}
 						Collections.sort(list7);
-		//				else {
-							String str8 = "";
-							for (int i = 0; i < list7.size(); i++) {
-								Log.v(TAG, "평상시" + list7.get(i).intValue() + "");
-								str8 += list7.get(i).intValue() + "" + ",";
-							}
-							Log.v(TAG, "strstr" + str8);
-							editor.putString("list8", str8);
-							editor.commit();
-			//			}
-						
-					break;
-				case 8:
-					int size9 =list8.size();
-					Log.v(TAG,"size"+size9+"");
-					//doSetList(size,list0,position);
-					if(size9!=0){
-						//list0=new LinkedList<Integer>();
+						//				else {
+						String str8 = "";
+						for (int i = 0; i < list7.size(); i++) {
+							Log.v(TAG, "평상시" + list7.get(i).intValue() + "");
+							str8 += list7.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr" + str8);
+						editor.putString("list8", str8);
+						editor.commit();
+						//			}
 
-						for(int i=1;i<size9+1;i++){
-							if(!list8.contains(position)){
-								list8.add(position);
-								
-							}
-							
+						break;
+					case 8:
+						int size9 =list8.size();
+						Log.v(TAG,"size"+size9+"");
+						//doSetList(size,list0,position);
+						if(size9!=0){
+							//list0=new LinkedList<Integer>();
 
-						}	
+							for(int i=1;i<size9+1;i++){
+								if(!list8.contains(position)){
+									list8.add(position);
+
+								}
+
+
+							}	
 						}else{
 							list8.add(position);
 						}
 						Collections.sort(list8);
-		//				else {
-							String str9 = "";
-							for (int i = 0; i < list8.size(); i++) {
-								Log.v(TAG, "평상시" + list8.get(i).intValue() + "");
-								str9 += list8.get(i).intValue() + "" + ",";
-							}
-							Log.v(TAG, "strstr" + str9);
-							editor.putString("list9", str9);
-							editor.commit();
-			//			}
-						
-						
-					break;
-					
-				}
-					
+						//				else {
+						String str9 = "";
+						for (int i = 0; i < list8.size(); i++) {
+							Log.v(TAG, "평상시" + list8.get(i).intValue() + "");
+							str9 += list8.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr" + str9);
+						editor.putString("list9", str9);
+						editor.commit();
+						//			}
+
+
+						break;
+
+					}
+
 
 					//선택되었을시	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 				}else{
+					//먼저 불러와서 시작
+					String checkedlist = pref.getString("checked", "");
+					//holder.itemAdapter.list0.clear();
+					//list0.clear();
+				checklist = new ArrayList<String>();
+					String[] detail = checkedlist.split(",");
+					for (String cha : detail) {
+						Log.v(TAG, "자른아이디0" + cha);
+						try {
+							
+							checklist.add(cha);
+						} catch (Exception e) {
+							checklist.removeAll(checklist);
+						}
+						
+
+					}
+					int checksize =checklist.size();
+					Log.v(TAG,"삭제후"+checksize+"");
+					if(checksize!=0){
+						//list0=new LinkedList<Integer>();
+						for(int i=0;i<checksize;i++){
+							if(checklist.contains(contents.getDetail_id())){
+								int index=checklist.indexOf(contents.getDetail_id());
+								checklist.remove(index);
+							}
+						}
+						String checked = "";
+						for (int i = 0; i < checklist.size(); i++) {
+							checked += checklist.get(i) + ",";
+						}
+						Log.v(TAG, "strstr" + checked);
+						editor.putString("checked", checked);
+						editor.commit();
+					}
 					switch (contents.getPosition()){
 					case 0:
-						 
-						 int size =list0.size();
-							Log.v(TAG,"size2222"+size+"");
-					
-							doRemoveItem(size,list0,position);
-						
-								String str = "";
-								for (int i = 0; i < list0.size(); i++) {
-									Log.v(TAG, "평상시" + list0.get(i).intValue() + "");
-									str += list0.get(i).intValue() + "" + ",";
-								}
-								Log.v(TAG, "strstr" + str);
-								editor.putString("list", str);
-								editor.commit();
+
+						int size =list0.size();
+						Log.v(TAG,"size2222"+size+"");
+
+						doRemoveItem(size,list0,position);
+
+						String str = "";
+						for (int i = 0; i < list0.size(); i++) {
 							
-							
-//								int size2=list0.size();
-//								for(int i=0;i<size2;i++){
-//									Log.v(TAG,"삭제된후에 list0"+list0.get(i).intValue()+"");
-//								}
-							
+							str += list0.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr" + str);
+						editor.putString("list", str);
+						editor.commit();
+
+
+						//								int size2=list0.size();
+						//								for(int i=0;i<size2;i++){
+						//									Log.v(TAG,"삭제된후에 list0"+list0.get(i).intValue()+"");
+						//								}
+
 						break;
-						
+
 					case 1:
-						 int size2 =list1.size();
-							Log.v(TAG,"size2222"+size2+"");
-					
-							doRemoveItem(size2,list1,position);
-							String str2 = "";
-							for (int i = 0; i < list1.size(); i++) {
-								Log.v(TAG, "평상시" + list0.get(i).intValue() + "");
-								str2 += list1.get(i).intValue() + "" + ",";
-							}
-							Log.v(TAG, "strstr2" + str2);
-							editor.putString("list2", str2);
-							editor.commit();
-						
-						
-												
+						int size2 =list1.size();
+						Log.v(TAG,"size2222"+size2+"");
+
+						doRemoveItem(size2,list1,position);
+						String str2 = "";
+						for (int i = 0; i < list1.size(); i++) {
+							
+							str2 += list1.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr2" + str2);
+						editor.putString("list2", str2);
+						editor.commit();
+
+
+
 						break;
 					case 2:
-						 int size3 =list2.size();
-							Log.v(TAG,"size2222"+size3+"");
-					
-							doRemoveItem(size3,list2,position);
-							String str3 = "";
-							for (int i = 0; i < list2.size(); i++) {
-								Log.v(TAG, "평상시" + list2.get(i).intValue() + "");
-								str3 += list2.get(i).intValue() + "" + ",";
-							}
-							Log.v(TAG, "strstr2" + str3);
-							editor.putString("list3", str3);
-							editor.commit();
+						int size3 =list2.size();
+						Log.v(TAG,"size2222"+size3+"");
+
+						doRemoveItem(size3,list2,position);
+						String str3 = "";
+						for (int i = 0; i < list2.size(); i++) {
 						
-																				
+							str3 += list2.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr2" + str3);
+						editor.putString("list3", str3);
+						editor.commit();
+
+
 						break;
 					case 3:
-						 int size4 =list3.size();
-							Log.v(TAG,"size2222"+size4+"");
-					
-							doRemoveItem(size4,list3,position);
-							String str4 = "";
-							for (int i = 0; i < list3.size(); i++) {
-								Log.v(TAG, "평상시" + list3.get(i).intValue() + "");
-								str4 += list3.get(i).intValue() + "" + ",";
-							}
-							Log.v(TAG, "strstr2" + str4);
-							editor.putString("list4", str4);
-							editor.commit();
-						
+						int size4 =list3.size();
+						Log.v(TAG,"size2222"+size4+"");
+
+						doRemoveItem(size4,list3,position);
+						String str4 = "";
+						for (int i = 0; i < list3.size(); i++) {
+							
+							str4 += list3.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr2" + str4);
+						editor.putString("list4", str4);
+						editor.commit();
+
 						break;
 					case 4:
-						 int size5 =list4.size();
-							Log.v(TAG,"size2222"+size5+"");
-					
-							doRemoveItem(size5,list4,position);
-							String str5 = "";
-							for (int i = 0; i < list4.size(); i++) {
-								Log.v(TAG, "평상시" + list4.get(i).intValue() + "");
-								str5 += list4.get(i).intValue() + "" + ",";
-							}
-							Log.v(TAG, "strstr2" + str5);
-							editor.putString("list5", str5);
-							editor.commit();
-						
+						int size5 =list4.size();
+						Log.v(TAG,"size2222"+size5+"");
+
+						doRemoveItem(size5,list4,position);
+						String str5 = "";
+						for (int i = 0; i < list4.size(); i++) {
+							
+							str5 += list4.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr2" + str5);
+						editor.putString("list5", str5);
+						editor.commit();
+
 						break;
 					case 5:
-						 int size6 =list5.size();
-					
-							doRemoveItem(size6,list5,position);
-							String str6 = "";
-							for (int i = 0; i < list5.size(); i++) {
-								Log.v(TAG, "평상시" + list5.get(i).intValue() + "");
-								str6 += list5.get(i).intValue() + "" + ",";
-							}
-							Log.v(TAG, "strstr2" + str6);
-							editor.putString("list6", str6);
-							editor.commit();
-						
+						int size6 =list5.size();
+
+						doRemoveItem(size6,list5,position);
+						String str6 = "";
+						for (int i = 0; i < list5.size(); i++) {
+							
+							str6 += list5.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr2" + str6);
+						editor.putString("list6", str6);
+						editor.commit();
+
 						break;
 					case 6:
-						 int size7 =list6.size();
-							Log.v(TAG,"size2222"+size7+"");
-					
-							doRemoveItem(size7,list6,position);
-							String str7 = "";
-							for (int i = 0; i < list6.size(); i++) {
-								Log.v(TAG, "평상시" + list6.get(i).intValue() + "");
-								str7 += list6.get(i).intValue() + "" + ",";
-							}
-							Log.v(TAG, "strstr2" + str7);
-							editor.putString("list7", str7);
-							editor.commit();
-						
+						int size7 =list6.size();
+						Log.v(TAG,"size2222"+size7+"");
+
+						doRemoveItem(size7,list6,position);
+						String str7 = "";
+						for (int i = 0; i < list6.size(); i++) {
+							
+							str7 += list6.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr2" + str7);
+						editor.putString("list7", str7);
+						editor.commit();
+
 						break;
 					case 7:
-						 int size8 =list7.size();
-							Log.v(TAG,"size2222"+size8+"");
-					
-							doRemoveItem(size8,list7,position);
-							String str8 = "";
-							for (int i = 0; i < list7.size(); i++) {
-								Log.v(TAG, "평상시" + list7.get(i).intValue() + "");
-								str8 += list7.get(i).intValue() + "" + ",";
-							}
-							Log.v(TAG, "strstr2" + str8);
-							editor.putString("list8", str8);
-							editor.commit();
+						int size8 =list7.size();
+						Log.v(TAG,"size2222"+size8+"");
+
+						doRemoveItem(size8,list7,position);
+						String str8 = "";
+						for (int i = 0; i < list7.size(); i++) {
 						
+							str8 += list7.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr2" + str8);
+						editor.putString("list8", str8);
+						editor.commit();
+
 						break;
 					case 8:
-						 int size9 =list8.size();
-							Log.v(TAG,"size2222"+size9+"");
-					
-							doRemoveItem(size9,list8,position);
-							String str9 = "";
-							for (int i = 0; i < list8.size(); i++) {
-								Log.v(TAG, "평상시" + list8.get(i).intValue() + "");
-								str9 += list8.get(i).intValue() + "" + ",";
-							}
-							Log.v(TAG, "strstr2" + str9);
-							editor.putString("list9", str9);
-							editor.commit();
-						
+						int size9 =list8.size();
+						Log.v(TAG,"size2222"+size9+"");
+
+						doRemoveItem(size9,list8,position);
+						String str9 = "";
+						for (int i = 0; i < list8.size(); i++) {
+							
+							str9 += list8.get(i).intValue() + "" + ",";
+						}
+						Log.v(TAG, "strstr2" + str9);
+						editor.putString("list9", str9);
+						editor.commit();
+
 						break;
 					}	
 				}
@@ -615,7 +696,7 @@ SharedPreferences.Editor editor;
 			}
 		});		
 		holder.title.setSelected(contents.isFlag());
-	
+
 		return cView;
 	}
 
@@ -624,8 +705,8 @@ SharedPreferences.Editor editor;
 			//list0=new LinkedList<Integer>();
 			for(int i=0;i<size;i++){
 				if(list.contains(position)){
-				int index=list.indexOf(position);
-				list.remove(index);
+					int index=list.indexOf(position);
+					list.remove(index);
 				}
 			}
 			Collections.sort(list);
@@ -634,7 +715,7 @@ SharedPreferences.Editor editor;
 		}
 	}
 	void setHashMap(){
-		
+
 		map.put("d001.png",R.drawable.d001);
 		map.put("d002.png",R.drawable.d002);
 		map.put("d003.png",R.drawable.d003);
@@ -722,29 +803,29 @@ SharedPreferences.Editor editor;
 		map.put("d105.png",R.drawable.d105);
 		map.put("d106.png",R.drawable.d106);
 		map.put("d107.png",R.drawable.d107);
-		
-			
+
+
 	}
 
-public void doSetList(int size,List<Integer> list,int position){
-	if(size!=0){
-		//list0=new LinkedList<Integer>();
+	public void doSetList(int size,List<Integer> list,int position){
+		if(size!=0){
+			//list0=new LinkedList<Integer>();
 
-		for(int i=1;i<size+1;i++){
-			if(!list.contains(position)){
-				list.add(position);
-				
-			}
-			
+			for(int i=1;i<size+1;i++){
+				if(!list.contains(position)){
+					list.add(position);
 
-		}	
+				}
+
+
+			}	
 		}else{
 			list.add(position);
 		}
 		Collections.sort(list);
 		for(int i=0;i<list.size();i++)
-		Log.v(TAG,"int i"+list.get(i).intValue()+"");
-}
+			Log.v(TAG,"int i"+list.get(i).intValue()+"");
+	}
 
 	class ViewHolder {
 		public FrameLayout frame;

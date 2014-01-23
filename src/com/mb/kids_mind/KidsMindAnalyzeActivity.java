@@ -138,6 +138,7 @@ public class KidsMindAnalyzeActivity extends Activity {
 		editor.putString("list7", "");
 		editor.putString("list8", "");
 		editor.putString("list9", "");
+		editor.putString("checked", "");
 		editor.commit();
 		Animation ani =null;
 		ani = new TranslateAnimation(0, width, 0, 0);

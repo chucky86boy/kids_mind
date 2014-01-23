@@ -54,6 +54,7 @@
 		            android:layout_gravity="center_horizontal"/>
 	   		</com.mb.kids_mind.view.PagerContainer>
 	   		<TextView 
+	   		      android:id="@+id/contents"
 	   		    android:layout_width="match_parent"
 	   		    android:layout_height="wrap_content"
 	   		    android:background="@drawable/bg_rp_speaking"

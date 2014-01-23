@@ -60,11 +60,11 @@ public class SiteAdapter extends BaseAdapter {
 		this.layout = layout;
 		this.list = list;
 		myhelper=new KidsMindDBHelper(context);
-		try{
-			myhelper.createDataBase();
-		}catch(IOException ioe){
-			throw new Error("error");
-		}
+//		try{
+//			myhelper.createDataBase();
+//		}catch(IOException ioe){
+//			throw new Error("error");
+//		}
 		pref = context.getSharedPreferences("pref", context.MODE_PRIVATE);
 	}
 
@@ -568,6 +568,7 @@ public class SiteAdapter extends BaseAdapter {
 		} catch (SQLException e) {
 			Log.v(TAG, "selec error" + e);
 		} finally {
+			closeDB();
 			if (c != null) {
 				c.close();
 			}

@@ -38,15 +38,15 @@ public class MyHelper extends SQLiteOpenHelper {
 //		String sql3 = "create table md_question_detail(" +
 //				
 //				"detail_id char(5) primary key  , detail_title text not null, detail_content text not null,  detail_image text not null, tag_id char(5) not null); ";
-		String sql4 = "create table md_check(" +
+		String sql4 = "create table km_check(" +
 				"_id integer primary key autoincrement," +
 				"fName text not null, detail_id text not null, detail_check text not null, advice_id integer ,question_id text not null); ";
-		String sql5 = "create table md_image(" +
+		String sql5 = "create table km_image(" +
 				"_id integer primary key autoincrement," +
-				"fName text not null,check char(5) not null); ";
+				"fName text not null, checked char(5) not null); ";
 		
 		try{
-			
+			Log.v(TAG,"DB만들어졌어요");
 			db.execSQL(sql4);
 			db.execSQL(sql5);
 			

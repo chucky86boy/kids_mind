@@ -3,8 +3,10 @@ package com.mb.kids_mind;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 
 import com.mb.kids_mind.Adapter.SiteAdapter;
 import com.mb.kids_mind.Helper.KidsMindDBHelper;
+import com.mb.kids_mind.Helper.MyHelper;
 import com.mb.kids_mind.Item.DetailListItem;
 import com.mb.kids_mind.Item.KidsMindResultItem;
 import com.mb.kids_mind.Item.TagList;
@@ -33,12 +36,14 @@ import com.mb.kids_mind.Item.TagList;
 public class KidsMindResultActivity extends Activity {
 	static final String TAG="TAG";
 	SharedPreferences pref;
+	
 	ArrayList<KidsMindResultItem> siteList = new ArrayList<KidsMindResultItem>();
 	ListView siteListView;
    SiteAdapter adapter;
    String savename;
-   SQLiteDatabase db;
+   SQLiteDatabase db,db2;
    TagList titem;
+   MyHelper helper;
    KidsMindDBHelper myhelper;
 	ArrayList<TagList> tlist = new ArrayList<TagList>();
 	ArrayList<DetailListItem>dlist=new ArrayList<DetailListItem>();
@@ -53,6 +58,9 @@ public class KidsMindResultActivity extends Activity {
 				in.putExtra("savename",savename);
 				in.putExtra("where","1");
 				startActivity(in);
+				String detail_id=pref.getString("checked", "");
+				String question_id=pref.getString("qposition","");
+				insertRec(savename, detail_id, "0", 0, question_id);
 			break;
 			case R.id.button2:
 				
@@ -68,11 +76,12 @@ public class KidsMindResultActivity extends Activity {
 		 img=(ImageView)findViewById(R.id.imageView1);
 		 pref=getSharedPreferences("pref",MODE_PRIVATE);
 		 myhelper=new KidsMindDBHelper(KidsMindResultActivity.this);
-		 try{
-				myhelper.createDataBase();
-			}catch(IOException ioe){
-				throw new Error("error");
-			}
+		 helper = new MyHelper(this, "kidsmind.db", null, 1);
+//		 try{
+//				myhelper.createDataBase();
+//			}catch(IOException ioe){
+//				throw new Error("error");
+//			}
 		 Intent intent=getIntent();
 		
 		//if("1".equals(intent.getStringExtra("where"))){
@@ -188,9 +197,34 @@ public class KidsMindResultActivity extends Activity {
 		Log.v(TAG, siteList.toString());
 		adapter.notifyDataSetChanged();
 	}	
+	public void insertRec(String image_id, String detail_id,
+			String detail_check, int advice_id, String question_id) {
+		// if(selectDb(detail_id)){
+		openDB();
+
+		ContentValues values = new ContentValues();
+		try {
+
+			values.put("fName", image_id);
+			
+			values.put("detail_id", detail_id);
+			
+			values.put("detail_check", detail_check);
+			values.put("advice_id", advice_id);
+			values.put("question_id", question_id);
+			long id = db2.insert("km_check", null, values);
+			
+			Log.v(TAG, id > 0 ? "success" : "fail");
+		} catch (SQLException e) {
+			Log.v(TAG, "insert error " + e);
+		}
+		closeDB();
+		
+
+	}
 	public void selectAll() {
 		openDB();
-		// 諛⑸쾿 1
+		
 		Log.v(TAG, "탭 디비 시작");
 
 		String question=pref.getString("qposition", "");
@@ -230,6 +264,7 @@ public class KidsMindResultActivity extends Activity {
 	public void openDB() {
 		// db = openOrCreateDatabase("sample.db", wi, null);
 		db = myhelper.getWritableDatabase();
+		db2=helper.getWritableDatabase();
 	}
 
 	// dbClose();
@@ -237,6 +272,11 @@ public class KidsMindResultActivity extends Activity {
 		if (db != null) {
 			if (db.isOpen()) {
 				db.close();
+			}
+		}
+		if (db2 != null) {
+			if (db2.isOpen()) {
+				db2.close();
 			}
 		}
 	}
