@@ -30,9 +30,11 @@
         <activity android:name="com.mb.kids_mind.MainActivity">
         </activity>
         <activity android:name=".KidsMindDrawActivity"></activity>
-        <activity android:name="KidsMindAnalyzeActivity"></activity>
-        <activity android:name="KidsMindResultActivity"></activity>
-        <activity android:name="KidsMindTotalResultActivity"></activity>
+        <activity android:name=".KidsMindAnalyzeActivity"></activity>
+        <activity android:name=".KidsMindResultActivity"></activity>
+        <activity android:name=".KidsMindTotalResultActivity"></activity>
+        <activity android:name=".KidsMindAddActivity"></activity>
+        <activity android:name="KidsMindLoginActivity"></activity>
     </application>
 
 </manifest>

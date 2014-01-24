@@ -83,7 +83,8 @@ public class KidsMindTotalResultActivity extends Activity {
 			
 			@Override
 			public void onPageChange(int position) {
-			DetailListItem ditem= list.get(position);
+			try{
+				DetailListItem ditem= list.get(position);
 			contents.setText(ditem.getDetail_content());
 				Log.v(TAG,"position listener"+position);
 				switch(position%2){
@@ -94,7 +95,10 @@ public class KidsMindTotalResultActivity extends Activity {
 					break;
 				
 				}
-		
+			}catch(IndexOutOfBoundsException e){
+				
+				Log.v(TAG,"IndexOutofBounds"+e);
+			}
 				}
 			
 		};

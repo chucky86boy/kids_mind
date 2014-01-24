@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_00"
     android:orientation="vertical" >
-
+ 
+       
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,9 +18,7 @@
             android:id="@+id/menuToggler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:button="@drawable/menu_toggler"
-            />
-
+            android:button="@drawable/menu_toggler" />
     </LinearLayout>
 
     <FrameLayout
@@ -32,59 +31,114 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        
         <LinearLayout
             android:id="@+id/sideMenu"
-            android:layout_width="300px"
-            android:layout_height="match_parent"
-            android:background="@android:color/darker_gray"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:gravity="center"
+             android:background="@drawable/bg_tab"
             android:visibility="invisible"
             tools:ignore="PxUsage" >
-
+<ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical" >
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="right"
                 android:orientation="vertical" >
-
-                <Button
-                    android:id="@+id/button1"
+                
+                <ImageView
+                    android:id="@+id/login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Button" />
-
-                <Button
-                    android:id="@+id/button4"
+                     android:layout_marginRight="10dp"
+           
+                  />
+				</LinearLayout>
+                <ImageView
+                    android:id="@+id/mypage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Button" />
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/pic_none" />
 
                 <TextView
-                    android:id="@+id/textView1"
+                    android:id="@+id/mainname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                     android:layout_marginTop="5dp"
+                    android:textColor="#ff000000"
+                    android:text="막둥이 철수" />
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_marginTop="10dp"
+                      android:layout_marginBottom="10dp"
+                    
+                    
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/line_tab" />
+  <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                 android:paddingTop="20dp" 
+                 android:paddingBottom="20dp" 
+                
+                android:orientation="vertical" >
                 <ListView
                     android:id="@+id/listView1"
+                   
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
                 </ListView>
-
+	</LinearLayout>
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/add"
+                     android:layout_marginTop="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Button" />
+                    android:background="@drawable/add_baby" />
 
-                <Button
-                    android:id="@+id/button3"
+                <TextView
+                    android:id="@+id/addtext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Button" />
+                     android:layout_marginTop="5dp"
+                     android:textColor="#ff000000"
+                   
+                    android:text="아이 등록하기" />
 
-            </LinearLayout>
-        </LinearLayout>
+                <Button
+                    android:id="@+id/notic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_marginTop="10dp"
+                   
+                    android:background="@drawable/notice" />
+
+                <Button
+                    android:id="@+id/setting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/tab_btn" />
+    	</LinearLayout>
+                </ScrollView>
+    
+                </LinearLayout>
+      
+
+  
     </FrameLayout>
 
 </LinearLayout>

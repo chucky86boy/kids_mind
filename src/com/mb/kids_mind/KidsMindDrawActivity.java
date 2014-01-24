@@ -3,15 +3,20 @@ package com.mb.kids_mind;
 
 import java.io.FileOutputStream;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -164,6 +169,7 @@ public class KidsMindDrawActivity extends FragmentActivity {
 				
 				//ft(R.id.boardLayout, frag5);
 				
+				
 		        Bitmap bitmap2=board.Save(fos);
 				savename=board.startActivity();
 				SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
@@ -216,7 +222,7 @@ public class KidsMindDrawActivity extends FragmentActivity {
         this.overridePendingTransition(0, 0);
 
         setContentView(R.layout.drawmain); 
-        
+        popupImage(KidsMindDrawActivity.this);        
         //LinearLayout toolsLayout = (LinearLayout) findViewById(R.id.toolsLayout); 
        // LinearLayout boardLayout = (LinearLayout) findViewById(R.id.boardLayout); 
         fram=(FrameLayout)findViewById(R.id.boardLayout);
@@ -293,7 +299,24 @@ public class KidsMindDrawActivity extends FragmentActivity {
   
     }
   
-  
+    void popupImage(Activity context)
+	{
+		// Create dialog
+			final Dialog dialog = new Dialog(context);
+			  dialog.getWindow().setBackgroundDrawable
+
+	             (new ColorDrawable(android.graphics.Color.TRANSPARENT));
+		dialog.setContentView(R.layout.drawinfo);
+		dialog.findViewById(R.id.button1).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+		
+		dialog.show();
+	}
      
   
   

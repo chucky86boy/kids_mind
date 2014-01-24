@@ -62,6 +62,7 @@ public class SingleResultSketchMenu extends Fragment{
 		
 		LayoutParams layoutParams = imageView.getLayoutParams();
 		//layoutParams.height = (int)(size.y * 0.7);
+		if(key!=null)
 		imageView.setImageResource(key);
 		imageView.setOnTouchListener(new OnTouchListener() {
 			
