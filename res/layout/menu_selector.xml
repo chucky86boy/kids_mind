@@ -9,6 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
         android:contentDescription="@string/doctor_instruction_img_desc"
         android:src="@drawable/btn_doctor" />
 
@@ -16,13 +17,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="10px"
         android:background="@drawable/btn_doctor_balloon"
+        android:gravity="center"
         android:text="@string/click_to_consult"
         android:textColor="@android:color/black"
         android:textSize="12sp"
-        android:layout_marginLeft="10dp"
-         android:layout_marginRight="10dp"
         tools:ignore="PxUsage" />
     
     <com.mb.kids_mind.view.PagerContainer

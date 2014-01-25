@@ -3,6 +3,7 @@ package com.mb.kids_mind;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
@@ -15,6 +16,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
@@ -93,7 +95,7 @@ public class KidsMindAnalyzeActivity extends Activity {
 		//	} else{
 		//	mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
 
-		popupImage(this);
+		popupImage(KidsMindAnalyzeActivity.this);
 		DisplayMetrics metrics = new DisplayMetrics();
 
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -112,7 +114,7 @@ public class KidsMindAnalyzeActivity extends Activity {
 			image_id=intent.getStringExtra("path");
 			bpath=image_id;
 			Log.v(TAG,"이미지 패스"+intent.getStringExtra("path"));
-			
+
 			//editor.putString("path", image_id);
 			//editor.commit();
 			//String path=pref.getString("path", null);
@@ -122,11 +124,22 @@ public class KidsMindAnalyzeActivity extends Activity {
 		//	linear.setBackgroundDrawable(bit);
 
 		//	frambg.setBackgroundResource(R.drawable.image);    
-	//	imgView = (ImageView) findViewById(R.id.imageView3);
-		
+		//	imgView = (ImageView) findViewById(R.id.imageView3);
+
 		img=(ImageView)findViewById(R.id.imageView1);
-
-
+		SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
+		SharedPreferences.Editor editor =pref.edit();
+		editor.putString("list", "");
+		editor.putString("list2", "");
+		editor.putString("list3", "");
+		editor.putString("list4", "");
+		editor.putString("list5", "");
+		editor.putString("list6", "");
+		editor.putString("list7", "");
+		editor.putString("list8", "");
+		editor.putString("list9", "");
+		editor.putString("checked", "");
+		editor.commit();
 		Animation ani =null;
 		ani = new TranslateAnimation(0, width, 0, 0);
 		ani.setDuration(2500);
@@ -227,20 +240,44 @@ public class KidsMindAnalyzeActivity extends Activity {
 	}
 	// TODO Auto-generated method stub
 	//}
-	
+
+	@Override 
+
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) { 
+
+
+		switch (keyCode) { 
+
+
+		case KeyEvent.KEYCODE_BACK: 
+
+
+			return true; 
+
+
+		} 
+
+
+		return super.onKeyDown(keyCode, event); 
+
+
+	} 
+
 	void popupImage(Activity context)
 	{
 		// Create dialog
-			final Dialog dialog = new Dialog(context);
-			  dialog.getWindow().setBackgroundDrawable
+		final Dialog dialog = new Dialog(context);
+		dialog.getWindow().setBackgroundDrawable
 
-	             (new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
+		(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+		dialog.setCancelable(false);
+		dialog.setCanceledOnTouchOutside(false);
 		dialog.setContentView(R.layout.transparent);
 		dialog.findViewById(R.id.imageView1);
 		dialog.findViewById(R.id.imageView1).setVisibility(ImageView.VISIBLE);
 		dialog.findViewById(R.id.imageView1).setBackgroundResource(R.anim.loading2);
-		
+
 		AnimationDrawable frameAnimation = (AnimationDrawable) dialog.findViewById(R.id.imageView1).getBackground();
 		frameAnimation.start();
 		//라디오 버튼 
@@ -271,53 +308,53 @@ public class KidsMindAnalyzeActivity extends Activity {
 
 		}
 	}
-	 public Options getBitmapSize(Options options){ 
+	public Options getBitmapSize(Options options){ 
 
-	        int targetWidth = 0; 
+		int targetWidth = 0; 
 
-	        int targetHeight = 0; 
+		int targetHeight = 0; 
 
-	          
 
-	        if(options.outWidth > options.outHeight){     
 
-	            targetWidth = (int)(600 * 1.3); 
+		if(options.outWidth > options.outHeight){     
 
-	            targetHeight = 600; 
+			targetWidth = (int)(600 * 1.3); 
 
-	        }else{ 
+			targetHeight = 600; 
 
-	            targetWidth = 600; 
+		}else{ 
 
-	            targetHeight = (int)(600 * 1.3); 
+			targetWidth = 600; 
 
-	        } 
+			targetHeight = (int)(600 * 1.3); 
 
-	  
+		} 
 
-	        Boolean scaleByHeight = Math.abs(options.outHeight - targetHeight) >= Math.abs(options.outWidth - targetWidth); 
 
-	        if(options.outHeight * options.outWidth * 2 >= 16384){ 
 
-	            double sampleSize = scaleByHeight 
+		Boolean scaleByHeight = Math.abs(options.outHeight - targetHeight) >= Math.abs(options.outWidth - targetWidth); 
 
-	                ? options.outHeight / targetHeight 
+		if(options.outHeight * options.outWidth * 2 >= 16384){ 
 
-	                : options.outWidth / targetWidth; 
+			double sampleSize = scaleByHeight 
 
-	            options.inSampleSize = (int) Math.pow(2d, Math.floor(Math.log(sampleSize)/Math.log(2d))); 
+					? options.outHeight / targetHeight 
 
-	        } 
+							: options.outWidth / targetWidth; 
 
-	        options.inJustDecodeBounds = false; 
+			options.inSampleSize = (int) Math.pow(2d, Math.floor(Math.log(sampleSize)/Math.log(2d))); 
 
-	        options.inTempStorage = new byte[16*1024]; 
+		} 
 
-	          
+		options.inJustDecodeBounds = false; 
 
-	        return options; 
+		options.inTempStorage = new byte[16*1024]; 
 
-	    }
+
+
+		return options; 
+
+	}
 	//	public void getColorRGB(){
 	//		Mat rgba =ex;
 	//		Size sizeRgba =ex.size();

@@ -46,18 +46,6 @@ public class SketchMenu extends Fragment {
 				pager.setOffscreenPageLimit(5);
 				mPagerAdapter=new ScreenSlidePagerAdapter(getFragmentManager());
 				pager.setAdapter(mPagerAdapter);
-				pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
-					@Override
-					public void onPageSelected(int position) {
-						SingleSketchMenu frag = (SingleSketchMenu) mPagerAdapter.getItem(position);
-						View imgView = frag.img;
-//						View parentView = (View) imgView.getParent();
-						imgView.animate().scaleXBy((float)1.2)
-							.scaleYBy((float)1.2)
-							.setDuration(500);
-							
-					}
-				});
 				super.onPostExecute(result);
 			}
 			

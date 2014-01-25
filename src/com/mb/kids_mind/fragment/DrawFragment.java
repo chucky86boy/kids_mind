@@ -32,10 +32,10 @@ public class DrawFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = null;
-		
+		Log.v(TAG,"fragmentoncre");
 	
 		v = inflater.inflate(R.layout.draw,null);
-		linear=(LinearLayout)v.findViewById(R.id.linear);
+		linear=(LinearLayout)v.findViewById(R.id.lay);
 		   LinearLayout.LayoutParams params = new LinearLayout.LayoutParams( 
 			        LinearLayout.LayoutParams.FILL_PARENT, 
 			        LinearLayout.LayoutParams.FILL_PARENT); 
@@ -43,7 +43,7 @@ public class DrawFragment extends Fragment {
 			
 		   	((KidsMindDrawActivity)activity).board.setLayoutParams(params); 
 		   	((KidsMindDrawActivity)activity).board.setPadding(2, 2, 2, 2); 
-
+           
 			linear.addView(((KidsMindDrawActivity)activity).board);
 	        		return v;
 	}
@@ -51,15 +51,28 @@ public class DrawFragment extends Fragment {
 
 
 	@Override
+	public void onDestroy() {
+		Log.v(TAG,"fragmentondestory");
+//		((ViewGroup)((KidsMindDrawActivity)activity).board
+//				.getParent()).removeView(((KidsMindDrawActivity)activity).board
+//						);
+		super.onDestroy();
+	}
+
+
+	@Override
 	public void onPause() {
-linear.removeView(((KidsMindDrawActivity)activity).board);
+		//((ViewGroup)linear.getParent()).removeView(linear);
+Log.v(TAG,"fragmentonpause");
+//linear.removeView(((KidsMindDrawActivity)activity).board);
 		super.onPause();
 	}
 
 
 	@Override
 	public void onResume() {
-		Log.v(TAG,"on��������");
+		
+		Log.v(TAG,"onResume");
 		super.onResume();
 	}
 	

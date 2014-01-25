@@ -1,14 +1,20 @@
 package com.mb.kids_mind;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -20,15 +26,27 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.mb.kids_mind.Adapter.SiteAdapter;
+import com.mb.kids_mind.Helper.KidsMindDBHelper;
+import com.mb.kids_mind.Helper.MyHelper;
+import com.mb.kids_mind.Item.DetailListItem;
 import com.mb.kids_mind.Item.KidsMindResultItem;
+import com.mb.kids_mind.Item.TagList;
+
 
 public class KidsMindResultActivity extends Activity {
 	static final String TAG="TAG";
+	SharedPreferences pref;
 	
 	ArrayList<KidsMindResultItem> siteList = new ArrayList<KidsMindResultItem>();
 	ListView siteListView;
    SiteAdapter adapter;
-	
+   String savename;
+   SQLiteDatabase db,db2;
+   TagList titem;
+   MyHelper helper;
+   KidsMindDBHelper myhelper;
+	ArrayList<TagList> tlist = new ArrayList<TagList>();
+	ArrayList<DetailListItem>dlist=new ArrayList<DetailListItem>();
 	View.OnClickListener bHandler = new View.OnClickListener() {
 		
 		@Override
@@ -36,8 +54,13 @@ public class KidsMindResultActivity extends Activity {
 			// TODO Auto-generated method stub
 			switch(v.getId()){
 			case R.id.button1:
-				Intent in =new Intent(KidsMindResultActivity.this,KidsMindDrawActivity.class);
+				Intent in =new Intent(KidsMindResultActivity.this,KidsMindTotalResultActivity.class);
+				in.putExtra("savename",savename);
+				in.putExtra("where","1");
 				startActivity(in);
+				String detail_id=pref.getString("checked", "");
+				String question_id=pref.getString("qposition","");
+				insertRec(savename, detail_id, "0", 0, question_id);
 			break;
 			case R.id.button2:
 				
@@ -51,17 +74,27 @@ public class KidsMindResultActivity extends Activity {
 		setContentView(R.layout.result);
 		Button btn=(Button)findViewById(R.id.button1);
 		 img=(ImageView)findViewById(R.id.imageView1);
-		Intent intent=getIntent();
+		 pref=getSharedPreferences("pref",MODE_PRIVATE);
+		 myhelper=new KidsMindDBHelper(KidsMindResultActivity.this);
+		 helper = new MyHelper(this, "kidsmind.db", null, 1);
+//		 try{
+//				myhelper.createDataBase();
+//			}catch(IOException ioe){
+//				throw new Error("error");
+//			}
+		 Intent intent=getIntent();
+		
 		//if("1".equals(intent.getStringExtra("where"))){
 		// Bitmap bit=intent.getParcelableExtra("img");
 		// img.setImageBitmap(bit);
-		String image_id=intent.getStringExtra("savename");
+		savename=intent.getStringExtra("savename");
 
-		readimage(image_id);
+		readimage(savename);
 		
 		btn.setOnClickListener(bHandler);
 		siteListView = (ListView) findViewById(R.id.listView1);
 		siteListView.setDivider(null);
+		
         adapter =new SiteAdapter(KidsMindResultActivity.this, R.layout.resultlist, siteList);
         // Assign adapter to HorizontalListView
         siteListView.setAdapter(adapter);
@@ -149,13 +182,14 @@ public class KidsMindResultActivity extends Activity {
 	    }
 	void fillSomeData()
 	{		
+		selectAll();
 		
-		String[] names = { "나무뿌리", "나무두께", "나무 크기", "모양 기타", "색깔", "나무 줄기", "열매 크기", "나무 위치","나무 구","나무 십" };
-		
-		for( int i=0; i<names.length; i++)
+		for( int i=0; i<tlist.size(); i++)
 		{
 			KidsMindResultItem site = new KidsMindResultItem();
-			site.setTitle(names[i]);
+			TagList item = tlist.get(i);
+			site.setTitle(item.getTag_name());
+			site.setTag_id(item.getTag_id());
 			
 			siteList.add(site);
 		}
@@ -163,5 +197,88 @@ public class KidsMindResultActivity extends Activity {
 		Log.v(TAG, siteList.toString());
 		adapter.notifyDataSetChanged();
 	}	
+	public void insertRec(String image_id, String detail_id,
+			String detail_check, int advice_id, String question_id) {
+		// if(selectDb(detail_id)){
+		openDB();
+
+		ContentValues values = new ContentValues();
+		try {
+
+			values.put("fName", image_id);
+			
+			values.put("detail_id", detail_id);
+			
+			values.put("detail_check", detail_check);
+			values.put("advice_id", advice_id);
+			values.put("question_id", question_id);
+			long id = db2.insert("km_check", null, values);
+			
+			Log.v(TAG, id > 0 ? "success" : "fail");
+		} catch (SQLException e) {
+			Log.v(TAG, "insert error " + e);
+		}
+		closeDB();
+		
+
+	}
+	public void selectAll() {
+		openDB();
+		
+		Log.v(TAG, "탭 디비 시작");
+
+		String question=pref.getString("qposition", "");
+		Log.v(TAG,"questiong_id"+question);
+		// String sql
+		// ="select tag_name from md_question_tag where question_id=Q"+po+";";
+		Cursor c = null;
+		String wStr = "question_id=?";
+		String[] wherStr = { question };
+		String[] colNames = { "tag_id", "tag_name" };
+		try {
+			c = db.query("km_question_tag", colNames, wStr, wherStr, null,
+					null, null);
+			// c=db.rawQuery(sql, null);
+			Log.v(TAG, "숫자:" + c.getCount());
+			while (c.moveToNext()) {
+				titem = new TagList();
+				titem.setTag_id(c.getString(c.getColumnIndex("tag_id")));
+				titem.setTag_name(c.getString(c.getColumnIndex("tag_name")));
+				tlist.add(titem);
+				Log.v(TAG,
+						"탭 아이디값은" + c.getString(c.getColumnIndex("tag_name")));
+				// Log.v(Debugc.getTaga(), c.getString(0)+ c.getString(1)+
+				// c.getString(2)+c.getString(3)+c.getString(4));
+				// c.getString(0);
+			}
+
+		} catch (SQLException e) {
+			Log.v(TAG, "selec error" + e);
+		} finally {
+			if (c != null) {
+				c.close();
+			}
+		}
+
+	}
+	public void openDB() {
+		// db = openOrCreateDatabase("sample.db", wi, null);
+		db = myhelper.getWritableDatabase();
+		db2=helper.getWritableDatabase();
+	}
+
+	// dbClose();
+	public void closeDB() {
+		if (db != null) {
+			if (db.isOpen()) {
+				db.close();
+			}
+		}
+		if (db2 != null) {
+			if (db2.isOpen()) {
+				db2.close();
+			}
+		}
+	}
 }
 

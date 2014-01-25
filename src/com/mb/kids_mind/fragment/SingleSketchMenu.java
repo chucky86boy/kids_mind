@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
@@ -39,7 +40,9 @@ import android.widget.ImageView;
 
 import com.mb.kids_mind.KidsMindAnalyzeActivity;
 import com.mb.kids_mind.KidsMindDrawActivity;
+import com.mb.kids_mind.MainActivity;
 import com.mb.kids_mind.R;
+import com.mb.kids_mind.Helper.KidsMindDBHelper;
 
 public class SingleSketchMenu extends Fragment{
 private static final String TAG="MainActivity";
@@ -54,6 +57,8 @@ private static final String TAG="MainActivity";
 	static Uri uri;
 	String bpath;
 	Dialog dialog;
+	KidsMindDBHelper  myDbHelper=null;
+	SQLiteDatabase db;
 	public float iscale;
 	View.OnClickListener bHandler =new View.OnClickListener() {
 
@@ -106,8 +111,7 @@ private static final String TAG="MainActivity";
 		this.activity = activity;
 		dialog=new Dialog(activity);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setCancelable(false);
-		dialog.setCanceledOnTouchOutside(false);
+	
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 		super.onAttach(activity);
@@ -118,6 +122,7 @@ private static final String TAG="MainActivity";
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.menu_sketch, null);
+		 myDbHelper=new KidsMindDBHelper(activity);
 		Display display = getActivity().getWindowManager().getDefaultDisplay();
 		int height = 0;
 		if((android.os.Build.VERSION.SDK_INT >= 13)){
@@ -147,27 +152,46 @@ private static final String TAG="MainActivity";
 					SharedPreferences pref=activity.getSharedPreferences("pref",activity.MODE_PRIVATE);
 					SharedPreferences.Editor editor=pref.edit();
 					editor.putInt("qposition", position);
-					editor.putInt("dbpath", position+1);//0遺�꽣�ㅼ뼱媛꾨떎
+					editor.putInt("dbpath", position+1);
 					editor.commit();
 
 					switch (position)
 					{
 					case 0:
-						popupImage(activity);
+						editor.putInt("qp", position);
+						editor.putString("qposition","Q1");
+						editor.commit();
 
+						popupImage(activity);
+						
 						//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
 						break;
 					case 1:
+						editor.putInt("qp", position);
+						
+						editor.putString("qposition","Q2");
+						editor.commit();
+
 						popupImage(activity);
 						//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
 
 						break;
 					case 2:
+						editor.putInt("qp", position);
+						
+						editor.putString("qposition","Q3");
+						editor.commit();
+
 						popupImage(activity);
 						//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
 
 						break;
 					case 3:
+						editor.putInt("qp", position);
+						
+						editor.putString("qposition","Q4");
+						editor.commit();
+
 						popupImage(activity);
 						//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
 
@@ -182,6 +206,18 @@ private static final String TAG="MainActivity";
 			}
 		});
 		return view;
+	}
+	void openDB(){
+//		db = openOrCreateDatabase("sample.db", wi, null);
+		db = myDbHelper.getWritableDatabase();
+	}
+	// dbClose();
+	void closeDB(){
+		if(db != null){
+			if(db.isOpen()){
+				db.close();
+			}
+		}
 	}
 	void popupImage(Activity context)
 	{

@@ -3,19 +3,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_00"
     android:orientation="vertical" >
 
-    <ImageView
+  <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/navi_re"
+        android:gravity="center_vertical" >
+
+        <Button
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/back" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/drawimage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:contentDescription="@string/doctor_instruction_img_desc"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_weight="1"
+        android:contentDescription="@string/doctor_instruction_img_desc"
         android:src="@drawable/btn_doctor" />
-    <FrameLayout 
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="2" >
+
         <LinearLayout
             android:layout_width="match_parent"
         	android:layout_height="match_parent"
@@ -34,6 +54,7 @@
 		            android:layout_gravity="center_horizontal"/>
 	   		</com.mb.kids_mind.view.PagerContainer>
 	   		<TextView 
+	   		      android:id="@+id/contents"
 	   		    android:layout_width="match_parent"
 	   		    android:layout_height="wrap_content"
 	   		    android:background="@drawable/bg_rp_speaking"
@@ -44,6 +65,7 @@
 	   		    android:textSize="14sp"/>
         </LinearLayout>
         <ImageView 
+            android:id="@+id/doctor"
             android:contentDescription="@string/doctor_explain_img_desc"
             android:layout_gravity="bottom|left"
             android:layout_width="wrap_content"
