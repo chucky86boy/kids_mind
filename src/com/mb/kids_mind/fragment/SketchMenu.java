@@ -1,41 +1,24 @@
 package com.mb.kids_mind.fragment;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Images;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 
-import com.mb.kids_mind.KidsMindAnalyzeActivity;
-import com.mb.kids_mind.KidsMindDrawActivity;
 import com.mb.kids_mind.R;
 
 public class SketchMenu extends Fragment {
 	Activity activity;
 	public ViewPager pager; 
 	public ScreenSlidePagerAdapter mPagerAdapter;
+	private int[] menuImage = {R.drawable.menu_01,R.drawable.menu_02,R.drawable.menu_03,R.drawable.menu_04};
 	@Override
 		public void onAttach(Activity activity) {
 			this.activity = activity;
@@ -59,10 +42,22 @@ public class SketchMenu extends Fragment {
 
 			@Override
 			protected void onPostExecute(View result) {
-				 pager = (ViewPager) result.findViewById(R.id.menu_pager);
+				pager = (ViewPager) result.findViewById(R.id.menu_pager);
 				pager.setOffscreenPageLimit(5);
-				mPagerAdapter=new ScreenSlidePagerAdapter(getFragmentManager()); 
+				mPagerAdapter=new ScreenSlidePagerAdapter(getFragmentManager());
 				pager.setAdapter(mPagerAdapter);
+				pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+					@Override
+					public void onPageSelected(int position) {
+						SingleSketchMenu frag = (SingleSketchMenu) mPagerAdapter.getItem(position);
+						View imgView = frag.img;
+//						View parentView = (View) imgView.getParent();
+						imgView.animate().scaleXBy((float)1.2)
+							.scaleYBy((float)1.2)
+							.setDuration(500);
+							
+					}
+				});
 				super.onPostExecute(result);
 			}
 			
@@ -72,7 +67,8 @@ public class SketchMenu extends Fragment {
 	}
 
 	public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-		public ViewPager pager2; 
+		SparseArray<Fragment> fragMap = new SparseArray<Fragment>();
+		
 		public ScreenSlidePagerAdapter(FragmentManager fm) {
 			super(fm);
         }
@@ -81,16 +77,15 @@ public class SketchMenu extends Fragment {
         public int getCount() {
             return 4;
         }
-
+        
 		@Override
 		public Fragment getItem(int position) {
 			SingleSketchMenu frag = new SingleSketchMenu();
+			frag.menuImage = menuImage;
 			frag.setPosition(position);
-			
+			fragMap.put(position, frag);
 			return frag;
 		}
 	}
 
-
-	
 }
