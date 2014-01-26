@@ -43,6 +43,7 @@ import com.mb.kids_mind.KidsMindDrawActivity;
 import com.mb.kids_mind.MainActivity;
 import com.mb.kids_mind.R;
 import com.mb.kids_mind.Helper.KidsMindDBHelper;
+import com.mb.kids_mind.task.ViewResizeTask;
 
 public class SingleSketchMenu extends Fragment{
 private static final String TAG="MainActivity";
@@ -124,6 +125,7 @@ private static final String TAG="MainActivity";
 		View view = inflater.inflate(R.layout.menu_sketch, null);
 		 myDbHelper=new KidsMindDBHelper(activity);
 		Display display = getActivity().getWindowManager().getDefaultDisplay();
+		@SuppressWarnings("unused")
 		int height = 0;
 		if((android.os.Build.VERSION.SDK_INT >= 13)){
 			Point size = new Point();
@@ -136,10 +138,10 @@ private static final String TAG="MainActivity";
 		}
 		
 		img = (ImageView) view.findViewById(R.id.singeMenu);
+		
 		Log.v(TAG,"iscale"+iscale+"");
 		//img.setScaleX(iscale);
-		LayoutParams layoutParams = img.getLayoutParams();
-		layoutParams.height = (int)(height * 0.7);
+		new ViewResizeTask(img, 0.8f, 0.8f,this).execute();
 		img.setImageDrawable(getActivity().getResources().getDrawable(menuImage[position]));
 		img.setOnTouchListener(new OnTouchListener() {
 			@Override
@@ -207,6 +209,7 @@ private static final String TAG="MainActivity";
 		});
 		return view;
 	}
+	
 	void openDB(){
 //		db = openOrCreateDatabase("sample.db", wi, null);
 		db = myDbHelper.getWritableDatabase();
@@ -221,14 +224,10 @@ private static final String TAG="MainActivity";
 	}
 	void popupImage(Activity context)
 	{
-		// Create dialog
-		//	final Dialog dialog = new Dialog(context);
-
 		dialog.setContentView(R.layout.mydialog);
 		dialog.findViewById(R.id.camera).setOnClickListener(bHandler);
 		dialog.findViewById(R.id.picture).setOnClickListener(bHandler);
 		dialog.findViewById(R.id.album).setOnClickListener(bHandler);
-		//�쇰뵒��踰꾪듉 
 		dialog.show();
 	}
 	FileOutputStream fos;
@@ -256,7 +255,7 @@ private static final String TAG="MainActivity";
 				dialog.dismiss();
 			}
 			else if(requestCode==1){
-				Uri mImageCaptureUri = data.getData(); // 媛ㅻ윭由ъ뿉���좏깮���ъ쭊��Uri 由ы꽩
+				Uri mImageCaptureUri = data.getData(); 
 				BitmapFactory.Options options =new BitmapFactory.Options(); 
 				options.inJustDecodeBounds=true;
 				String [] proj={MediaStore.Images.Media.DATA};   

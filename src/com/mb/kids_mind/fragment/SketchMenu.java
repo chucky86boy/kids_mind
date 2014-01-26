@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ public class SketchMenu extends Fragment {
 	public ViewPager pager; 
 	public ScreenSlidePagerAdapter mPagerAdapter;
 	private int[] menuImage = {R.drawable.menu_01,R.drawable.menu_02,R.drawable.menu_03,R.drawable.menu_04};
+	private int currentPage;
 	@Override
 		public void onAttach(Activity activity) {
 			this.activity = activity;
@@ -46,6 +48,28 @@ public class SketchMenu extends Fragment {
 				pager.setOffscreenPageLimit(5);
 				mPagerAdapter=new ScreenSlidePagerAdapter(getFragmentManager());
 				pager.setAdapter(mPagerAdapter);
+				pager.setPageMargin(
+						activity.getResources().getDimensionPixelOffset(R.dimen.viewpager_margin));
+				pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+
+					@Override
+					public void onPageScrolled(int position,
+							float positionOffset, int positionOffsetPixels) {
+						
+					}
+
+					@Override
+					public void onPageSelected(int position) {
+						View prevView = pager.getChildAt(currentPage);
+						View view = pager.getChildAt(position);
+						view.animate().scaleX(1.1f).setDuration(500);
+						view.animate().scaleY(1.1f).setDuration(500);
+						prevView.animate().scaleX(10f/11f).setDuration(500);
+						prevView.animate().scaleY(10f/11f).setDuration(500);
+						currentPage = position;
+					}
+					
+				});
 				super.onPostExecute(result);
 			}
 			

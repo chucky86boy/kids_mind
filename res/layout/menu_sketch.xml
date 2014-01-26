@@ -5,14 +5,15 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp" >
+	android:paddingLeft="@dimen/viewpager_margin_fix"
+	android:paddingRight="@dimen/viewpager_margin_fix" >
 
     <ImageView
         android:id="@+id/singeMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/menu_01"
+        android:visibility="invisible"
         tools:ignore="ContentDescription" />
 
 </LinearLayout>
