@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import com.mb.kids_mind.R;
 import com.mb.kids_mind.Item.DetailListItem;
+import com.mb.kids_mind.task.ViewResizeTask;
 
 public class SingleResultSketchMenu extends Fragment{
 	ArrayList<DetailListItem> dlist;
@@ -48,11 +50,20 @@ public class SingleResultSketchMenu extends Fragment{
 		View view = inflater.inflate(R.layout.result_sketch, null);
 		activity.getFragmentManager();
 		Display display = getActivity().getWindowManager().getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
+		int height = 0;
+		if((android.os.Build.VERSION.SDK_INT >= 13)){
+			Point size = new Point();
+			display.getSize(size);
+			height = size.y;
+		}else{
+			DisplayMetrics metrics = new DisplayMetrics();
+			getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+			height = metrics.heightPixels;
+		}
+		
 		ImageView imageView = (ImageView) view.findViewById(R.id.singeMenu);
 		TextView title=(TextView)view.findViewById(R.id.resulttitle);
-		
+		new ViewResizeTask(imageView, 0.8f, 0.8f,this).execute();
 		setHashMap();
 		DetailListItem item=dlist.get(position);
 		title.setText(item.getDetail_tilte());

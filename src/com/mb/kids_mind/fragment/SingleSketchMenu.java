@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
@@ -23,6 +24,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -30,23 +32,18 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.mb.kids_mind.KidsMindAnalyzeActivity;
 import com.mb.kids_mind.KidsMindDrawActivity;
-import com.mb.kids_mind.MainActivity;
 import com.mb.kids_mind.R;
 import com.mb.kids_mind.Helper.KidsMindDBHelper;
-import com.mb.kids_mind.listener.PageChagedListener;
-
-import com.mb.kids_mind.view.PagerContainer;
-
+import com.mb.kids_mind.task.ViewResizeTask;
 public class SingleSketchMenu extends Fragment{
-private static final String TAG="MainActivity";
-	private int[] menuImage = {R.drawable.menu_02,R.drawable.menu_03,R.drawable.menu_04,R.drawable.menu_01};
+	private static final String TAG="MainActivity";
+	public int[] menuImage;
 	private int position;
 	public ImageView img; 
 	
@@ -66,36 +63,6 @@ private static final String TAG="MainActivity";
 		public void onClick(View v) {
 			switch(v.getId()){
 			case R.id.camera:
-				/*			Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-
-			//Log.v(d.getTaga(),"�����"+path.getAbsolutePath());
-
-			DirPath = Environment.getExternalStorageDirectory().getAbsolutePath();       
-			DirPath = DirPath + "/" + "MindDrawing" + "/";	         
-			Log.v(d.getTaga(),"�Ƕ���Ǹ��ɵǷ�"+DirPath);
-
-			File cameraDir = new File(DirPath);
-			if( !cameraDir.exists() ){
-				Log.v(d.getTaga(),"�����"+DirPath);
-
-				cameraDir.mkdirs();
-			}
-			Log.v(d.getTaga(),"�̹��ִ�"+DirPath);
-
-
-			savename = System.currentTimeMillis()+".jpg";
-
-			File save=new File(cameraDir,savename);
-
-			 uri = Uri.fromFile(save);
-			intent.putExtra(MediaStore.EXTRA_OUTPUT, uri ) ;
-
-			//intent.setAction( android.provider.MediaStore.ACTION_IMAGE_CAPTURE) ; // ��� �ܸ����� �ȵ� �� �ֱ� ������ �����ؾ� ��
-
-
-
-			startActivityForResult( intent, 1 ) ;
-				 */
 				SharedPreferences pref=activity.getSharedPreferences("pref",activity.MODE_PRIVATE);
 				SharedPreferences.Editor editor=pref.edit();
 
@@ -146,15 +113,27 @@ private static final String TAG="MainActivity";
 
 		super.onAttach(activity);
 	}
+	
+	@SuppressLint("NewApi")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		final View view = inflater.inflate(R.layout.menu_sketch, null);
 		 myDbHelper=new KidsMindDBHelper(activity);
 		Display display = getActivity().getWindowManager().getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		FrameLayout frame=(FrameLayout)view.findViewById(R.id.FrameLayout1);
+		@SuppressWarnings("unused")
+		int height = 0;
+		if((android.os.Build.VERSION.SDK_INT >= 13)){
+			Point size = new Point();
+			display.getSize(size);
+			height = size.y;
+		}else{
+			DisplayMetrics metrics = new DisplayMetrics();
+			getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+			height = metrics.heightPixels;
+		}
+		
+	
 		Log.v(TAG,"iscale"+iscale+"");
 		img = (ImageView) view.findViewById(R.id.singeMenu);
 		
@@ -172,20 +151,21 @@ private static final String TAG="MainActivity";
 //		    		}		
 //			}
 //		};
+		new ViewResizeTask(img, 0.8f, 0.8f,this).execute();
 		img.setImageDrawable(getActivity().getResources().getDrawable(menuImage[position]));
 		img.setOnTouchListener(new OnTouchListener() {
-
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				switch(event.getAction()){
 				case MotionEvent.ACTION_DOWN:
-
 					//doAction(v);
 					break;
 				case MotionEvent.ACTION_UP:
-					
 					SharedPreferences pref=activity.getSharedPreferences("pref",activity.MODE_PRIVATE);
 					SharedPreferences.Editor editor=pref.edit();
+					editor.putInt("qposition", position);
+					editor.putInt("dbpath", position+1);
+					editor.commit();
 
 					switch (position)
 					{
@@ -231,7 +211,6 @@ private static final String TAG="MainActivity";
 					}
 					break;
 				case MotionEvent.ACTION_MOVE:
-
 					break;
 
 				}
@@ -240,6 +219,7 @@ private static final String TAG="MainActivity";
 		});
 		return view;
 	}
+	
 	void openDB(){
 //		db = openOrCreateDatabase("sample.db", wi, null);
 		db = myDbHelper.getWritableDatabase();
@@ -254,14 +234,10 @@ private static final String TAG="MainActivity";
 	}
 	void popupImage(Activity context)
 	{
-		// Create dialog
-		//	final Dialog dialog = new Dialog(context);
-
 		dialog.setContentView(R.layout.mydialog);
 		dialog.findViewById(R.id.camera).setOnClickListener(bHandler);
 		dialog.findViewById(R.id.picture).setOnClickListener(bHandler);
 		dialog.findViewById(R.id.album).setOnClickListener(bHandler);
-		//라디오 버튼 
 		dialog.show();
 	}
 	FileOutputStream fos;
@@ -289,7 +265,7 @@ private static final String TAG="MainActivity";
 				
 			}
 			else if(requestCode==1){
-				Uri mImageCaptureUri = data.getData(); // 갤러리에서 선택된 사진의 Uri 리턴
+				Uri mImageCaptureUri = data.getData(); 
 				BitmapFactory.Options options =new BitmapFactory.Options(); 
 				options.inJustDecodeBounds=true;
 				String [] proj={MediaStore.Images.Media.DATA};   
@@ -340,12 +316,12 @@ private static final String TAG="MainActivity";
 					dialog.dismiss();
 
 					intent2.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-					//Log.v(Debugc.getTagd(),"�̹�����δ� 111111"+bpath2);
+					//Log.v(Debugc.getTagd(),"占싱뱄옙占쏙옙占쏙옙灌占�111111"+bpath2);
 					startActivity(intent2);
 					dialog.dismiss();
 
-					//Bitmap photo = Images.Media.getBitmap(getContentResolver(), mImageCaptureUri); // Uri로 이미지 가져오기
-					//Log.e(TAG, "PICK_FROM_ALBUM : " + photo.getHeight() * photo.getWidth()); // 확인코드
+					//Bitmap photo = Images.Media.getBitmap(getContentResolver(), mImageCaptureUri); // Uri濡��대�吏�媛�졇�ㅺ린
+					//Log.e(TAG, "PICK_FROM_ALBUM : " + photo.getHeight() * photo.getWidth()); // �뺤씤肄붾뱶
 				
 
 			}
@@ -442,12 +418,13 @@ private static final String TAG="MainActivity";
 		}
 	}
 	private void doTakeAlbumAction() {
-		// �ٹ� ȣ��
+		// 占쌕뱄옙 호占쏙옙
 		Intent intent = new Intent(Intent.ACTION_PICK);
 		intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
 		startActivityForResult(intent, 1);
 	}
 
+	
 	public String getRealPathFromURI(Uri contentUri){
 		String[] proj={MediaStore.Images.Media.DATA};
 		Cursor cursor=activity.managedQuery(contentUri, proj, null, null, null);

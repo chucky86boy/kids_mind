@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v13.app.FragmentStatePagerAdapter;
@@ -27,8 +28,6 @@ import com.mb.kids_mind.Helper.KidsMindDBHelper;
 import com.mb.kids_mind.Helper.MyHelper;
 import com.mb.kids_mind.Item.DetailListItem;
 import com.mb.kids_mind.fragment.SingleResultSketchMenu;
-import com.mb.kids_mind.listener.PageChagedListener;
-import com.mb.kids_mind.view.PagerContainer;
 
 public class KidsMindTotalResultActivity extends Activity {
 	FragmentManager fm=null;
@@ -49,6 +48,7 @@ public class KidsMindTotalResultActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.result_page);
+	    View view = findViewById(R.id.menu_pager);
 	    img=(ImageView)findViewById(R.id.doctor);
 		drawimage=(ImageView)findViewById(R.id.drawimage);
 		findViewById(R.id.back_btn).setOnClickListener(new OnClickListener() {
@@ -67,7 +67,7 @@ public class KidsMindTotalResultActivity extends Activity {
 	   khelper=new KidsMindDBHelper(KidsMindTotalResultActivity.this);
 		helper = new MyHelper(this, "kidsmind.db", null, 1);
 		String image_id=intent.getStringExtra("savename");
-
+		
 		readimage(image_id);
 		selectAll(image_id);
 		
@@ -80,38 +80,146 @@ public class KidsMindTotalResultActivity extends Activity {
 		if(list.size()!=0)
 		contents.setText(list.get(0).getDetail_content());
 		Log.v(TAG,"here");
-		
-		
-       // TODO Auto-generated method stub
-	    pager = (ViewPager)findViewById(R.id.menu_pager);
-		pager.setOffscreenPageLimit(5);
-		mPagerAdapter=new ScreenSlidePagerAdapter(getFragmentManager()); 
-		pager.setAdapter(mPagerAdapter);
+		new AsyncTask<View, Void, View>() {
+			View view;
+
+			@Override
+			protected View doInBackground(View... params) {
+				view = params[0];
+				while(!view.isShown()){
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {}
+				}
+				return view;
+			}
+
+			@Override
+			protected void onPostExecute(View result) {
+				pager = (ViewPager) result.findViewById(R.id.menu_pager);
+				pager.setOffscreenPageLimit(5);
+				mPagerAdapter=new ScreenSlidePagerAdapter(getFragmentManager());
+				pager.setAdapter(mPagerAdapter);
+				pager.setPageMargin(
+						getResources().getDimensionPixelOffset(R.dimen.viewpager_margin));
+				pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+
+					@Override
+					public void onPageScrolled(int position,
+							float positionOffset, int positionOffsetPixels) {
+						
+					}
+
+					@Override
+					public void onPageSelected(int position) {
+						View prevView = pager.getChildAt(currentPage);
+						View view = pager.getChildAt(position);
+						view.animate().scaleX(1.1f).setDuration(500);
+						view.animate().scaleY(1.1f).setDuration(500);
+						prevView.animate().scaleX(10f/11f).setDuration(500);
+						prevView.animate().scaleY(10f/11f).setDuration(500);
+						currentPage = position;
+						try{
+							DetailListItem ditem= list.get(position);
+						contents.setText(ditem.getDetail_content());
+							Log.v(TAG,"position listener"+position);
+							switch(position%2){
+							case 0:
+								img.setImageResource(R.drawable.re_dotor1);
+								break;
+							case 1:img.setImageResource(R.drawable.re_dotor2);
+								break;
+							
+							}
+						}catch(IndexOutOfBoundsException e){
+							
+							Log.v(TAG,"IndexOutofBounds"+e);
+						}
+
+					}
+					
+				});
+				super.onPostExecute(result);
+			}
+		}.execute(view);
+			
+			//pager.setOnPageChangeListener(contai);
 
 		
-		PagerContainer.listene=new PageChagedListener() {
-			
-			@Override
-			public void onPageChange(int position) {
-			try{
-				DetailListItem ditem= list.get(position);
-			contents.setText(ditem.getDetail_content());
-				Log.v(TAG,"position listener"+position);
-				switch(position%2){
-				case 0:
-					img.setImageResource(R.drawable.re_dotor1);
-					break;
-				case 1:img.setImageResource(R.drawable.re_dotor2);
-					break;
-				
-				}
-			}catch(IndexOutOfBoundsException e){
-				
-				Log.v(TAG,"IndexOutofBounds"+e);
-			}
-				}
-			
-		};
+		
+//		pager = (ViewPager) findViewById(R.id.menu_pager);
+//		pager.setOffscreenPageLimit(5);
+//		mPagerAdapter=new ScreenSlidePagerAdapter(getFragmentManager());
+//		pager.setAdapter(mPagerAdapter);
+//		pager.setPageMargin(
+//				getResources().getDimensionPixelOffset(R.dimen.viewpager_margin));
+//		pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+//
+//			@Override
+//			public void onPageScrolled(int position,
+//					float positionOffset, int positionOffsetPixels) {
+//				
+//			}
+//
+//			@Override
+//			public void onPageSelected(int position) {
+//				View prevView = pager.getChildAt(currentPage);
+//				View view = pager.getChildAt(position);
+//				view.animate().scaleX(1.1f).setDuration(500);
+//				view.animate().scaleY(1.1f).setDuration(500);
+//				prevView.animate().scaleX(10f/11f).setDuration(500);
+//				prevView.animate().scaleY(10f/11f).setDuration(500);
+//				currentPage = position;
+//				try{
+//					DetailListItem ditem= list.get(position);
+//				contents.setText(ditem.getDetail_content());
+//					Log.v(TAG,"position listener"+position);
+//					switch(position%2){
+//					case 0:
+//						img.setImageResource(R.drawable.re_dotor1);
+//						break;
+//					case 1:img.setImageResource(R.drawable.re_dotor2);
+//						break;
+//					
+//					}
+//				}catch(IndexOutOfBoundsException e){
+//					
+//					Log.v(TAG,"IndexOutofBounds"+e);
+//				}
+//			}
+//			
+//		});
+		
+       // TODO Auto-generated method stub
+//	    pager = (ViewPager)findViewById(R.id.menu_pager);
+//		pager.setOffscreenPageLimit(5);
+//		mPagerAdapter=new ScreenSlidePagerAdapter(getFragmentManager()); 
+//		pager.setAdapter(mPagerAdapter);
+
+		
+//		PagerContainer.listene=new PageChagedListener() {
+//			
+//			@Override
+//			public void onPageChange(int position) {
+//			try{
+//				DetailListItem ditem= list.get(position);
+//			contents.setText(ditem.getDetail_content());
+//				Log.v(TAG,"position listener"+position);
+//				switch(position%2){
+//				case 0:
+//					img.setImageResource(R.drawable.re_dotor1);
+//					break;
+//				case 1:img.setImageResource(R.drawable.re_dotor2);
+//					break;
+//				
+//				}
+//			}catch(IndexOutOfBoundsException e){
+//				
+//				Log.v(TAG,"IndexOutofBounds"+e);
+//			}
+//				}
+//			
+//		};
 		   
 
 		//PagerContainer m=new PagerContainer(KidsMindTotalResultActivity.this,img);

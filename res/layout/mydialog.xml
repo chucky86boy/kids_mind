@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="30dp"
@@ -18,7 +19,7 @@
         android:layout_marginRight="5dp"
         android:layout_weight="1"
         android:background="@drawable/camerabtn"
-         />
+        tools:ignore="ButtonStyle" />
 
     <Button
         android:id="@+id/album"
@@ -28,7 +29,7 @@
         android:layout_marginRight="5dp"
         android:layout_weight="1"
         android:background="@drawable/albumbtn"
-       />
+        tools:ignore="ButtonStyle" />
 
     <Button
         android:id="@+id/picture"
@@ -37,6 +38,7 @@
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_weight="1"
-        android:background="@drawable/paintbtn" />
+        android:background="@drawable/paintbtn"
+        tools:ignore="ButtonStyle" />
 
 </LinearLayout>
