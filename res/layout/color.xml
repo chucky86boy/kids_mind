@@ -11,8 +11,9 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="색"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="Color"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ff884848" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +27,7 @@
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
      
-     android:background="@drawable/colorselectbutton1"
+     android:background="@drawable/swatch_black"
      android:height="50dp"
      android:width="50dp" />
 
@@ -107,7 +108,7 @@
             android:id="@+id/fifth1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/colorselectbutton9"
+            android:background="@drawable/swatch_b"
             android:height="50dp"
             android:width="50dp" />
     

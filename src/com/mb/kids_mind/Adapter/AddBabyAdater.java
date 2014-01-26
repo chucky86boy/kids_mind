@@ -6,8 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.BitmapFactory.Options;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Environment;
 import android.util.Log;
@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.mb.kids_mind.R;
 import com.mb.kids_mind.RoundedAvatarDrawable;
@@ -69,12 +69,23 @@ public class AddBabyAdater extends BaseAdapter {
 			cView=LayoutInflater.from(context).inflate(layout, parent,false);
 			holder = new ViewHolder();
 			holder.image=(ImageView)cView.findViewById(R.id.imageView1);
+			holder.sex=(ImageView)cView.findViewById(R.id.sex);
+			holder.name=(TextView)cView.findViewById(R.id.name);
+			holder.name.setTextColor(0xff000000);
 			cView.setTag(holder);
 			//	Log.v(TAG,"cvew==null");
 		} else {
 
 			holder = (ViewHolder) cView.getTag();
 			//	Log.v(TAG,"cvew!=null");
+		}
+		holder.name.setText(contents.getName());
+		String se=contents.getSex();
+		if("boy".equals(se)){
+			holder.sex.setImageResource(R.drawable.gender_boy);
+		}else if("girl".equals(se)){
+			holder.sex.setImageResource(R.drawable.gender_girl);
+			
 		}
 		String image_path=contents.getImage_path();
 		readimage(image_path, holder.image);
@@ -88,7 +99,7 @@ public class AddBabyAdater extends BaseAdapter {
 	void readimage(String path,ImageView img){
 		if ( Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 
-
+try{
 			//DbUse dbuse=new DbUse(MindDrawingResultActivity.this);
 			//insertRec2(path2, "0");
 			BitmapFactory.Options options =new BitmapFactory.Options();
@@ -100,7 +111,10 @@ public class AddBabyAdater extends BaseAdapter {
 			bitmap = getBitmapResizePrc(bitmap, 150, 150);
 			profile=new RoundedAvatarDrawable(bitmap);
 			img.setImageDrawable(profile);
-//						if(bitmap!=null){
+}catch(OutOfMemoryError e){
+	Log.v(TAG,"outofmemoryerror");
+}
+			//						if(bitmap!=null){
 //				Log.v(TAG,"이미지 로딩");
 //				img.setImageBitmap(bitmap);
 //			}else{
@@ -206,6 +220,8 @@ public class AddBabyAdater extends BaseAdapter {
 	    }
 	class ViewHolder {
 		public ImageView image;
+		public ImageView sex;
+		public TextView name;
 		
 	}
 }

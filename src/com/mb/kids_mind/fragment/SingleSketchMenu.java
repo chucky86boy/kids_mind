@@ -32,6 +32,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.mb.kids_mind.KidsMindAnalyzeActivity;
@@ -39,13 +40,16 @@ import com.mb.kids_mind.KidsMindDrawActivity;
 import com.mb.kids_mind.MainActivity;
 import com.mb.kids_mind.R;
 import com.mb.kids_mind.Helper.KidsMindDBHelper;
+import com.mb.kids_mind.listener.PageChagedListener;
+
+import com.mb.kids_mind.view.PagerContainer;
 
 public class SingleSketchMenu extends Fragment{
 private static final String TAG="MainActivity";
-	private int[] menuImage = {R.drawable.menu_01,R.drawable.menu_02,R.drawable.menu_03,R.drawable.menu_04};
+	private int[] menuImage = {R.drawable.menu_02,R.drawable.menu_03,R.drawable.menu_04,R.drawable.menu_01};
 	private int position;
 	public ImageView img; 
-
+	
 	FragmentManager fm;
 	Activity activity;
 	String DirPath;
@@ -145,16 +149,29 @@ private static final String TAG="MainActivity";
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.menu_sketch, null);
+		final View view = inflater.inflate(R.layout.menu_sketch, null);
 		 myDbHelper=new KidsMindDBHelper(activity);
 		Display display = getActivity().getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
-		img = (ImageView) view.findViewById(R.id.singeMenu);
+		FrameLayout frame=(FrameLayout)view.findViewById(R.id.FrameLayout1);
 		Log.v(TAG,"iscale"+iscale+"");
+		img = (ImageView) view.findViewById(R.id.singeMenu);
+		
 		//img.setScaleX(iscale);
-		LayoutParams layoutParams = img.getLayoutParams();
-		layoutParams.height = (int)(size.y * 0.7);
+//		LayoutParams layoutParams = img.getLayoutParams();
+//		layoutParams.height = (int)(size.y * 0.7);
+//		PagerContainer.listene=new PageChagedListener() {
+//			
+//			@Override
+//			public void onPageChange(int position) {
+//				// TODO Auto-generated method stub
+//				if (SingleSketchMenu.listener != null) {
+//		    		Log.v(TAG,"viewchange listendr");
+//		    		SingleSketchMenu.listener.onPageChange(img);
+//		    		}		
+//			}
+//		};
 		img.setImageDrawable(getActivity().getResources().getDrawable(menuImage[position]));
 		img.setOnTouchListener(new OnTouchListener() {
 
@@ -267,9 +284,9 @@ private static final String TAG="MainActivity";
 				
 				intent2.putExtra("path", bpath2);
 				intent2.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-				
-				startActivity(intent2);
 				dialog.dismiss();
+				startActivity(intent2);
+				
 			}
 			else if(requestCode==1){
 				Uri mImageCaptureUri = data.getData(); // 갤러리에서 선택된 사진의 Uri 리턴
@@ -320,7 +337,8 @@ private static final String TAG="MainActivity";
 					SharedPreferences.Editor editor=pref.edit();
 					String bpath2=pref.getString("bpath", "0");
 					intent2.putExtra("path", bpath2);
-					
+					dialog.dismiss();
+
 					intent2.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 					//Log.v(Debugc.getTagd(),"�̹�����δ� 111111"+bpath2);
 					startActivity(intent2);

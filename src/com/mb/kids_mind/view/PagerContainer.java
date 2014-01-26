@@ -22,11 +22,6 @@
  */
 package com.mb.kids_mind.view;
 
-import com.mb.kids_mind.KidsMindTotalResultActivity;
-import com.mb.kids_mind.Dialog.MyDialogColor;
-import com.mb.kids_mind.listener.OnColorSelectedListener;
-import com.mb.kids_mind.listener.PageChagedListener;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
@@ -37,7 +32,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
- 
+
+import com.mb.kids_mind.fragment.SingleSketchMenu;
+import com.mb.kids_mind.listener.PageChagedListener;
+
 /**
  * PagerContainer: A layout that displays a ViewPager with its children that are outside
  * the typical pager bounds.
@@ -49,12 +47,12 @@ public class PagerContainer extends FrameLayout implements ViewPager.OnPageChang
     private int currentPage;
     ImageView img;
     SharedPreferences pref;
-    public PagerContainer(Context context,ImageView image) {
+    Context pContext;
+    public PagerContainer(Context context) {
         super(context);
-        img=image;
+       pContext=context;
         init();
-         pref=context.getSharedPreferences("pref",context.MODE_PRIVATE);
-		
+        
     }
  
     public PagerContainer(Context context, AttributeSet attrs) {
@@ -123,15 +121,52 @@ public class PagerContainer extends FrameLayout implements ViewPager.OnPageChang
         if (mNeedsRedraw) invalidate();
     }
  private static final String TAG="MainActivity";
- public static PageChagedListener listener;
+ public static PageChagedListener listene;
+
+ int prefIndex=0; 
+ int oldWidth=320, oldHeight=320,newWidth=400,newHeight=400;
     @Override
-    public void onPageSelected(int position) { 
+    public void onPageSelected( int position) { 
     	Log.v(TAG,"poposisition"+position);
-    	if (PagerContainer.listener != null) {
+    	if (PagerContainer.listene != null) {
     		//	Log.v(d.getTaga(),"������ Į��"+color+"");
-    		PagerContainer.listener.onPageChange(position);
+    		PagerContainer.listene.onPageChange(position);
     		}
-//    	if(img!=null){
+    	
+//    	SingleSketchMenu.listener=new ViewSizeChangedListener() {
+//			
+//			@Override
+//			public void onPageChange(ImageView img) {
+//				// TODO Auto-generated method stub
+//				
+//				LayoutParams params = (LayoutParams) img.getLayoutParams();
+//				params.width = newWidth;
+//				params.height=newHeight;
+//				// existing height is ok as is, no need to edit it
+//				img.setLayoutParams(params);
+//				
+////				LayoutParams Oldparams = (LayoutParams) img.getLayoutParams();
+////				params.width = newWidth;
+////				params.height=newHeight;
+////				// existing height is ok as is, no need to edit it
+////				img.setLayoutParams(params);
+//				
+////				Log.v(TAG,"pagechaged");
+////				View a=v.getChildAt(position);
+////				Log.v(TAG,"pagechaged");
+////				FrameLayout.LayoutParams params=new FrameLayout.LayoutParams(newWidth,newHeight);
+////				Log.v(TAG,"pagechaged");
+////				a.setLayoutParams(params);
+////				Log.v(TAG,"pagechaged");
+////				View oldV =v.getChildAt(prefIndex);
+////				Log.v(TAG,"pagechaged");
+////				FrameLayout.LayoutParams oldParams =new FrameLayout.LayoutParams(oldWidth,oldHeight);
+////				Log.v(TAG,"pagechaged");
+////				oldV.setLayoutParams(oldParams);
+////				prefIndex=position;
+//			}
+//		};
+    	//    	if(img!=null){
 //    	switch(position){
 //		case 0:
 //			img.setImageResource(R.drawable.re_dotor1);

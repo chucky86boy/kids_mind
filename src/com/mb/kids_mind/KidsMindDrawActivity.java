@@ -8,7 +8,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -46,6 +45,7 @@ public class KidsMindDrawActivity extends FragmentActivity {
 	    //Debugc d=new Debugc();
 	    FrameLayout fram=null;
 	    String savename;
+	    SharedPreferences pref;
 	LinearLayout linear;
 	View.OnClickListener bHandler=new View.OnClickListener() {
 		
@@ -57,9 +57,15 @@ public class KidsMindDrawActivity extends FragmentActivity {
                 MyDialogColor.listener = new OnColorSelectedListener() { 
                     public void onColorSelected(int color) { 
                     	//Log.v(d.getTaga(),"������ ���� Į��"+color+"");
-                        mColor = color; 
+                        pref=getSharedPreferences("pref",MODE_PRIVATE);
+                        SharedPreferences.Editor editor =pref.edit();
+                        editor.putInt("color", color);
+                        editor.commit();
+                    	mColor = color; 
+                        
                         linear.setBackgroundColor(color);
                         board.updatePaintProperty(mColor, mSize); 
+                        
                       //  displayPaintProperty(); 
                     } 
                 }; 
@@ -77,7 +83,11 @@ public class KidsMindDrawActivity extends FragmentActivity {
                     public void onPenSelected(int size) { 
                         mSize = size; 
                         board.updatePaintProperty(mColor, mSize); 
-                       // displayPaintProperty(); 
+                        pref=getSharedPreferences("pref",MODE_PRIVATE);
+                        SharedPreferences.Editor editor =pref.edit();
+                        editor.putInt("size", size);
+                        editor.commit();
+                        // displayPaintProperty(); 
                     } 
                 };
                 MyDialogpen.listener3 = new OnColorSelectedListener() { 
@@ -157,10 +167,13 @@ public class KidsMindDrawActivity extends FragmentActivity {
 	                }*/ 
 				break;
 			case R.id.newpage2://���� �Է����� �ٲ�
-				board.clear();
+				doClear();
+				//board.newImage();
+				//board.clear();
 				break;
 			case R.id.undoBtn://���
-				   board.undo(); 
+				
+				board.undo(); 
 				break;
 		
 				
@@ -200,8 +213,8 @@ public class KidsMindDrawActivity extends FragmentActivity {
     Button colorLegendBtn; 
     TextView sizeLegendTxt; 
     FragmentTransaction ft;
-    int mColor = 0xff000000; 
-    int mSize = 2; 
+    int mColor ; 
+    int mSize ; 
     int oldColor; 
     int oldSize;
     int width;
@@ -221,7 +234,11 @@ public class KidsMindDrawActivity extends FragmentActivity {
         super.onCreate(savedInstanceState); 
         this.overridePendingTransition(0, 0);
 
-        setContentView(R.layout.drawmain); 
+        setContentView(R.layout.drawpain); 
+        pref=getSharedPreferences("pref", MODE_PRIVATE);
+        mColor=pref.getInt("color", 0xff000000);
+        mSize=pref.getInt("csize", 2);
+        
         popupImage(KidsMindDrawActivity.this);        
         //LinearLayout toolsLayout = (LinearLayout) findViewById(R.id.toolsLayout); 
        // LinearLayout boardLayout = (LinearLayout) findViewById(R.id.boardLayout); 
@@ -322,12 +339,12 @@ public class KidsMindDrawActivity extends FragmentActivity {
   
     @Override
 	protected void onPause() {
-    	((ViewGroup)(board.getParent())).removeView(board);
-    	Log.v(TAG,"activityonpause");
-    	fm=getSupportFragmentManager();
-        ft =fm.beginTransaction();
-        ft.remove(frag5);
-        ft.commit();
+//    	((ViewGroup)(board.getParent())).removeView(board);
+//    	Log.v(TAG,"activityonpause");
+//    	fm=getSupportFragmentManager();
+//        ft =fm.beginTransaction();
+//        ft.remove(frag5);
+//        ft.commit();
         
 		super.onPause();
 	}
@@ -342,18 +359,35 @@ public class KidsMindDrawActivity extends FragmentActivity {
 		super.onDestroy();
 	}
 
+void doClear(){
+	((ViewGroup)(board.getParent())).removeView(board);
+	Log.v(TAG,"activityonpause");
+	fm=getSupportFragmentManager();
+    ft =fm.beginTransaction();
+    ft.remove(frag5);
+    ft.commit();
+	frag5=new DrawFragment();
+    board=new BestPaintBoard(this);
+    fm=getSupportFragmentManager();
+    ft =fm.beginTransaction();
+    ft.add(R.id.boardLayout, frag5);
+    ft.commit();
 
+}
 
 
 
 	@Override
 	protected void onResume() {
+		
     	frag5=new DrawFragment();
         board=new BestPaintBoard(this);
         fm=getSupportFragmentManager();
         ft =fm.beginTransaction();
         ft.add(R.id.boardLayout, frag5);
         ft.commit();
+        mColor=pref.getInt("color", 0xff000000);
+        mSize=pref.getInt("csize", 2);
         
 		super.onResume();
 	}

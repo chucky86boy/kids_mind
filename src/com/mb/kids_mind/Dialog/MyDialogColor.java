@@ -31,7 +31,7 @@ public class MyDialogColor extends DialogFragment {
 		0xffff6600,
 		0xff9900ff,
 		0xff009966,
-		0xffffffff};
+		0xff964b00};
 	
 	
 	public void	selectcolor(int color){

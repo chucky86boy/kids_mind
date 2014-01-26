@@ -5,6 +5,7 @@
     android:background="@drawable/bg_sketch"
     android:orientation="vertical" >
 
+   
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
            
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="15dp"
          android:background="@drawable/pen"
         />
 
@@ -24,6 +25,9 @@
             android:id="@+id/colorlinear"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+            
             android:gravity="center"
             android:orientation="vertical" >
 
@@ -31,8 +35,7 @@
                   android:id="@+id/colorBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                
                  android:background="@drawable/color"
                  />
 
@@ -42,8 +45,8 @@
           android:id="@+id/eraserBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-               android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+               android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:background="@drawable/eraser"
              />
 
@@ -51,7 +54,7 @@
             android:id="@+id/undoBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-               android:layout_marginLeft="10dp"
+               android:layout_marginLeft="15dp"
         
            android:background="@drawable/undo"
           />

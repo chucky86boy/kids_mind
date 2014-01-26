@@ -60,10 +60,13 @@ public class KidsMindResultActivity extends Activity {
 				startActivity(in);
 				String detail_id=pref.getString("checked", "");
 				String question_id=pref.getString("qposition","");
-				insertRec(savename, detail_id, "0", 0, question_id);
-			break;
-			case R.id.button2:
+				String userid=pref.getString("userid", "");
 				
+				insertRec(savename, detail_id, "0", 0, question_id,userid);
+			break;
+			case R.id.back_btn:
+			KidsMindResultActivity.this.finish();
+			break;
 			}
 		}
 	};
@@ -75,6 +78,7 @@ public class KidsMindResultActivity extends Activity {
 		Button btn=(Button)findViewById(R.id.button1);
 		 img=(ImageView)findViewById(R.id.imageView1);
 		 pref=getSharedPreferences("pref",MODE_PRIVATE);
+		 findViewById(R.id.back_btn).setOnClickListener(bHandler);
 		 myhelper=new KidsMindDBHelper(KidsMindResultActivity.this);
 		 helper = new MyHelper(this, "kidsmind.db", null, 1);
 //		 try{
@@ -198,7 +202,7 @@ public class KidsMindResultActivity extends Activity {
 		adapter.notifyDataSetChanged();
 	}	
 	public void insertRec(String image_id, String detail_id,
-			String detail_check, int advice_id, String question_id) {
+			String detail_check, int advice_id, String question_id,String user_id) {
 		// if(selectDb(detail_id)){
 		openDB();
 
@@ -212,6 +216,7 @@ public class KidsMindResultActivity extends Activity {
 			values.put("detail_check", detail_check);
 			values.put("advice_id", advice_id);
 			values.put("question_id", question_id);
+			values.put("user_id",user_id);
 			long id = db2.insert("km_check", null, values);
 			
 			Log.v(TAG, id > 0 ? "success" : "fail");

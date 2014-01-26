@@ -36,11 +36,11 @@ public class MyHelper extends SQLiteOpenHelper {
 //				
 //				"tag_id char(5) primary key  , tag_name text not null, question_id char(5) not null); ";
 		String sql3 = "create table km_baby(" +
-				"user_id integer primary key autoincrement," +
-				"name text not null, birth text not null, sex text not null,  image_path text not null, image_id text not null); ";
+				"_id integer primary key autoincrement," +
+				"user_name text not null, user_id text not null, name text not null, birth text not null, sex text not null,  image_path text not null); ";
 		String sql4 = "create table km_check(" +
 				"_id integer primary key autoincrement," +
-				"fName text not null, detail_id text not null, detail_check text not null, advice_id integer ,question_id text not null); ";
+				"fName text not null, detail_id text not null, detail_check text not null, advice_id integer ,question_id text not null, user_id text not null); ";
 		String sql5 = "create table km_image(" +
 				"_id integer primary key autoincrement," +
 				"fName text not null, checked char(5) not null); ";

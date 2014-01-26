@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:text="Add Baby"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+         	android:textSize="20sp" />
 
     </LinearLayout>
       <EditText
@@ -51,7 +51,7 @@
           android:src="@drawable/icon_birth" />
 
       <TextView
-          android:id="@+id/textView1"
+          android:id="@+id/birthtext"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="5dp"

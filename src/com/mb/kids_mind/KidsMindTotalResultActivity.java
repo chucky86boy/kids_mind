@@ -17,6 +17,8 @@ import android.os.Environment;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +51,14 @@ public class KidsMindTotalResultActivity extends Activity {
 	    setContentView(R.layout.result_page);
 	    img=(ImageView)findViewById(R.id.doctor);
 		drawimage=(ImageView)findViewById(R.id.drawimage);
+		findViewById(R.id.back_btn).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});
 	    contents=(TextView)findViewById(R.id.contents);
 		Intent intent=getIntent();
 		//if("1".equals(intent.getStringExtra("where"))){
@@ -79,7 +89,7 @@ public class KidsMindTotalResultActivity extends Activity {
 		pager.setAdapter(mPagerAdapter);
 
 		
-		PagerContainer.listener=new PageChagedListener() {
+		PagerContainer.listene=new PageChagedListener() {
 			
 			@Override
 			public void onPageChange(int position) {

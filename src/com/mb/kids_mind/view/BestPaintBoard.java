@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.util.Stack;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -72,7 +73,7 @@ private static final String TAG="MainActivity";
 
     private float mCurveEndX;
     private float mCurveEndY;
-
+    private SharedPreferences pref;
     private int mInvalidateExtraBorder = 10;
     
     static final float TOUCH_TOLERANCE = 8;
@@ -80,7 +81,7 @@ private static final String TAG="MainActivity";
     private static final boolean RENDERING_ANTIALIAS = true;
     private static final boolean DITHER_FLAG = true;
 
-    private int mCertainColor = 0xFF000000;
+    private int mCertainColor ;
     private float mStrokeWidth = 2.0f;
 	
 	/**
@@ -90,7 +91,8 @@ private static final String TAG="MainActivity";
 	 */
 	public BestPaintBoard(Context context) {
 		super(context);
-		
+		pref=context.getSharedPreferences("pref", context.MODE_PRIVATE);
+		mCertainColor=pref.getInt("color", 0xFF000000);
 		// create a new paint object
 		mPaint = new Paint();
 		mPaint.setAntiAlias(RENDERING_ANTIALIAS);

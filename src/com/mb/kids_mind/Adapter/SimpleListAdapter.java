@@ -19,7 +19,6 @@ package com.mb.kids_mind.Adapter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
@@ -32,11 +31,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mb.kids_mind.R;
 import com.mb.kids_mind.Item.DetailListItem;
-import com.mb.kids_mind.Item.KMimageItem;
 import com.mb.kids_mind.Item.KidsMindFlagItem;
 
 
@@ -128,7 +127,7 @@ public class SimpleListAdapter extends BaseAdapter {
 			holder.title=(Button)cView.findViewById(R.id.checkBox1);
 			holder.sort=(TextView)cView.findViewById(R.id.textView1);
 			holder.sort.setTextColor(0xff000000);
-
+			holder.image=(ImageView)cView.findViewById(R.id.image);
 			cView.setTag(holder);
 			//	Log.v(TAG,"cvew==null");
 		} else {
@@ -148,11 +147,12 @@ public class SimpleListAdapter extends BaseAdapter {
 		//String ImageUrl = Const.QUESTION_IMAGE_PATH;
 		Integer key=map.get(image);
 		if(key!=null){
-
-			holder.frame.setBackgroundResource((int)key);
+			 holder.image.setBackgroundResource((int)key);
+			//holder.frame.setBackgroundResource((int)key);
 
 		}else
-			holder.frame.setBackgroundResource(R.drawable.box_thumbnail);
+			holder.image.setBackgroundResource(R.drawable.btn_doctor);
+			//holder.frame.setBackgroundResource(R.drawable.box_thumbnail);
 		//		holder.frame.setBackgroundResource(contents.getImgres());
 
 
@@ -828,6 +828,7 @@ public class SimpleListAdapter extends BaseAdapter {
 	}
 
 	class ViewHolder {
+		public ImageView image;
 		public FrameLayout frame;
 		public Button title;
 		public TextView sort;

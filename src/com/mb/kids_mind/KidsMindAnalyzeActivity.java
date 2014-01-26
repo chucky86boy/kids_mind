@@ -60,6 +60,7 @@ public class KidsMindAnalyzeActivity extends Activity {
 	private static final int CROP_FROM_CAMERA = 2;
 	LinearLayout linear;
 	ImageView imgView;
+	 Dialog dialog=null;
 	//private Bitmap photo;
 	private Uri mImageCaptureUri; // 이미지가 있는 곳의 Uri
 
@@ -231,6 +232,7 @@ public class KidsMindAnalyzeActivity extends Activity {
 		handler.postDelayed(new Runnable(){
 			@Override
 			public void run(){
+				dialog.dismiss();
 				Intent intent =new Intent(KidsMindAnalyzeActivity.this, KidsMindResultActivity.class);
 				intent.putExtra("savename", image_id);
 				startActivity(intent);
@@ -245,7 +247,7 @@ public class KidsMindAnalyzeActivity extends Activity {
 
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) { 
-
+ 
 
 		switch (keyCode) { 
 
@@ -267,7 +269,7 @@ public class KidsMindAnalyzeActivity extends Activity {
 	void popupImage(Activity context)
 	{
 		// Create dialog
-		final Dialog dialog = new Dialog(context);
+		 dialog = new Dialog(context);
 		dialog.getWindow().setBackgroundDrawable
 
 		(new ColorDrawable(android.graphics.Color.TRANSPARENT));

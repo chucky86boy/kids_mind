@@ -19,6 +19,8 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -33,7 +35,7 @@ import com.mb.kids_mind.listener.MainSideMenuListener;
 
 public class MainActivity extends Activity {
 	FragmentManager fm=null;
-	KidsMindDBHelper myDbHelper=null;
+	
     private static final String TAG="MainActivity";
     ArrayList<BabyInformationItem> babyitem;
 View.OnClickListener bHandler =new View.OnClickListener() {
@@ -64,37 +66,55 @@ View.OnClickListener bHandler =new View.OnClickListener() {
 	SQLiteDatabase db,db2;
 	MyHelper helper;
 	TextView name;
+	
 	ListView addlist;
 	ImageView mypage,login;
 	AddBabyAdater adapter;
+	public ImageView toggle;
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+        SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
+    		SharedPreferences.Editor editor=pref.edit();
+    	    
         fm=getFragmentManager();
         fm.beginTransaction().add(R.id.fragmentHolder,new SketchMenu()).commit();
         name=(TextView)findViewById(R.id.mainname);
         helper = new MyHelper(this, "kidsmind.db", null, 1);
-        myDbHelper=new KidsMindDBHelper(MainActivity.this);
-		 
-		try{
-			myDbHelper.createDataBase();
-			closeDB();
-		}catch(IOException ioe){
-			Log.v(TAG,"error"+ioe);
-		}
+        
         addlist=(ListView)findViewById(R.id.listView1);
         addlist.setDivider(null);
+        
         selectAll();
         int height=(getResources().getDimensionPixelSize(R.dimen.list_item_size)+1)*babyitem.size();
         LayoutParams lp=(LayoutParams) addlist.getLayoutParams();
         lp.height=height;
         addlist.setLayoutParams(lp);
-        
+    	//editor.putString("login_check", "checked");
+		
+		
         adapter=new AddBabyAdater(MainActivity.this, R.layout.babyadapter, babyitem);
        
         addlist.setAdapter(adapter);
+        addlist.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View view, int position,
+					long arg3) {
+				ArrayList<BabyInformationItem> list=new ArrayList<BabyInformationItem>();
+				list=adapter.getList();
+				BabyInformationItem info=list.get(position);
+				SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
+				SharedPreferences.Editor editor=pref.edit();
+				editor.putString("userid", info.getUser_id());
+				editor.commit();
+				Log.v(TAG,"userid"+info.getUser_id());
+				//시작 앨범으로 시작~~ 그해당 userid를 통해  km_check 테이블에서 해당 image_id뽑아내고 그다음 image_id를 통해 detail_id를 이용해서 선택항목 추출
+				
+			}
+		});
+        //리스트에 들어가는 부분에서 선택하면 user id를 쉐어드로 넣어준다.
         login=(ImageView)findViewById(R.id.login);
         login.setImageResource(R.drawable.btn_login);
         login.setOnClickListener(new OnClickListener() {
@@ -106,7 +126,8 @@ View.OnClickListener bHandler =new View.OnClickListener() {
 				startActivity(intent);
 			}
 		});
-        findViewById(R.id.menuToggler).setOnClickListener(new MainSideMenuListener());
+       toggle=(ImageView) findViewById(R.id.menuToggler);
+    		   toggle.setOnClickListener(new MainSideMenuListener());
         findViewById(R.id.add).setOnClickListener(bHandler);
         mypage=(ImageView)findViewById(R.id.mypage);
         mypage.setOnClickListener(bHandler);
@@ -135,22 +156,18 @@ View.OnClickListener bHandler =new View.OnClickListener() {
 //				return false;
 //			}
 //		});
-        SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
-		SharedPreferences.Editor editor=pref.edit();
-		editor.putInt("abs", 0);
+        editor.putInt("abs", 0);
 		editor.putString("list", "");
 		editor.putInt("temp", 0);
 		editor.commit();
-		
-//		try{
-//			myDbHelper.openDataBase();
-//		}catch(SQLException sqle){
-//			throw sqle;
-//		}
-//		if(!checkDB(MainActivity.this)){
-//			dumpDB(MainActivity.this);
-//		}
-		//selectAll();
+		String ch=pref.getString("just","");
+		if("".equals(ch)){
+			editor.putString("just", "on");
+			editor.commit();
+			Intent in=new Intent(MainActivity.this,KidsMindAddActivity.class);
+			startActivityForResult(in, 0);
+		}
+
     }
 	
 	@Override
@@ -160,6 +177,7 @@ View.OnClickListener bHandler =new View.OnClickListener() {
 			//Log.
 			if(requestCode==0){
 				Log.v(TAG,"리절트 왔어요");
+				
 				selectAll();
 				Log.v(TAG,"size"+babyitem.size()+"");
 				int height=(getResources().getDimensionPixelSize(R.dimen.list_item_size)+1)*babyitem.size();
@@ -175,22 +193,52 @@ View.OnClickListener bHandler =new View.OnClickListener() {
 	}
 	void selectAll(){
 		openDB();
+		Log.v(TAG, "탭 디비 시작");
+		SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
+		SharedPreferences.Editor editor=pref.edit();
+	    
+		String checking=pref.getString("login_check", "");
+		String user_name;
+		if("".equals(checking)){
+			//not login
+			 user_name="untitle";
+			 name.setText(user_name);
+			editor.putString("user_name", user_name);
+	        editor.commit();
+	        	
+		}else{
+			//로그인된경우
+			 user_name=pref.getString("user_name", "");
+			 name.setText(user_name);
+		}
+        Log.v(TAG,"username"+user_name);
+		// String sql
+		// ="select tag_name from md_question_tag where question_id=Q"+po+";";
+		Cursor c = null;
 		babyitem=new ArrayList<BabyInformationItem>();
-		//諛⑸쾿 1
-		String sql ="select image_path from km_baby order by user_id DESC;";
-		Cursor c=null;
+		
+		String wStr = "user_name=?";
+		String[] wherStr = { user_name };
+		String[] colNames = {"user_id","name","birth","sex","image_path" };
+		try {
+			c = db2.query("km_baby", colNames, wStr, wherStr, null,
+					null, null);
+		
+//		
+//		String sql ="select * from km_baby where "+user_name"+ order by _id DESC;";
+//		Cursor c=null;
 		Log.v(TAG,"select db");
-		try{
-			Log.v(TAG,"select db");
-			
-			c=db2.rawQuery(sql, null);
+//		try{
+//			Log.v(TAG,"select db");
+//			
+//			c=db2.rawQuery(sql, null);
 			Log.v(TAG,"숫자:"+c.getCount());
 			while(c.moveToNext()){
 			BabyInformationItem item= new BabyInformationItem();
-			//item.setUser_id(c.getInt(c.getColumnIndex("user_id")));
-//			item.setName(c.getString(c.getColumnIndex("name")));
-//			item.setBirth(c.getString(c.getColumnIndex("birth")));
-//			item.setSex(c.getString(c.getColumnIndex("sex")));
+			item.setUser_id(c.getString(c.getColumnIndex("user_id")));
+			item.setName(c.getString(c.getColumnIndex("name")));
+			item.setBirth(c.getString(c.getColumnIndex("birth")));
+			item.setSex(c.getString(c.getColumnIndex("sex")));
 			item.setImage_path(c.getString(c.getColumnIndex("image_path")));
 			babyitem.add(item);
 				//c.getString(c.getColumnIndex("question_id"));
@@ -207,7 +255,7 @@ View.OnClickListener bHandler =new View.OnClickListener() {
 			}
 		}
 	
-
+		closeDB();
 	}	
 			
 	EditText id,pw;
@@ -243,17 +291,13 @@ void openDB(){
 	
 //	db = openOrCreateDatabase("sample.db", wi, null);
 	db2=helper.getWritableDatabase();
-	db = myDbHelper.getWritableDatabase();
+	
 }
 // dbClose();
 void closeDB(){
 	if(db != null){
 		if(db.isOpen()){
 			db.close();
-		}
-	}if(db2 != null){
-		if(db2.isOpen()){
-			db2.close();
 		}
 	}
 }

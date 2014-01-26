@@ -15,26 +15,26 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory.Options;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.Toast;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mb.kids_mind.Helper.MyHelper;
 
@@ -82,15 +82,35 @@ OnDateChangedListener {
 							Toast.LENGTH_SHORT).show();
 				} else {
 					Log.v(TAG,"babyname"+babyname+"birthdate"+birthdate+"sex"+sex+"imagepath"+imagepath);
-					insertRec(babyname, birthdate, sex, imagepath, "");
-					Intent intent=new Intent();
-					intent.setData(mImageCaptureUri);
-					KidsMindAddActivity.this.setResult(RESULT_OK,intent);
+					String user = "U"+System.currentTimeMillis();
+					pref = getSharedPreferences("pref", MODE_PRIVATE);
+					SharedPreferences.Editor editor =pref.edit();
+					editor.putString("userid", user);
+					editor.commit();
+					
+					String checking=pref.getString("login_check", "");
+					String user_name;
+					if("".equals(checking)){
+						//not login
+						 user_name="untitle";
+						editor.putString("user_name", user_name);
+				        editor.commit();
+				        	
+					}else{
+						//로그인된경우
+						 user_name=pref.getString("user_name", "");
+						
+					}
+			        Log.v(TAG," insert username"+user_name);
+					insertRec(user_name,user,babyname, birthdate, sex, imagepath);
+					KidsMindAddActivity.this.setResult(RESULT_OK);
 					finish();
 					
 				}
 				// db insert
 				break;
+			case R.id.back_btn:
+				finish();
 
 			}
 		}
@@ -418,7 +438,7 @@ OnDateChangedListener {
 	}
 
 	private DatePicker datePicker;
-
+	private TextView birthtext;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -426,10 +446,11 @@ OnDateChangedListener {
 		setContentView(R.layout.addbaby);
 		name = (EditText) findViewById(R.id.name);
 		birth = (ImageView) findViewById(R.id.birth);
+		birthtext=(TextView)findViewById(R.id.birthtext);
 		birth.setOnClickListener(bHandler);
 		boy = (ImageView) findViewById(R.id.boy);
 		boy.setOnClickListener(bHandler);
-
+		findViewById(R.id.back_btn).setOnClickListener(bHandler);
 		girl = (ImageView) findViewById(R.id.girl);
 		girl.setOnClickListener(bHandler);
 		myhelper = new MyHelper(this, "kidsmind.db", null, 1);
@@ -506,21 +527,23 @@ OnDateChangedListener {
 		dialog.show();
 	}
 
-	public void insertRec(String babyname, String birthdate, String sex,
-			String imagepath, String image_id) {
+	public void insertRec(String user_name,String user_id,String babyname, String birthdate, String sex,
+			String imagepath) {
 		// if(selectDb(detail_id)){
 		openDB();
 
 		ContentValues values = new ContentValues();
 		try {
-
+			values.put("user_name", user_name);
+			
+			values.put("user_id", user_id);
 			values.put("name", babyname);
 
 			values.put("birth", birthdate);
 
 			values.put("sex", sex);
 			values.put("image_path", imagepath);
-			values.put("image_id", image_id);
+			
 			long id = db.insert("km_baby", null, values);
 
 			Log.v(TAG, id > 0 ? "success" : "fail");
@@ -558,7 +581,7 @@ OnDateChangedListener {
 	@Override
 	public void onDateChanged(DatePicker view, int year, int monthOfYear,
 			int dayOfMonth) {
-		birthdate = year + "" + "." + monthOfYear + "" + "." + dayOfMonth + "";
-
+		birthdate = year + "" + "." + monthOfYear+1 + "" + "." + dayOfMonth + "";
+		birthtext.setText(birthdate);
 	}
 }

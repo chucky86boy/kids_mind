@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+   
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_tab_top"
+        android:gravity="center" >
+
+        <Button
+             android:id="@+id/penBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           
+            android:layout_marginRight="15dp"
+         android:background="@drawable/pen"
+        />
+
+        <LinearLayout
+            android:id="@+id/colorlinear"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+            
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <Button
+                  android:id="@+id/colorBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                
+                 android:background="@drawable/color"
+                 />
+
+        </LinearLayout>
+
+        <Button
+          android:id="@+id/eraserBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+               android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/eraser"
+             />
+
+        <Button
+            android:id="@+id/undoBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+               android:layout_marginLeft="15dp"
+        
+           android:background="@drawable/undo"
+          />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/boardLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9" >
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_tab_bottom"
+        android:gravity="center" >
+
+        <Button
+             android:id="@+id/newpage2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+              android:background="@drawable/newpage"
+             />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:gravity="right|center"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/transfor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/confrim"
+               />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

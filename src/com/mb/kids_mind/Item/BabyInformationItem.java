@@ -2,7 +2,7 @@ package com.mb.kids_mind.Item;
 
 public class BabyInformationItem {
 
-	int user_id;
+	String user_id;
 	String name;
 	String birth;
 	String sex;
@@ -14,10 +14,11 @@ public class BabyInformationItem {
 	public void setImage_path(String image_path) {
 		this.image_path = image_path;
 	}
-	public int getUser_id() {
+	
+	public String getUser_id() {
 		return user_id;
 	}
-	public void setUser_id(int user_id) {
+	public void setUser_id(String user_id) {
 		this.user_id = user_id;
 	}
 	public String getName() {
