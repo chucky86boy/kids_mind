@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
@@ -13,15 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mb.kids_mind.R;
-import com.mb.kids_mind.view.PagerContainer;
 
 public class SketchMenu extends Fragment {
 	Activity activity;
 	public ViewPager pager; 
 	public ScreenSlidePagerAdapter mPagerAdapter;
 	
-	 private static final String TAG="MainActivity";
-	 View v=null;
 	private int[] menuImage = {R.drawable.menu_01,R.drawable.menu_02,R.drawable.menu_03,R.drawable.menu_04};
 	private int currentPage;
 	@Override
@@ -32,42 +30,8 @@ public class SketchMenu extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		
 		View view = inflater.inflate(R.layout.menu_selector, null);
-//		new AsyncTask<View, Void, View>() {
-//
-//			@Override
-//			protected View doInBackground(View... params) {
-//				while(!SketchMenu.this.isVisible()){
-//					try {
-//						Thread.sleep(50);
-//					} catch (InterruptedException e) {}
-//				}
-//				return params[0];
-//			}
-//
-//			@Override
-//			protected void onPostExecute(View result) {
-//				 pager = (ViewPager) result.findViewById(R.id.menu_pager);
-//				pager.setOffscreenPageLimit(5);
-//				mPagerAdapter=new ScreenSlidePagerAdapter(getFragmentManager()); 
-//				pager.setAdapter(mPagerAdapter);
-//				PagerContainer.listener=new PageChagedListener() {
-//					
-//					@Override
-//					public void onPageChange(int position) {
-//						
-//					}
-//				};
-//				super.onPostExecute(result);
-//			}
-//			
-//		}.execute(view); 
-//		 pager = (ViewPager)view.findViewById(R.id.menu_pager);
-//			pager.setOffscreenPageLimit(5);
-//			mPagerAdapter=new ScreenSlidePagerAdapter(getFragmentManager()); 
-//			pager.setAdapter(mPagerAdapter);
-//			
-//			PagerContainer contai =new PagerContainer(activity);
 			
 		new AsyncTask<View, Void, View>() {
 
@@ -92,33 +56,57 @@ public class SketchMenu extends Fragment {
 				pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
 
 					@Override
-					public void onPageScrolled(int position,
-							float positionOffset, int positionOffsetPixels) {
-						
-					}
-
-					@Override
 					public void onPageSelected(int position) {
-						View prevView = pager.getChildAt(currentPage);
-						View view = pager.getChildAt(position);
-						view.animate().scaleX(1.1f).setDuration(500);
-						view.animate().scaleY(1.1f).setDuration(500);
-						prevView.animate().scaleX(10f/11f).setDuration(500);
-						prevView.animate().scaleY(10f/11f).setDuration(500);
+						View prevViewG = pager.getChildAt(currentPage);
+						View prevView = prevViewG.findViewById(R.id.singeMenu); 
+						View viewG = pager.getChildAt(position);
+						View view = viewG.findViewById(R.id.singeMenu);
+						if(position == 0){
+							view.animate().scaleX(1.0f).setDuration(500);
+							view.animate().scaleY(1.0f).setDuration(500);
+						}else{
+							view.animate().scaleX(33f/30f).setDuration(500);
+							view.animate().scaleY(33f/30f).setDuration(500);
+						}
+						if(currentPage == 0){
+							prevView.animate().scaleX(30f/33f).setDuration(500);
+							prevView.animate().scaleY(30f/33f).setDuration(500);
+						}else{
+							prevView.animate().scaleX(1f).setDuration(500);
+							prevView.animate().scaleY(1f).setDuration(500);
+						}
 						currentPage = position;
 					}
 					
 				});
+				
+				new AsyncTask<Void, Void, Void>(){
+					View view;
+					@Override
+					protected Void doInBackground(Void... params) {
+						view = pager.getChildAt(0);
+						while(!view.isShown()){
+							SystemClock.sleep(50);
+						}
+						return null;
+					}
+
+					@Override
+					protected void onPostExecute(Void result) {
+						view.animate().scaleX(33f/30f).setDuration(500);
+						view.animate().scaleY(33f/30f).setDuration(500);
+						currentPage = 0;
+					}
+				}.execute();
 				super.onPostExecute(result);
 			}
 		}.execute(view);
-			
-			//pager.setOnPageChangeListener(contai);
+		
 		return view ;
 	}
 
 	public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-		SparseArray<Fragment> fragMap = new SparseArray<Fragment>();
+		public SparseArray<Fragment> fragMap = new SparseArray<Fragment>();
 		
 		public ScreenSlidePagerAdapter(FragmentManager fm) {
 			super(fm);

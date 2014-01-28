@@ -3,6 +3,7 @@ package com.mb.kids_mind.fragment;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -44,12 +45,15 @@ public class SingleResultSketchMenu extends Fragment{
 			this.activity = activity;
 			super.onAttach(activity);
 		}
+	@SuppressLint("NewApi")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.result_sketch, null);
+		View resultContainer = view.findViewById(R.id.resultSketchContainer);
 		activity.getFragmentManager();
 		Display display = getActivity().getWindowManager().getDefaultDisplay();
+		@SuppressWarnings("unused")
 		int height = 0;
 		if((android.os.Build.VERSION.SDK_INT >= 13)){
 			Point size = new Point();
@@ -63,7 +67,7 @@ public class SingleResultSketchMenu extends Fragment{
 		
 		ImageView imageView = (ImageView) view.findViewById(R.id.singeMenu);
 		TextView title=(TextView)view.findViewById(R.id.resulttitle);
-		new ViewResizeTask(imageView, 0.8f, 0.8f,this).execute();
+		new ViewResizeTask(resultContainer, 0.7f, 0.7f,this).execute();
 		setHashMap();
 		DetailListItem item=dlist.get(position);
 		title.setText(item.getDetail_tilte());
@@ -71,6 +75,7 @@ public class SingleResultSketchMenu extends Fragment{
 		//String ImageUrl = Const.QUESTION_IMAGE_PATH;
 		Integer key=map.get(image);
 		
+		@SuppressWarnings("unused")
 		LayoutParams layoutParams = imageView.getLayoutParams();
 		//layoutParams.height = (int)(size.y * 0.7);
 		if(key!=null)

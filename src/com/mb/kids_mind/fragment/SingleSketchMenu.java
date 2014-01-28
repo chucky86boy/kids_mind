@@ -33,7 +33,6 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.mb.kids_mind.KidsMindAnalyzeActivity;
@@ -100,9 +99,11 @@ public class SingleSketchMenu extends Fragment{
 
 		}
 	};
+	
 	public void setPosition(int position) {
 		this.position = position;
 	}
+	
 	@Override
 	public void onAttach(Activity activity) {
 		this.activity = activity;
@@ -118,7 +119,7 @@ public class SingleSketchMenu extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		final View view = inflater.inflate(R.layout.menu_sketch, null);
+		View view = inflater.inflate(R.layout.menu_sketch, null);
 		 myDbHelper=new KidsMindDBHelper(activity);
 		Display display = getActivity().getWindowManager().getDefaultDisplay();
 		@SuppressWarnings("unused")
@@ -137,21 +138,7 @@ public class SingleSketchMenu extends Fragment{
 		Log.v(TAG,"iscale"+iscale+"");
 		img = (ImageView) view.findViewById(R.id.singeMenu);
 		
-		//img.setScaleX(iscale);
-//		LayoutParams layoutParams = img.getLayoutParams();
-//		layoutParams.height = (int)(size.y * 0.7);
-//		PagerContainer.listene=new PageChagedListener() {
-//			
-//			@Override
-//			public void onPageChange(int position) {
-//				// TODO Auto-generated method stub
-//				if (SingleSketchMenu.listener != null) {
-//		    		Log.v(TAG,"viewchange listendr");
-//		    		SingleSketchMenu.listener.onPageChange(img);
-//		    		}		
-//			}
-//		};
-		new ViewResizeTask(img, 0.8f, 0.8f,this).execute();
+		new ViewResizeTask(img, 7f/10f, 7f/10f,this).execute();
 		img.setImageDrawable(getActivity().getResources().getDrawable(menuImage[position]));
 		img.setOnTouchListener(new OnTouchListener() {
 			@Override
