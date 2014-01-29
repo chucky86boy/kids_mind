@@ -88,9 +88,18 @@ public class AddBabyAdater extends BaseAdapter {
 			
 		}
 		String image_path=contents.getImage_path();
+		if("none".equals(image_path)){
+			if("boy".equals(se)){
+				holder.image.setImageResource(R.drawable.btn_boy_push);	
+			}else if("girl".equals(se)){
+				holder.image.setImageResource(R.drawable.btn_girl_push);
+				
+			}
+			
+		}else{
 		readimage(image_path, holder.image);
 		//holder.image.setImageBitmap(bm);
-		
+		}
 		
 		return cView;
 	}

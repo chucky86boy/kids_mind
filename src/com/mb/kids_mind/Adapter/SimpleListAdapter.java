@@ -137,9 +137,10 @@ public class SimpleListAdapter extends BaseAdapter {
 		}
 		if(contents.isFlag()){
 			holder.sort.setTextColor(0xffffffff);
+			//holder.frame.setBackgroundColor(0xff000080);
 		}else{
 			holder.sort.setTextColor(0xff000000);
-
+			//holder.frame.setBackgroundColor(0xffffffff);
 		}
 
 		holder.sort.setText(contents.getDetail_tilte());

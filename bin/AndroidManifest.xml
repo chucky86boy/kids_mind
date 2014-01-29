@@ -7,19 +7,24 @@
     <uses-sdk
         android:minSdkVersion="12"
         android:targetSdkVersion="19" />
+    
   <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
-  
+    <permission android:name="com.example.gcm.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/launcher"
         android:label="@string/app_name"
           android:largeHeap="true"
         android:theme="@android:style/Theme.NoTitleBar">
+        
+
         <activity
             android:name="com.mb.kids_mind.Splash"
             android:noHistory="true" android:screenOrientation="portrait">
@@ -36,6 +41,19 @@
         <activity android:name=".KidsMindTotalResultActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".KidsMindAddActivity" android:screenOrientation="portrait"></activity>
         <activity android:name="KidsMindLoginActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="KidsMindLastResultActivity"></activity>
+        <activity android:name="KidsMindLoginSelectActivity"></activity>
+      <receiver
+            android:name=".GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <!-- Receives the actual messages. -->
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.google.android.gcm.demo.app" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".GcmIntentService" />
+        <activity android:name="KidsmindYoutubeActivity"></activity>
     </application>
 
 </manifest>

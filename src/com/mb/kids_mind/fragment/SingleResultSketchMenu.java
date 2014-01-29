@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;

@@ -2,9 +2,6 @@ package com.mb.kids_mind;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -15,7 +12,10 @@ import android.graphics.BitmapFactory.Options;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +29,7 @@ import com.mb.kids_mind.Helper.MyHelper;
 import com.mb.kids_mind.Item.DetailListItem;
 import com.mb.kids_mind.fragment.SingleResultSketchMenu;
 
-public class KidsMindTotalResultActivity extends Activity {
+public class KidsMindTotalResultActivity extends FragmentActivity {
 	FragmentManager fm=null;
 	public ViewPager pager; 
 	public ScreenSlidePagerAdapter mPagerAdapter;
@@ -42,6 +42,7 @@ public class KidsMindTotalResultActivity extends Activity {
 	private ArrayList<DetailListItem>list=new ArrayList<DetailListItem>() ;
 	DetailListItem item;
 	TextView contents;
+	private String savename;
 	boolean mNeedsRedraw = false;
 	/** Called when the activity is first created. */
 	@Override
@@ -55,6 +56,10 @@ public class KidsMindTotalResultActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
+				Intent in =new Intent(KidsMindTotalResultActivity.this,KidsMindLastResultActivity.class);
+				in.putExtra("savename",savename);
+				in.putExtra("where","1");
+				startActivity(in);
 				// TODO Auto-generated method stub
 			finish();	
 			}
@@ -67,7 +72,7 @@ public class KidsMindTotalResultActivity extends Activity {
 	   khelper=new KidsMindDBHelper(KidsMindTotalResultActivity.this);
 		helper = new MyHelper(this, "kidsmind.db", null, 1);
 		String image_id=intent.getStringExtra("savename");
-		
+		savename=image_id;
 		readimage(image_id);
 		selectAll(image_id);
 		
@@ -98,7 +103,7 @@ public class KidsMindTotalResultActivity extends Activity {
 			protected void onPostExecute(View result) {
 				pager = (ViewPager) result.findViewById(R.id.menu_pager);
 				pager.setOffscreenPageLimit(5);
-				mPagerAdapter=new ScreenSlidePagerAdapter(getFragmentManager());
+				mPagerAdapter=new ScreenSlidePagerAdapter(getSupportFragmentManager());
 				pager.setAdapter(mPagerAdapter);
 				pager.setPageMargin(
 						getResources().getDimensionPixelOffset(R.dimen.viewpager_margin));
@@ -112,13 +117,35 @@ public class KidsMindTotalResultActivity extends Activity {
 
 					@Override
 					public void onPageSelected(int position) {
+						Log.v(TAG,"currentpage"+currentPage+"");
+						try{
 						View prevView = pager.getChildAt(currentPage);
+						Log.v(TAG,"position2"+position);
 						View view = pager.getChildAt(position);
+						
+						Log.v(TAG,"position3"+position);
+						Log.v(TAG,"view"+view.toString());
+						
+							
 						view.animate().scaleX(1.1f).setDuration(500);
+						Log.v(TAG,"view2"+view.toString());
 						view.animate().scaleY(1.1f).setDuration(500);
-						prevView.animate().scaleX(10f/11f).setDuration(500);
-						prevView.animate().scaleY(10f/11f).setDuration(500);
-						currentPage = position;
+						Log.v(TAG,"view3"+view.toString());
+						Log.v(TAG,"position4"+position);
+						prevView.animate().scaleX(0.9f).setDuration(500);
+						prevView.animate().scaleY(0.9f).setDuration(500);
+						Log.v(TAG,"position"+position+"");
+						
+						Log.v(TAG,"currentpage"+currentPage+"");
+						}catch(NullPointerException e){
+							Log.v(TAG,"null");
+							
+						}finally{
+							currentPage = position;
+							Log.v(TAG,"position"+position+"");
+							
+							Log.v(TAG,"currentpage"+currentPage+"");
+						}
 						try{
 							DetailListItem ditem= list.get(position);
 						contents.setText(ditem.getDetail_content());
@@ -427,6 +454,7 @@ public class KidsMindTotalResultActivity extends Activity {
 	
         @Override
         public int getCount() {
+        	//Log.v(TAG,"adapter listsize"+list.size()+"");
             return list.size();
         }
 

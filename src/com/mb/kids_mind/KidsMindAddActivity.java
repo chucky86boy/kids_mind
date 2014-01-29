@@ -73,14 +73,18 @@ OnDateChangedListener {
 				break;
 			case R.id.register:
 				pref = getSharedPreferences("pref", MODE_PRIVATE);
-				pref.getString("image_path", "");
 				String imagepath = pref.getString("image_path", "");
+				Log.v(TAG,"등로겡서 이미지패스"+imagepath);
 				babyname = name.getText().toString();
-				if (babyname == null || sex == null || birthdate == null
-						|| imagepath.equals("")) {
+				if (babyname == null || sex == null || birthdate == null){
+						//|| imagepath.equals("")) {
 					Toast.makeText(KidsMindAddActivity.this, "모든항목을  채워 주세요",
 							Toast.LENGTH_SHORT).show();
 				} else {
+					if("".equals(imagepath)){
+						imagepath="none";
+						Log.v(TAG,"imagepath"+imagepath);
+					}
 					Log.v(TAG,"babyname"+babyname+"birthdate"+birthdate+"sex"+sex+"imagepath"+imagepath);
 					String user = "U"+System.currentTimeMillis();
 					pref = getSharedPreferences("pref", MODE_PRIVATE);
@@ -102,7 +106,9 @@ OnDateChangedListener {
 						
 					}
 			        Log.v(TAG," insert username"+user_name);
+			        Log.v(TAG,"imagepath"+imagepath);
 					insertRec(user_name,user,babyname, birthdate, sex, imagepath);
+					//유저 내임 가입시 아이디가 키고 유저는 아이 사진 
 					KidsMindAddActivity.this.setResult(RESULT_OK);
 					finish();
 					
@@ -195,13 +201,12 @@ OnDateChangedListener {
 				mImageCaptureUri = data.getData(); // ���������� ���õ� ������
 				// Uri ����
 				String path = getRealPathFromURI(mImageCaptureUri);
-				SharedPreferences pref = getSharedPreferences("pref",
+				pref = getSharedPreferences("pref",
 						MODE_PRIVATE);
 				SharedPreferences.Editor editor = pref.edit();
-
+				Log.v(TAG,"앨범에서"+path);
 				editor.putString("image_path", path);
 				editor.commit();
-
 				try {
 					BitmapFactory.Options options = new BitmapFactory.Options();
 					options.inJustDecodeBounds = true;
@@ -289,7 +294,7 @@ OnDateChangedListener {
 				intent.putExtra("noFaceDetection", true);
 				intent.putExtra("circleCrop", false);
 
-				// startActivityForResult(intent, CROP_FROM_CAMERA);
+				 startActivityForResult(intent, CROP_FROM_CAMERA);
 			} catch (ActivityNotFoundException e) {
 				Log.e("crop_from_camera", e.toString());
 			}
@@ -455,8 +460,26 @@ OnDateChangedListener {
 		girl.setOnClickListener(bHandler);
 		myhelper = new MyHelper(this, "kidsmind.db", null, 1);
 		findViewById(R.id.register).setOnClickListener(bHandler);
+		SharedPreferences pref = getSharedPreferences("pref",
+				MODE_PRIVATE);
+		SharedPreferences.Editor editor = pref.edit();
 
+		editor.putString("image_path", "");
+		editor.commit();
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void onResume() {
+		SharedPreferences pref = getSharedPreferences("pref",
+				MODE_PRIVATE);
+		SharedPreferences.Editor editor = pref.edit();
+		String a=pref.getString("image_path", "");
+		if("none".equals(a)){
+		editor.putString("image_path", "");
+		editor.commit();
+		}
+		super.onResume();
 	}
 
 	void popupImage(Activity context) {
@@ -581,7 +604,7 @@ OnDateChangedListener {
 	@Override
 	public void onDateChanged(DatePicker view, int year, int monthOfYear,
 			int dayOfMonth) {
-		birthdate = year + "" + "." + monthOfYear+1 + "" + "." + dayOfMonth + "";
+		birthdate = year + "" + "." + (monthOfYear+1) + "" + "." + dayOfMonth + "";
 		birthtext.setText(birthdate);
 	}
 }

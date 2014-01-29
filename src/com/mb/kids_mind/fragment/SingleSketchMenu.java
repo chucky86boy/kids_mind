@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -23,6 +22,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -33,8 +33,8 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.mb.kids_mind.KidsMindAnalyzeActivity;
 import com.mb.kids_mind.KidsMindDrawActivity;
@@ -163,6 +163,11 @@ public class SingleSketchMenu extends Fragment{
 				case MotionEvent.ACTION_UP:
 					SharedPreferences pref=activity.getSharedPreferences("pref",activity.MODE_PRIVATE);
 					SharedPreferences.Editor editor=pref.edit();
+					int count=pref.getInt("babycount", 0);
+					if(count==0){
+						Toast.makeText(activity, "아이를 추가해 주세요", Toast.LENGTH_SHORT).show();
+					}else{
+					
 					editor.putInt("qposition", position);
 					editor.putInt("dbpath", position+1);
 					editor.commit();
@@ -208,6 +213,7 @@ public class SingleSketchMenu extends Fragment{
 						//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
 
 						break;
+					}
 					}
 					break;
 				case MotionEvent.ACTION_MOVE:

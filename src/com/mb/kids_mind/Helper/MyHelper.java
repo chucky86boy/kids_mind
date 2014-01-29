@@ -41,6 +41,7 @@ public class MyHelper extends SQLiteOpenHelper {
 		String sql4 = "create table km_check(" +
 				"_id integer primary key autoincrement," +
 				"fName text not null, detail_id text not null, detail_check text not null, advice_id integer ,question_id text not null, user_id text not null); ";
+		//km_check에서 user_id즉 아기 아이디 U커런트 밀리초 이아이디를 집어 넣어준다. insert시
 		String sql5 = "create table km_image(" +
 				"_id integer primary key autoincrement," +
 				"fName text not null, checked char(5) not null); ";

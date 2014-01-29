@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.mb.kids_mind.Item.Const;
 import com.mb.kids_mind.Item.Debugc;
 
@@ -33,14 +34,15 @@ public static final String PROPERTY_REG_ID = "registration_id";
 private static final String PROPERTY_APP_VERSION = "appVersion";
 private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
-String SENDER_ID = "908544295302";
-
+String SENDER_ID = "699304907810";
+SharedPreferences pref;
 String regId = "";
 TextView mDisplay;
-
+GoogleCloudMessaging gcm;
 AtomicInteger msgId = new AtomicInteger();
 SharedPreferences prefs;
 Context context;
+private String user_name3=null,user_pwd3=null;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,9 @@ Context context;
 	    setContentView(R.layout.dialoglogin);
 		id=(EditText)findViewById(R.id.editText1);
 		pw=(EditText)findViewById(R.id.editText2);
+		pref=getSharedPreferences("pref", MODE_PRIVATE);
+		SharedPreferences.Editor editor=pref.edit();
+		aquery = new AQuery(this);
 		findViewById(R.id.back_btn).setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -60,22 +65,35 @@ Context context;
 		
 		@Override
 		public void onClick(View v) {
-			String user_name3 =id.getText().toString();
-			String user_pwd3 = pw.getText().toString();
-			asyncJoinJson(user_name3, user_pwd3);
-			finish();
+			user_name3 =id.getText().toString();
+			 user_pwd3 = pw.getText().toString();
+			String auth=pref.getString("authkey", "");
+			String first=pref.getString("first", "");
+			int user_id=pref.getInt("user_id", 0);
+			//if("".equals(auth)){
+				Log.v(TAG,"1");
+				Log.v(TAG,"가입시user_name3"+user_name3+"user_pwd"+user_pwd3);
+				asyncNicknameCheckJson(user_name3);
+					
+//			}else{
+//				Log.v(TAG,"2");
+//				Log.v(TAG,"로그인시user_name3"+user_id+""+"auth"+auth);
+//				asyncAutoLoginJson(user_id,auth);
+//				//asyncLoginJson(user_name3, user_pwd3);
+//			}
+			
 		}
 	});
-		regId = getRegistrationId(this);
-		if(regId.equals("")){
-			Log.v(TAG, "exist");
-		//	registerInBackground();
-		}else{
-
-			Log.v(TAG, " regId : " + regId);
-		}
+//		regId = getRegistrationId(this);
+//		if(regId.equals("")){
+//			Log.v(TAG, "exist");
+//		//	registerInBackground();
+//		}else{
+//
+//			Log.v(TAG, " regId : " + regId);
+//		}
 	    
-		aquery = new AQuery(this);
+		
 	}
 //	private void unRegisterInBackground() {
 //	new AsyncTask<Void, Void, String>() {
@@ -164,15 +182,14 @@ Context context;
 	public void asyncNicknameCheckJson(String name) {
 		//openWaitDialog();
 
-		String url = Const.NAME_CHECK_PATH + "/" + name;
+		String url = "http://localhost:3083/namecheck" + "/" + name;
+		Log.v(TAG,"URL"+url);
 		aquery.ajax(url, JSONObject.class, this, "jsonNicknameCheckCallback");
 
 		//sendView.setText(url);
 	}
 
-	/**
-	 * �г��� �˻��Ŀ��� isSucess�� ���
-	 */
+	
 	String error;
 	public void jsonNicknameCheckCallback(String url, JSONObject json, AjaxStatus status) {
 		if (json != null) {
@@ -183,10 +200,13 @@ Context context;
 				boolean isSuccess = json.getString("result").equals(Const.SUCCESS);
 
 				if (isSuccess) {
-				
+					Log.v(TAG,"닉네임중복 없음");
+					asyncJoinJson(user_name3, user_pwd3);
+					
 
 					//	resultView.setText(json.toString());
 				} else {
+					Log.v(TAG,"중복있음");
 					SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
 					SharedPreferences.Editor editor=pref.edit();
 					editor.putString("acheck", null);
@@ -195,10 +215,12 @@ Context context;
 					openInfoMessageDialogBox(error);
 				}
 			} catch (JSONException e) {
+				Log.v(TAG,"에러");
 				openErrorDialog();
 				e.printStackTrace();
 			}
 		} else {
+			Log.v(TAG,"에러2");
 			openErrorDialog();
 		}
 	}
@@ -232,19 +254,25 @@ Context context;
 					String user_name = json.getString("user_name");
 					String authkey = json.getString("authkey");
 					
-					Log.v(Debugc.getTagd(),"user_id"+user_id);
+					Log.v(TAG,"z키즈마인드user_id"+user_id);
 					Log.v(Debugc.getTagd(),"authkey"+authkey);
 					SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
 					SharedPreferences.Editor editor=pref.edit();
+					editor.putString("first", "first");
 					editor.putString("login_check", "checked");
 					editor.putString("user_name", user_name);
 					editor.putInt("user_id", user_id);
+					
 					editor.putString("authkey", authkey);
+					editor.putString("user_pwd", user_pwd3);
 					editor.commit();
+					
 					//asyncAutoLoginJson(user_id, authkey);
-					Log.v(TAG,"authkey"+authkey+"user_name"+user_name);
+					Log.v(TAG,"authkey"+authkey+"user_name"+user_name+"user_id"+user_id+"");
 					openInfoMessageDialogBox("로그인 성공");
-					//finish();
+					KidsMindLoginActivity.this.setResult(RESULT_OK);
+					finish();
+					
 
 					//resultView.setText(json.toString());
 				} else {
@@ -253,7 +281,7 @@ Context context;
 					SharedPreferences.Editor editor=pref.edit();
 					editor.putString("acheck", null);
 					editor.commit();
-					openInfoMessageDialogBox(error);
+					openInfoMessageDialogBox("error");
 				}
 			} catch (JSONException e) {
 				openErrorDialog();
@@ -283,9 +311,7 @@ Context context;
 		//sendView.setText(url);
 	}
 
-	/**
-	 * �ڵ� �α����� Ȥ�ó� Ȯ�θ�
-	 */
+	
 	public void jsonAutoLoginCallback(String url, JSONObject json, AjaxStatus status) {
 		if (json != null) {
 			try {
@@ -298,7 +324,7 @@ Context context;
 					int user_id = json.getInt("user_id");
 					String user_name = json.getString("user_name");
 					String authkey = json.getString("authkey");
-
+					Log.v(TAG,"자동로긴 성공");
 				
 
 					//	resultView.setText(json.toString());
@@ -339,13 +365,12 @@ Context context;
 				boolean isSuccess = json.getString("result").equals(Const.SUCCESS);
 
 				if (isSuccess) {
+					Log.v(TAG,"재로그인 성공");
 					int user_id = json.getInt("user_id");
 					String user_name = json.getString("user_name");
 					String authkey = json.getString("authkey");
-					String user_name3 =id.getText().toString();
-					String user_pwd3 = pw.getText().toString();
-
-					asyncLoginJson(user_name3, user_pwd3);
+					
+					//asyncLoginJson(user_name3, user_pwd3);
 					SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
 					SharedPreferences.Editor editor=pref.edit();
 
@@ -359,6 +384,7 @@ Context context;
 
 					//resultView.setText(json.toString());
 				} else {
+					Log.v(TAG,"재로그인 실패");
 					String error = json.getString("error");
 					SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
 					SharedPreferences.Editor editor=pref.edit();
@@ -369,8 +395,10 @@ Context context;
 			} catch (JSONException e) {
 				openErrorDialog();
 				e.printStackTrace();
+				Log.v(TAG,"json execption");
 			}
 		} else {
+			Log.v(TAG,"json null");
 			openErrorDialog();
 		}
 	}
@@ -381,47 +409,6 @@ Context context;
 	 * @param user_name
 	 * @param user_pwd
 	 */
-	public void asyncLogoutJson(String user_name, String user_pwd) {
-		//openWaitDialog();
-
-		String url = Const.LOGOUT_PATH;
-
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("user_name", user_name);
-		map.put("user_pwd", user_pwd);
-
-		aquery.ajax(url, map, JSONObject.class, this, "jsonLogoutCallback");
-
-		//sendView.setText(url);
-	}
-
 	
-	public void jsonLogoutCallback(String url, JSONObject json, AjaxStatus status) {
-		if (json != null) {
-			try {
-				aquery.ajaxCancel();
-				//closeWaitDialog();
-
-				boolean isSuccess = json.getString("result").equals(Const.SUCCESS);
-
-				if (isSuccess) {
-					SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
-					SharedPreferences.Editor editor=pref.edit();
-					editor.putString("login_check", "");
-					editor.putString("authkey", null);
-					editor.commit();
-					//resultView.setText(json.toString());
-				} else {
-					String error = json.getString("error");
-					openInfoMessageDialogBox(error);
-				}
-			} catch (JSONException e) {
-				openErrorDialog();
-				e.printStackTrace();
-			}
-		} else {
-			openErrorDialog();
-		}
-	}
 
 }

@@ -1,8 +1,9 @@
 package com.mb.kids_mind.task;
 
-import android.app.Fragment;
+
 import android.os.AsyncTask;
 import android.os.SystemClock;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;

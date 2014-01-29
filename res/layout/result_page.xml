@@ -52,7 +52,7 @@
 	   		    android:layout_height="wrap_content"
 	   		    android:background="@drawable/bg_rp_speaking"
 	   		    android:gravity="center"
-	   		    android:paddingLeft="200px"
+	   		    android:paddingLeft="150dp"
 	   		    android:text="현실 접촉이 상실될 지도 모른다는 위기의식을 반영합니다."
 	   		    android:textColor="@android:color/white"
 	   		    android:textSize="14sp"/>

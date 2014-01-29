@@ -43,7 +43,12 @@ public class DrawFragment extends Fragment {
 			
 		   	((KidsMindDrawActivity)activity).board.setLayoutParams(params); 
 		   	((KidsMindDrawActivity)activity).board.setPadding(2, 2, 2, 2); 
-           
+           if((((KidsMindDrawActivity)activity).board).getParent()!=null){
+        	   ((ViewGroup)((KidsMindDrawActivity)activity).board
+       				.getParent()).removeView(((KidsMindDrawActivity)activity).board
+       						);
+           }
+        	   
 			linear.addView(((KidsMindDrawActivity)activity).board);
 	        		return v;
 	}
