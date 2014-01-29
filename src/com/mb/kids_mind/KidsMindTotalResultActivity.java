@@ -1,5 +1,6 @@
 package com.mb.kids_mind;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import android.content.Intent;
@@ -12,12 +13,18 @@ import android.graphics.BitmapFactory.Options;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+<<<<<<< HEAD
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+=======
+import android.os.SystemClock;
+import android.support.v13.app.FragmentStatePagerAdapter;
+>>>>>>> d85581c05a2bd337072e95152cc6f3d3bb3b51e2
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -33,6 +40,8 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 	FragmentManager fm=null;
 	public ViewPager pager; 
 	public ScreenSlidePagerAdapter mPagerAdapter;
+	public SparseArray<WeakReference<SingleResultSketchMenu>> sparseArray = new SparseArray<WeakReference<SingleResultSketchMenu>>();
+	
 	private ImageView img,drawimage;
 	private int currentPage;
 	private MyHelper helper;
@@ -75,7 +84,7 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 		savename=image_id;
 		readimage(image_id);
 		selectAll(image_id);
-		
+		Log.v(TAG,"detail_id"+detail_id);
 		String[] detail=detail_id.split(",");
 		for(String cha:detail){
 			Log.v(TAG,"자른아이디"+cha);
@@ -102,20 +111,42 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 			@Override
 			protected void onPostExecute(View result) {
 				pager = (ViewPager) result.findViewById(R.id.menu_pager);
+<<<<<<< HEAD
 				pager.setOffscreenPageLimit(5);
 				mPagerAdapter=new ScreenSlidePagerAdapter(getSupportFragmentManager());
+=======
+				pager.setOffscreenPageLimit(2);
+				mPagerAdapter=new ScreenSlidePagerAdapter(getFragmentManager());
+>>>>>>> d85581c05a2bd337072e95152cc6f3d3bb3b51e2
 				pager.setAdapter(mPagerAdapter);
 				pager.setPageMargin(
 						getResources().getDimensionPixelOffset(R.dimen.viewpager_margin));
+				
+
 				pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
 
 					@Override
-					public void onPageScrolled(int position,
-							float positionOffset, int positionOffsetPixels) {
+					public void onPageSelected(int position) {
 						
+						View prevView = sparseArray.get(currentPage).get().getView();
+						
+						View view = sparseArray.get(position).get().getView();
+						
+						view.animate().scaleX(33f/30f).setDuration(500);
+						view.animate().scaleY(33f/30f).setDuration(500);
+						
+						prevView.animate().scaleX(1f).setDuration(500);
+						prevView.animate().scaleY(1f).setDuration(500);
+						
+						currentPage = position; 
 					}
-
+					
+				});
+				
+				new AsyncTask<Void, Void, Void>(){
+					View view;
 					@Override
+<<<<<<< HEAD
 					public void onPageSelected(int position) {
 						Log.v(TAG,"currentpage"+currentPage+"");
 						try{
@@ -161,11 +192,24 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 						}catch(IndexOutOfBoundsException e){
 							
 							Log.v(TAG,"IndexOutofBounds"+e);
+=======
+					protected Void doInBackground(Void... params) {
+						view = pager.getChildAt(0);
+						while(!view.isShown()){
+							SystemClock.sleep(50);
+>>>>>>> d85581c05a2bd337072e95152cc6f3d3bb3b51e2
 						}
-
+						return null;
 					}
-					
-				});
+
+					@Override
+					protected void onPostExecute(Void result) {
+						view.animate().scaleX(33f/30f).setDuration(500);
+						view.animate().scaleY(33f/30f).setDuration(500);
+						currentPage = 0;
+					}
+				}.execute();
+				
 				super.onPostExecute(result);
 			}
 		}.execute(view);
@@ -316,16 +360,16 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 				//Log.v(Debugc.getTaga(), c.getString(0)+ c.getString(1)+ c.getString(2)+c.getString(3)+c.getString(4));
 				//	c.getString(0);
 			}
-			}catch(SQLException e){
-				Log.v(TAG,"selec error"+e);
-			}finally{
-				Log.v(TAG,"dbopen3");
-				closeDB();
-				if(c!=null){
-					c.close();
-				}
+		}catch(SQLException e){
+			Log.v(TAG,"selec error"+e);
+		}finally{
+			Log.v(TAG,"dbopen3");
+			closeDB();
+			if(c!=null){
+				c.close();
 			}
 		}
+	}
 
 	public void selectAll(String image){
 		openDB();
@@ -338,11 +382,9 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 		try{
 			c=db.query("km_check", colNames, wStr, wherStr, null, null, null);
 			while(c.moveToNext()){
-			detail_id=c.getString(c.getColumnIndex("detail_id"));
-			Log.v(TAG,"detail_id DB"+detail_id);
+				detail_id=c.getString(c.getColumnIndex("detail_id"));
+				Log.v(TAG,"detail_id DB"+detail_id);
 			}
-
-
 
 		}catch(SQLException e){
 			Log.v(TAG,"selec error"+e);
@@ -445,9 +487,10 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 	        return options; 
 
 	    }
+	 
 	private static final String TAG="MainActivity";
+	
 	public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-		public ViewPager pager2; 
 		public ScreenSlidePagerAdapter(FragmentManager fm) {
 			super(fm);
         }
@@ -460,12 +503,10 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-		
-		
 			SingleResultSketchMenu frag = new SingleResultSketchMenu();
 			frag.setData(list);
 			frag.setPosition(position);
-			
+			sparseArray.put(position, new WeakReference<SingleResultSketchMenu>(frag));
 			return frag;
 		}
 

@@ -10,14 +10,14 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
 public class ViewResizeTask extends AsyncTask<Void, Void, Void>{
-	private ImageView view;
+	private View view;
 	private Fragment fragment;
 	private float newHeightProportion, newWidthProportion;
 	public ViewResizeTask(){}
 
 
 
-	public ViewResizeTask(ImageView view, 
+	public ViewResizeTask(View view, 
 			float newHeightProportion, float newWidthProportion, Fragment fragment) {
 		super();
 		this.view = view;

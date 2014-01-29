@@ -319,8 +319,13 @@ public final class R {
         public static final int undo=0x7f02011c;
     }
     public static final class id {
+<<<<<<< HEAD
         public static final int LinearLayout1=0x7f090048;
         public static final int action_settings=0x7f090052;
+=======
+        public static final int LinearLayout1=0x7f09003b;
+        public static final int action_settings=0x7f090046;
+>>>>>>> d85581c05a2bd337072e95152cc6f3d3bb3b51e2
         public static final int add=0x7f09000a;
         public static final int addtext=0x7f09000b;
         public static final int album=0x7f090039;
@@ -353,17 +358,30 @@ public final class R {
         public static final int forth=0x7f09001b;
         public static final int forth1=0x7f090020;
         public static final int fragmentHolder=0x7f090003;
+<<<<<<< HEAD
         public static final int frambg=0x7f09004e;
+=======
+        public static final int frambg=0x7f090042;
+>>>>>>> d85581c05a2bd337072e95152cc6f3d3bb3b51e2
         public static final int frame=0x7f090031;
         public static final int girl=0x7f090014;
         public static final int image=0x7f090032;
         public static final int imageView1=0x7f090016;
+<<<<<<< HEAD
         public static final int imageView2=0x7f090050;
         public static final int lay=0x7f090028;
         public static final int linear=0x7f090000;
         public static final int list=0x7f09004d;
         public static final int listView1=0x7f090009;
         public static final int loadingPic=0x7f090051;
+=======
+        public static final int imageView2=0x7f090044;
+        public static final int lay=0x7f090028;
+        public static final int linear=0x7f090000;
+        public static final int list=0x7f090041;
+        public static final int listView1=0x7f090009;
+        public static final int loadingPic=0x7f090045;
+>>>>>>> d85581c05a2bd337072e95152cc6f3d3bb3b51e2
         public static final int login=0x7f090006;
         public static final int mainBody=0x7f090002;
         public static final int mainname=0x7f090008;
@@ -379,14 +397,21 @@ public final class R {
         public static final int play_button=0x7f09003c;
         public static final int reg=0x7f090023;
         public static final int register=0x7f090015;
+<<<<<<< HEAD
         public static final int regpic=0x7f090046;
         public static final int resulttitle=0x7f09004c;
+=======
+        public static final int regpic=0x7f090039;
+        public static final int resultSketchContainer=0x7f09003f;
+        public static final int resulttitle=0x7f090040;
+>>>>>>> d85581c05a2bd337072e95152cc6f3d3bb3b51e2
         public static final int scrollView1=0x7f090005;
         public static final int second=0x7f090019;
         public static final int second1=0x7f09001e;
         public static final int setting=0x7f09000d;
         public static final int sex=0x7f090017;
         public static final int sideMenu=0x7f090004;
+<<<<<<< HEAD
         public static final int singeMenu=0x7f090037;
         public static final int skip_to_text=0x7f09003e;
         public static final int splashImg=0x7f09004f;
@@ -395,6 +420,10 @@ public final class R {
         public static final int style_default=0x7f090042;
         public static final int style_minimal=0x7f090043;
         public static final int style_radio_group=0x7f090041;
+=======
+        public static final int singeMenu=0x7f090035;
+        public static final int splashImg=0x7f090043;
+>>>>>>> d85581c05a2bd337072e95152cc6f3d3bb3b51e2
         public static final int textView1=0x7f09000f;
         public static final int third=0x7f09001a;
         public static final int third1=0x7f09001f;
