@@ -32,6 +32,8 @@ public class Splash extends Activity{
 			//closeDB();
 		}catch(IOException ioe){
 			
+		}finally{
+			myDbHelper.close();
 		}
 	}
 	void openDB(){

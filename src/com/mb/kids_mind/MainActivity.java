@@ -34,6 +34,7 @@ import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
 import com.mb.kids_mind.Adapter.AddBabyAdater;
 import com.mb.kids_mind.Helper.MyHelper;
+import com.mb.kids_mind.Item.AlbumItem;
 import com.mb.kids_mind.Item.BabyInformationItem;
 import com.mb.kids_mind.Item.Const;
 import com.mb.kids_mind.fragment.SketchMenu;
@@ -44,6 +45,7 @@ public class MainActivity extends FragmentActivity {
 	private AQuery aquery;
     private static final String TAG="MainActivity";
     ArrayList<BabyInformationItem> babyitem;
+    ArrayList<AlbumItem> albumitem;
 View.OnClickListener bHandler =new View.OnClickListener() {
 		
 		@Override
@@ -115,6 +117,9 @@ View.OnClickListener bHandler =new View.OnClickListener() {
 				SharedPreferences.Editor editor=pref.edit();
 				editor.putString("userid", info.getUser_id());
 				editor.commit();
+				Intent in= new Intent(MainActivity.this,KidsMindAlbumactivity.class);
+				in.putExtra("user_id", info.getUser_id());
+				startActivity(in);
 				Log.v(TAG,"userid"+info.getUser_id());
 				//시작 앨범으로 시작~~ 그해당 userid를 통해  km_check 테이블에서 해당 image_id뽑아내고 그다음 image_id를 통해 detail_id를 이용해서 선택항목 추출
 				
@@ -280,6 +285,57 @@ View.OnClickListener bHandler =new View.OnClickListener() {
 	}
 		}
 	}
+	void selectAlbum(String user_id){
+		openDB();
+		Log.v(TAG, "탭 디비 시작");
+		Cursor c = null;
+		albumitem=new ArrayList<AlbumItem>();
+		String wStr = "user_id=?";
+		String[] wherStr = { user_id };
+	
+		String[] colNames = {"fName","question_id","detail_check","question_title" };
+		try {
+			c = db2.query("km_check", colNames, wStr, wherStr, null,
+					null, "_id desc");
+		
+//		
+//		String sql ="select * from km_baby where "+user_name"+ order by _id DESC;";
+//		Cursor c=null;
+		Log.v(TAG,"select db");
+//		try{
+//			Log.v(TAG,"select db");
+//			
+//			c=db2.rawQuery(sql, null);
+			Log.v(TAG,"숫자:"+c.getCount());
+//			editor.putInt("babycount", c.getCount());
+//			editor.commit();
+			while(c.moveToNext()){
+				AlbumItem item= new AlbumItem();
+			item.setImage_path(c.getString(c.getColumnIndex("fName")));
+			item.setQuestioin(c.getString(c.getColumnIndex("question_id")));
+			item.setNewmessage(c.getString(c.getColumnIndex("detail_check")));
+			item.setTitle(c.getString(c.getColumnIndex("question_title")));
+		
+			albumitem.add(item);
+				//c.getString(c.getColumnIndex("question_id"));
+	//	Log.v(TAG, c.getString(0));
+				//	c.getString(0);
+			}
+			
+			
+		}catch(SQLException e){
+			Log.v(TAG,"selec error"+e);
+		}finally{
+			if(c!=null){
+			c.close();
+			}
+		}
+	
+		closeDB();
+	}	
+	
+	
+	
 	void selectAll(){
 		openDB();
 		Log.v(TAG, "탭 디비 시작");

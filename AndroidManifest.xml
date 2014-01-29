@@ -54,6 +54,7 @@
         </receiver>
         <service android:name=".GcmIntentService" />
         <activity android:name="KidsmindYoutubeActivity"></activity>
+        <activity android:name="KidsMindAlbumactivity"></activity>
     </application>
 
 </manifest>

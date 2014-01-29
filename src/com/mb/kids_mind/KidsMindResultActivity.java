@@ -1,9 +1,10 @@
 package com.mb.kids_mind;
 
 
-import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.Date;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -62,8 +63,10 @@ public class KidsMindResultActivity extends Activity {
 				String question_id=pref.getString("qposition","");
 				String userid=pref.getString("userid", "");
 				
+				
 				insertRec(savename, detail_id, "0", 0, question_id,userid);
-			break;
+				//전문가 상담시 세번재 인자 1로 셋팅
+				break;
 			case R.id.back_btn:
 			KidsMindResultActivity.this.finish();
 			break;
@@ -205,6 +208,15 @@ public class KidsMindResultActivity extends Activity {
 			String detail_check, int advice_id, String question_id,String user_id) {
 		// if(selectDb(detail_id)){
 		openDB();
+		SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat ( "yyyy.MM.dd", Locale.KOREA );
+		Date currentTime = new Date ( );
+		
+		String date = mSimpleDateFormat.format ( currentTime );
+		Log.v(TAG,"image_id,detail_id,detail_check,advice_id,question_id,user_id,date"+image_id+detail_id+detail_check+question_id+user_id);
+		
+		Log.v(TAG,"DATe"+date);
+
+		
 
 		ContentValues values = new ContentValues();
 		try {
@@ -217,6 +229,7 @@ public class KidsMindResultActivity extends Activity {
 			values.put("advice_id", advice_id);
 			values.put("question_id", question_id);
 			values.put("user_id",user_id);
+			values.put("date", date);
 			long id = db2.insert("km_check", null, values);
 			
 			Log.v(TAG, id > 0 ? "success" : "fail");
