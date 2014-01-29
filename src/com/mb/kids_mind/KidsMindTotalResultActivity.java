@@ -13,15 +13,11 @@ import android.graphics.BitmapFactory.Options;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-<<<<<<< HEAD
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-=======
-import android.os.SystemClock;
-import android.support.v13.app.FragmentStatePagerAdapter;
->>>>>>> d85581c05a2bd337072e95152cc6f3d3bb3b51e2
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.util.SparseArray;
@@ -111,13 +107,9 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 			@Override
 			protected void onPostExecute(View result) {
 				pager = (ViewPager) result.findViewById(R.id.menu_pager);
-<<<<<<< HEAD
-				pager.setOffscreenPageLimit(5);
-				mPagerAdapter=new ScreenSlidePagerAdapter(getSupportFragmentManager());
-=======
+
 				pager.setOffscreenPageLimit(2);
-				mPagerAdapter=new ScreenSlidePagerAdapter(getFragmentManager());
->>>>>>> d85581c05a2bd337072e95152cc6f3d3bb3b51e2
+				mPagerAdapter=new ScreenSlidePagerAdapter(getSupportFragmentManager());
 				pager.setAdapter(mPagerAdapter);
 				pager.setPageMargin(
 						getResources().getDimensionPixelOffset(R.dimen.viewpager_margin));
@@ -146,58 +138,12 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 				new AsyncTask<Void, Void, Void>(){
 					View view;
 					@Override
-<<<<<<< HEAD
-					public void onPageSelected(int position) {
-						Log.v(TAG,"currentpage"+currentPage+"");
-						try{
-						View prevView = pager.getChildAt(currentPage);
-						Log.v(TAG,"position2"+position);
-						View view = pager.getChildAt(position);
-						
-						Log.v(TAG,"position3"+position);
-						Log.v(TAG,"view"+view.toString());
-						
-							
-						view.animate().scaleX(1.1f).setDuration(500);
-						Log.v(TAG,"view2"+view.toString());
-						view.animate().scaleY(1.1f).setDuration(500);
-						Log.v(TAG,"view3"+view.toString());
-						Log.v(TAG,"position4"+position);
-						prevView.animate().scaleX(0.9f).setDuration(500);
-						prevView.animate().scaleY(0.9f).setDuration(500);
-						Log.v(TAG,"position"+position+"");
-						
-						Log.v(TAG,"currentpage"+currentPage+"");
-						}catch(NullPointerException e){
-							Log.v(TAG,"null");
-							
-						}finally{
-							currentPage = position;
-							Log.v(TAG,"position"+position+"");
-							
-							Log.v(TAG,"currentpage"+currentPage+"");
-						}
-						try{
-							DetailListItem ditem= list.get(position);
-						contents.setText(ditem.getDetail_content());
-							Log.v(TAG,"position listener"+position);
-							switch(position%2){
-							case 0:
-								img.setImageResource(R.drawable.re_dotor1);
-								break;
-							case 1:img.setImageResource(R.drawable.re_dotor2);
-								break;
-							
-							}
-						}catch(IndexOutOfBoundsException e){
-							
-							Log.v(TAG,"IndexOutofBounds"+e);
-=======
+
 					protected Void doInBackground(Void... params) {
 						view = pager.getChildAt(0);
 						while(!view.isShown()){
 							SystemClock.sleep(50);
->>>>>>> d85581c05a2bd337072e95152cc6f3d3bb3b51e2
+
 						}
 						return null;
 					}

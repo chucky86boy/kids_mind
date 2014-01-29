@@ -3,14 +3,10 @@ package com.mb.kids_mind.fragment;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-<<<<<<< HEAD
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-=======
-import android.os.SystemClock;
-import android.support.v13.app.FragmentStatePagerAdapter;
->>>>>>> d85581c05a2bd337072e95152cc6f3d3bb3b51e2
 import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
