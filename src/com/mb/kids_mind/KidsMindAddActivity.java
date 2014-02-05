@@ -444,6 +444,7 @@ OnDateChangedListener {
 
 	private DatePicker datePicker;
 	private TextView birthtext;
+	Button back;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -455,7 +456,10 @@ OnDateChangedListener {
 		birth.setOnClickListener(bHandler);
 		boy = (ImageView) findViewById(R.id.boy);
 		boy.setOnClickListener(bHandler);
-		findViewById(R.id.back_btn).setOnClickListener(bHandler);
+		back=(Button)findViewById(R.id.back_btn);
+		back.setOnClickListener(bHandler);
+		back.setVisibility(View.VISIBLE);
+		
 		girl = (ImageView) findViewById(R.id.girl);
 		girl.setOnClickListener(bHandler);
 		myhelper = new MyHelper(this, "kidsmind.db", null, 1);
@@ -466,6 +470,12 @@ OnDateChangedListener {
 
 		editor.putString("image_path", "");
 		editor.commit();
+		String ch=pref.getString("just","");
+		if("".equals(ch)){
+			editor.putString("just", "on");
+			editor.commit();
+			back.setVisibility(View.GONE);
+		}		
 		// TODO Auto-generated method stub
 	}
 

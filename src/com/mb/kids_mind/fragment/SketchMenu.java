@@ -1,6 +1,8 @@
 package com.mb.kids_mind.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -8,11 +10,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.mb.kids_mind.KidsMindAdviceActivity;
+import com.mb.kids_mind.KidsMindLoginSelectActivity;
+import com.mb.kids_mind.KidsmindMapActivity;
+import com.mb.kids_mind.MainActivity;
 import com.mb.kids_mind.R;
 
 public class SketchMenu extends Fragment {
@@ -22,17 +32,51 @@ public class SketchMenu extends Fragment {
 	
 	private int[] menuImage = {R.drawable.menu_01,R.drawable.menu_02,R.drawable.menu_03,R.drawable.menu_04};
 	private int currentPage;
+	private ImageView doctor;
 	@Override
 		public void onAttach(Activity activity) {
 			this.activity = activity;
 			super.onAttach(activity);
 		}
 	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data){
+		super.onActivityResult(requestCode,resultCode,data);
+		if(resultCode==activity.RESULT_OK){
+			//Log.
+			if(requestCode==0){
+				((MainActivity)activity).login.setImageResource(R.drawable.btn_logout);
+				//Intent intent= new Intent(activity,KidsMindAdviceActivity.class);
+				//Intent intent= new Intent(activity,KidsmindMapActivity.class);
+				
+				//startActivity(intent);
+			}
+		}
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
+		final SharedPreferences pref=activity.getSharedPreferences("pref",activity.MODE_PRIVATE);
+		SharedPreferences.Editor editor=pref.edit();
 		View view = inflater.inflate(R.layout.menu_selector, null);
+			doctor=(ImageView)view.findViewById(R.id.docbtn);
 			
+			doctor.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					String ch=pref.getString("login_check", "");	
+					if(!ch.equals("")){
+						//로그인상태
+						//Intent intent= new Intent(activity,KidsMindAdviceActivity.class);
+						
+					}else{
+						Intent in=new Intent(activity,KidsMindLoginSelectActivity.class);
+						startActivityForResult(in, 0);
+					}
+					
+				}
+			});
 		new AsyncTask<View, Void, View>() {
 
 			@Override

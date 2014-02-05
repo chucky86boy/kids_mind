@@ -35,6 +35,10 @@ public class MyHelper extends SQLiteOpenHelper {
 //		String sql2 = "create table md_question_tag(" +
 //				
 //				"tag_id char(5) primary key  , tag_name text not null, question_id char(5) not null); ";
+		String sql2 = "create table km_lbs(" +
+				"_id integer primary key autoincrement," +
+				"address text not null, image_path text not null, name text not null, number text not null, contents text not null, area text not null); ";
+		
 		String sql3 = "create table km_baby(" +
 				"_id integer primary key autoincrement," +
 				"user_name text not null, user_id text not null, name text not null, birth text not null, sex text not null,  image_path text not null); ";
@@ -51,7 +55,7 @@ public class MyHelper extends SQLiteOpenHelper {
 			db.execSQL(sql3);
 			db.execSQL(sql4);
 			db.execSQL(sql5);
-			
+			db.execSQL(sql2);
 		}catch(SQLException e){
 			Log.v(TAG, "create erroor : " + e );
 		}

@@ -131,6 +131,17 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 						prevView.animate().scaleY(1f).setDuration(500);
 						
 						currentPage = position; 
+						DetailListItem item=list.get(position);
+						contents.setText(item.getDetail_content());
+						switch (position%2){
+						case 0:
+							img.setImageResource(R.drawable.re_dotor1);
+							break;
+						case 1:
+							img.setImageResource(R.drawable.re_dotor2);
+							break;
+						
+						}
 					}
 					
 				});
@@ -140,142 +151,36 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 					@Override
 
 					protected Void doInBackground(Void... params) {
+						try{
 						view = pager.getChildAt(0);
+						
 						while(!view.isShown()){
 							SystemClock.sleep(50);
 
+						}
+						}catch(NullPointerException e){
+							
 						}
 						return null;
 					}
 
 					@Override
 					protected void onPostExecute(Void result) {
+						try{
 						view.animate().scaleX(33f/30f).setDuration(500);
 						view.animate().scaleY(33f/30f).setDuration(500);
 						currentPage = 0;
+						}catch(NullPointerException e){
+							
+						}
 					}
 				}.execute();
 				
 				super.onPostExecute(result);
 			}
 		}.execute(view);
-			
-			//pager.setOnPageChangeListener(contai);
-
 		
-		
-//		pager = (ViewPager) findViewById(R.id.menu_pager);
-//		pager.setOffscreenPageLimit(5);
-//		mPagerAdapter=new ScreenSlidePagerAdapter(getFragmentManager());
-//		pager.setAdapter(mPagerAdapter);
-//		pager.setPageMargin(
-//				getResources().getDimensionPixelOffset(R.dimen.viewpager_margin));
-//		pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
-//
-//			@Override
-//			public void onPageScrolled(int position,
-//					float positionOffset, int positionOffsetPixels) {
-//				
-//			}
-//
-//			@Override
-//			public void onPageSelected(int position) {
-//				View prevView = pager.getChildAt(currentPage);
-//				View view = pager.getChildAt(position);
-//				view.animate().scaleX(1.1f).setDuration(500);
-//				view.animate().scaleY(1.1f).setDuration(500);
-//				prevView.animate().scaleX(10f/11f).setDuration(500);
-//				prevView.animate().scaleY(10f/11f).setDuration(500);
-//				currentPage = position;
-//				try{
-//					DetailListItem ditem= list.get(position);
-//				contents.setText(ditem.getDetail_content());
-//					Log.v(TAG,"position listener"+position);
-//					switch(position%2){
-//					case 0:
-//						img.setImageResource(R.drawable.re_dotor1);
-//						break;
-//					case 1:img.setImageResource(R.drawable.re_dotor2);
-//						break;
-//					
-//					}
-//				}catch(IndexOutOfBoundsException e){
-//					
-//					Log.v(TAG,"IndexOutofBounds"+e);
-//				}
-//			}
-//			
-//		});
-		
-       // TODO Auto-generated method stub
-//	    pager = (ViewPager)findViewById(R.id.menu_pager);
-//		pager.setOffscreenPageLimit(5);
-//		mPagerAdapter=new ScreenSlidePagerAdapter(getFragmentManager()); 
-//		pager.setAdapter(mPagerAdapter);
 
-		
-//		PagerContainer.listene=new PageChagedListener() {
-//			
-//			@Override
-//			public void onPageChange(int position) {
-//			try{
-//				DetailListItem ditem= list.get(position);
-//			contents.setText(ditem.getDetail_content());
-//				Log.v(TAG,"position listener"+position);
-//				switch(position%2){
-//				case 0:
-//					img.setImageResource(R.drawable.re_dotor1);
-//					break;
-//				case 1:img.setImageResource(R.drawable.re_dotor2);
-//					break;
-//				
-//				}
-//			}catch(IndexOutOfBoundsException e){
-//				
-//				Log.v(TAG,"IndexOutofBounds"+e);
-//			}
-//				}
-//			
-//		};
-		   
-
-		//PagerContainer m=new PagerContainer(KidsMindTotalResultActivity.this,img);
-		//pager.setOnPageChangeListener(m);
-
-//		pager.setOnPageChangeListener(new OnPageChangeListener() {
-//			
-//			@Override
-//			public void onPageSelected(int position) {
-//				// TODO Auto-generated method stub
-//				switch(position){
-//				case 0:
-//					img.setImageResource(R.drawable.re_dotor1);
-//					break;
-//				case 1:img.setImageResource(R.drawable.re_dotor2);
-//					break;
-//				case 2:
-//					img.setImageResource(R.drawable.re_dotor2);
-//					break;
-//				case 3:
-//					img.setImageResource(R.drawable.re_dotor1);
-//					break;
-//				}
-//			}
-//
-//			@Override
-//			public void onPageScrollStateChanged(int state) {
-//				// TODO Auto-generated method stub
-//				 mNeedsRedraw = (state != ViewPager.SCROLL_STATE_IDLE);
-//			}
-//
-//			@Override
-//			public void onPageScrolled(int arg0, float arg1, int arg2) {
-//			    if (mNeedsRedraw)pager.invalidate();
-//				
-//			}
-//			
-//			
-//		});
 	}
 	public void selectDb(String cha){
 

@@ -1,5 +1,6 @@
 package com.mb.kids_mind;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -9,7 +10,9 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,7 +37,7 @@ public static final String PROPERTY_REG_ID = "registration_id";
 private static final String PROPERTY_APP_VERSION = "appVersion";
 private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
-String SENDER_ID = "699304907810";
+String SENDER_ID = "364625981181";
 SharedPreferences pref;
 String regId = "";
 TextView mDisplay;
@@ -67,6 +70,8 @@ private String user_name3=null,user_pwd3=null;
 		public void onClick(View v) {
 			user_name3 =id.getText().toString();
 			 user_pwd3 = pw.getText().toString();
+			 
+			 if(user_name3.contains("@")&&user_name3.contains(".")){
 			String auth=pref.getString("authkey", "");
 			String first=pref.getString("first", "");
 			int user_id=pref.getInt("user_id", 0);
@@ -74,7 +79,9 @@ private String user_name3=null,user_pwd3=null;
 				Log.v(TAG,"1");
 				Log.v(TAG,"가입시user_name3"+user_name3+"user_pwd"+user_pwd3);
 				asyncNicknameCheckJson(user_name3);
-					
+			 }else{
+				 Toast.makeText(KidsMindLoginActivity.this, "유효하지 않은 메일 형식 입니다", Toast.LENGTH_SHORT).show();
+			 }
 //			}else{
 //				Log.v(TAG,"2");
 //				Log.v(TAG,"로그인시user_name3"+user_id+""+"auth"+auth);
@@ -84,69 +91,69 @@ private String user_name3=null,user_pwd3=null;
 			
 		}
 	});
-//		regId = getRegistrationId(this);
-//		if(regId.equals("")){
-//			Log.v(TAG, "exist");
-//		//	registerInBackground();
-//		}else{
-//
-//			Log.v(TAG, " regId : " + regId);
-//		}
+		regId = getRegistrationId(this);
+		if(regId.equals("")){
+			Log.v(TAG, "없어요");
+			registerInBackground();
+		}else{
+
+			Log.v(TAG, " regId : " + regId);
+		}
 	    
 		
 	}
-//	private void unRegisterInBackground() {
-//	new AsyncTask<Void, Void, String>() {
-//		@Override
-//		protected String doInBackground(Void... params) {
-//			String msg = "";
-//			try {
-//				if (gcm == null) {
-//					gcm = GoogleCloudMessaging.getInstance(MindDrawingLoginActivity.this);
-//				}
-//				gcm.unregister();
-//				Log.v(TAG, "Device unregister, : " + regId);
-//				storeRegistrationId(MindDrawingLoginActivity.this, "");
-//			} catch (IOException ex) {
-//				msg = "Error :" + ex.getMessage();
-//				// If there is an error, don't just keep trying to register.
-//				// Require the user to click a button again, or perform
-//				// exponential back-off.
-//				
-//			}
-//			return "";
-//
-//		}
-//	}.execute();
-//}
-//private void registerInBackground() {
-//
-//	new AsyncTask<Void, Void, String>() {
-//
-//		@Override
-//		protected String doInBackground(Void... params) {
-//			String msg = "";
-//			L
-//			try {
-//				if (gcm == null) {
-//					gcm = GoogleCloudMessaging.getInstance(MindDrawingLoginActivity.this);
-//				}
-//				
-//				regId = gcm.register(SENDER_ID);
-//				
-//				storeRegistrationId(MindDrawingLoginActivity.this, regId);
-//				
-//			} catch (IOException ex) {
-//				msg = "Error :" + ex.getMessage();
-//				// If there is an error, don't just keep trying to register.
-//				// Require the user to click a button again, or perform
-//				// exponential back-off.
-//				Log.v(TAG, msg);
-//			}
-//			return msg;
-//		}
-//	}.execute();
-//}
+	private void unRegisterInBackground() {
+	new AsyncTask<Void, Void, String>() {
+		@Override
+		protected String doInBackground(Void... params) {
+			String msg = "";
+			try {
+				if (gcm == null) {
+					gcm = GoogleCloudMessaging.getInstance(KidsMindLoginActivity.this);
+				}
+				gcm.unregister();
+				Log.v(TAG, "Device unregister, : " + regId);
+				storeRegistrationId(KidsMindLoginActivity.this, "");
+			} catch (IOException ex) {
+				msg = "Error :" + ex.getMessage();
+				// If there is an error, don't just keep trying to register.
+				// Require the user to click a button again, or perform
+				// exponential back-off.
+				
+			}
+			return "";
+
+		}
+	}.execute();
+}
+private void registerInBackground() {
+
+	new AsyncTask<Void, Void, String>() {
+
+		@Override
+		protected String doInBackground(Void... params) {
+			String msg = "";
+			
+			try {
+				if (gcm == null) {
+					gcm = GoogleCloudMessaging.getInstance(KidsMindLoginActivity.this);
+				}
+				
+				regId = gcm.register(SENDER_ID);
+				Log.v(TAG,regId);
+				storeRegistrationId(KidsMindLoginActivity.this, regId);
+				
+			} catch (IOException ex) {
+				msg = "Error :" + ex.getMessage();
+				// If there is an error, don't just keep trying to register.
+				// Require the user to click a button again, or perform
+				// exponential back-off.
+				Log.v(TAG, msg);
+			}
+			return msg;
+		}
+	}.execute();
+}
 	public void storeRegistrationId(Context context, String regId) {
 		final SharedPreferences prefs = getSharedPreferences("pref", 0);
 
@@ -182,7 +189,8 @@ private String user_name3=null,user_pwd3=null;
 	public void asyncNicknameCheckJson(String name) {
 		//openWaitDialog();
 
-		String url = "http://localhost:3083/namecheck" + "/" + name;
+		//String url = "http://localhost:3083/namecheck" + "/" + name;
+		String url=Const.NAME_CHECK_PATH+"/"+name;
 		Log.v(TAG,"URL"+url);
 		aquery.ajax(url, JSONObject.class, this, "jsonNicknameCheckCallback");
 
@@ -267,11 +275,12 @@ private String user_name3=null,user_pwd3=null;
 					editor.putString("user_pwd", user_pwd3);
 					editor.commit();
 					
-					//asyncAutoLoginJson(user_id, authkey);
+					asyncAutoLoginJson(user_id,regId);
 					Log.v(TAG,"authkey"+authkey+"user_name"+user_name+"user_id"+user_id+"");
 					openInfoMessageDialogBox("로그인 성공");
-					KidsMindLoginActivity.this.setResult(RESULT_OK);
-					finish();
+					
+//					KidsMindLoginActivity.this.setResult(RESULT_OK);
+//					finish();
 					
 
 					//resultView.setText(json.toString());
@@ -300,11 +309,11 @@ private String user_name3=null,user_pwd3=null;
 	 */
 	public void asyncAutoLoginJson(int user_id, String authkey) {
 		
-		String url = Const.AUTO_LOGIN_PATH;
+		String url = Const.GCM;
 
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("user_id", String.valueOf(user_id));
-		map.put("authkey", authkey);
+		map.put("regId", authkey);
 
 		aquery.ajax(url, map, JSONObject.class, this, "jsonAutoLoginCallback");
 
@@ -321,11 +330,16 @@ private String user_name3=null,user_pwd3=null;
 				boolean isSuccess = json.getString("result").equals(Const.SUCCESS);
 
 				if (isSuccess) {
-					int user_id = json.getInt("user_id");
-					String user_name = json.getString("user_name");
-					String authkey = json.getString("authkey");
-					Log.v(TAG,"자동로긴 성공");
-				
+//					int user_id = json.getInt("user_id");
+//					String user_name = json.getString("user_name");
+//					String authkey = json.getString("authkey");
+					Log.v(TAG,"gcm_등록");
+//					Intent intent=new Intent(KidsMindLoginActivity.this,MainActivity.class);
+//					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//					startActivity(intent);
+//				finish();
+					KidsMindLoginActivity.this.setResult(RESULT_OK);
+					finish();
 
 					//	resultView.setText(json.toString());
 				} else {
@@ -379,7 +393,8 @@ private String user_name3=null,user_pwd3=null;
 					editor.putString("authkey", authkey);
 					editor.commit();
 					//String path=pref.getString("path", null);
-
+					KidsMindLoginActivity.this.setResult(RESULT_OK);
+					finish();
 					
 
 					//resultView.setText(json.toString());

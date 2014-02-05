@@ -208,6 +208,7 @@ public class KidsMindResultActivity extends Activity {
 			String detail_check, int advice_id, String question_id,String user_id) {
 		// if(selectDb(detail_id)){
 		openDB();
+		Log.v(TAG,"오픈 디비 ");
 		SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat ( "yyyy.MM.dd", Locale.KOREA );
 		Date currentTime = new Date ( );
 		

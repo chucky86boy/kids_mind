@@ -18,17 +18,20 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:background="@drawable/back"
-            />
+             android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp" />
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="50dp"
             android:text="Add Baby"
          	android:textSize="20sp" />
 
     </LinearLayout>
+
       <EditText
           android:id="@+id/name"
           android:layout_width="wrap_content"
@@ -37,6 +40,7 @@
           android:background="@drawable/box_name"
           android:ems="10"
           android:gravity="center"
+          android:hint="아이 이름을 적어 주세요"
           android:inputType="textPersonName"
           android:paddingTop="15dp" >
 

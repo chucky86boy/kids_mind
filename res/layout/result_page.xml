@@ -6,18 +6,31 @@
     android:background="@drawable/bg_00"
     android:orientation="vertical" >
 
-  <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/navi_re"
-        android:gravity="center_vertical" >
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:background="@drawable/navi_"
+     android:gravity="center_vertical" >
 
         <Button
             android:id="@+id/back_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:background="@drawable/back" />
+             android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/back"
+            />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:text="Result"
+         	android:textSize="20sp" />
+
     </LinearLayout>
 
     <ImageView
@@ -53,7 +66,7 @@
 	   		    android:background="@drawable/bg_rp_speaking"
 	   		    android:gravity="center"
 	   		    android:paddingLeft="150dp"
-	   		    android:text="현실 접촉이 상실될 지도 모른다는 위기의식을 반영합니다."
+	   		    android:text="-해당 항목을 선택해 주세요-"
 	   		    android:textColor="@android:color/white"
 	   		    android:textSize="14sp"/>
         </LinearLayout>

@@ -64,6 +64,10 @@ View.OnClickListener bHandler =new View.OnClickListener() {
 				break;
 			case R.id.setting://
 			break;
+			case R.id.mapbtn:
+				Intent intent= new Intent(MainActivity.this,KidsmindMapActivity.class);
+				startActivity(intent);
+				break;
 //			case R.id.login:
 //				popuplogin(MainActivity.this);
 //				
@@ -76,7 +80,7 @@ View.OnClickListener bHandler =new View.OnClickListener() {
 	TextView name;
 	
 	ListView addlist;
-	ImageView mypage,login;
+	public ImageView mypage,login;
 	AddBabyAdater adapter;
 	public ImageView toggle;
 	@Override
@@ -85,10 +89,10 @@ View.OnClickListener bHandler =new View.OnClickListener() {
         setContentView(R.layout.activity_main);
         SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
     		SharedPreferences.Editor editor=pref.edit();
-    	    
+    	    findViewById(R.id.mapbtn).setOnClickListener(bHandler);
         fm=getSupportFragmentManager();
         fm.beginTransaction().add(R.id.fragmentHolder,new SketchMenu()).commit();
-        name=(TextView)findViewById(R.id.mainname);
+        name=(TextView)findViewById(R.id.name);
         helper = new MyHelper(this, "kidsmind.db", null, 1);
         
         addlist=(ListView)findViewById(R.id.listView1);
@@ -117,8 +121,13 @@ View.OnClickListener bHandler =new View.OnClickListener() {
 				SharedPreferences.Editor editor=pref.edit();
 				editor.putString("userid", info.getUser_id());
 				editor.commit();
-				Intent in= new Intent(MainActivity.this,KidsMindAlbumactivity.class);
+				Intent in= new Intent(MainActivity.this,KidsMindMypageActivity.class);
 				in.putExtra("user_id", info.getUser_id());
+				in.putExtra("image_path", info.getImage_path());
+				in.putExtra("name", info.getName());
+				in.putExtra("date", info.getBirth());
+				in.putExtra("sex", info.getSex());
+				
 				startActivity(in);
 				Log.v(TAG,"userid"+info.getUser_id());
 				//시작 앨범으로 시작~~ 그해당 userid를 통해  km_check 테이블에서 해당 image_id뽑아내고 그다음 image_id를 통해 detail_id를 이용해서 선택항목 추출
@@ -146,8 +155,8 @@ View.OnClickListener bHandler =new View.OnClickListener() {
 				asyncLogoutJson(user_name, user_pwd);
 				}else{
 					Log.v(TAG,"login");
-					login.setImageResource(R.drawable.btn_logout);
-					Intent intent=new Intent(MainActivity.this,KidsMindLoginActivity.class);
+				
+					Intent intent=new Intent(MainActivity.this,KidsMindLoginSelectActivity.class);
 				startActivityForResult(intent, 1);
 				//startActivity(intent);
 				}
@@ -279,60 +288,23 @@ View.OnClickListener bHandler =new View.OnClickListener() {
 				Log.v(TAG,"리절트로 왔어요");
 				//리스트뷰 어댑터에 이미지를 추가해 주고 setdata -> notifydata changed
 	}else if(requestCode ==1){
-		//사용자 이미지 셋팅 
-		//mypage.setima
+		//로그인완료
+		selectAll();
+		login.setImageResource(R.drawable.btn_logout);
+		Log.v(TAG,"size"+babyitem.size()+"");
+		int height=(getResources().getDimensionPixelSize(R.dimen.list_item_size)+1)*babyitem.size();
+        LayoutParams lp=(LayoutParams) addlist.getLayoutParams();
+        lp.height=height;
+  
+        addlist.setLayoutParams(lp);
+		adapter.setList(babyitem);
+		adapter.notifyDataSetChanged();
+
 		
 	}
 		}
 	}
-	void selectAlbum(String user_id){
-		openDB();
-		Log.v(TAG, "탭 디비 시작");
-		Cursor c = null;
-		albumitem=new ArrayList<AlbumItem>();
-		String wStr = "user_id=?";
-		String[] wherStr = { user_id };
-	
-		String[] colNames = {"fName","question_id","detail_check","question_title" };
-		try {
-			c = db2.query("km_check", colNames, wStr, wherStr, null,
-					null, "_id desc");
-		
-//		
-//		String sql ="select * from km_baby where "+user_name"+ order by _id DESC;";
-//		Cursor c=null;
-		Log.v(TAG,"select db");
-//		try{
-//			Log.v(TAG,"select db");
-//			
-//			c=db2.rawQuery(sql, null);
-			Log.v(TAG,"숫자:"+c.getCount());
-//			editor.putInt("babycount", c.getCount());
-//			editor.commit();
-			while(c.moveToNext()){
-				AlbumItem item= new AlbumItem();
-			item.setImage_path(c.getString(c.getColumnIndex("fName")));
-			item.setQuestioin(c.getString(c.getColumnIndex("question_id")));
-			item.setNewmessage(c.getString(c.getColumnIndex("detail_check")));
-			item.setTitle(c.getString(c.getColumnIndex("question_title")));
-		
-			albumitem.add(item);
-				//c.getString(c.getColumnIndex("question_id"));
-	//	Log.v(TAG, c.getString(0));
-				//	c.getString(0);
-			}
-			
-			
-		}catch(SQLException e){
-			Log.v(TAG,"selec error"+e);
-		}finally{
-			if(c!=null){
-			c.close();
-			}
-		}
-	
-		closeDB();
-	}	
+
 	
 	
 	
@@ -347,7 +319,7 @@ View.OnClickListener bHandler =new View.OnClickListener() {
 		if("".equals(checking)){
 			//not login
 			 user_name="untitle";
-			 name.setText(user_name);
+			 //name.setText(user_name);
 			editor.putString("user_name", user_name);
 	        editor.commit();
 	        	
@@ -403,7 +375,7 @@ View.OnClickListener bHandler =new View.OnClickListener() {
 			}
 		}
 	
-		closeDB();
+	
 	}	
 			
 	EditText id,pw;

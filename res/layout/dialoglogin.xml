@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/bg_00"
     android:gravity="center_horizontal"
     android:orientation="vertical" >
@@ -30,41 +30,45 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_sign_up"
-        android:gravity="center|bottom"
-        android:orientation="vertical"
-        android:paddingBottom="40dp" >
     
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/box_email"
-        android:ems="10"
-        android:gravity="center_vertical|center" >
 
-        <requestFocus />
-    </EditText>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_sign_up"
+            android:gravity="center|bottom"
+            android:layout_marginTop="20dp"
+            android:paddingBottom="40dp"
+            android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:background="@drawable/box_pwl"
-        android:ems="10"
-        android:gravity="center_vertical|center"
-        android:inputType="textPassword" />
+            <EditText
+                android:id="@+id/editText1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/box_email"
+                android:ems="10"
+                android:gravity="center_vertical|center"
+                android:hint="info@km.com" />
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btnok" />
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/box_pwl"
+                android:ems="10"
+                android:gravity="center_vertical|center"
+                android:hint="Password"
+                android:inputType="textPassword" />
 
-</LinearLayout>
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btnok" />
+        </LinearLayout>
+
+  
+
 </LinearLayout>

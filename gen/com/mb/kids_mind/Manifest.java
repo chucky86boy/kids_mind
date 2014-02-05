@@ -9,6 +9,7 @@ package com.mb.kids_mind;
 
 public final class Manifest {
     public static final class permission {
-        public static final String C2D_MESSAGE="com.example.gcm.permission.C2D_MESSAGE";
+        public static final String C2D_MESSAGE="com.mb.kids_mind.permission.C2D_MESSAGE";
+        public static final String MAPS_RECEIVE="com.mb.kids_mind.permission.MAPS_RECEIVE";
     }
 }

@@ -14,6 +14,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -351,8 +352,10 @@ public void clear(){
 	 * @param event
 	 * @return
 	 */
+	
     private Rect touchDown(MotionEvent event) {
-
+    Log.v(TAG,"start");	
+  
         float x = event.getX();
         float y = event.getY();
 

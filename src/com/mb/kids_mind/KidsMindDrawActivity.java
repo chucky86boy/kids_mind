@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -56,7 +57,7 @@ public class KidsMindDrawActivity extends FragmentActivity {
 				
                 MyDialogColor.listener = new OnColorSelectedListener() { 
                     public void onColorSelected(int color) { 
-                    	//Log.v(d.getTaga(),"������ ���� Į��"+color+"");
+                    	
                         pref=getSharedPreferences("pref",MODE_PRIVATE);
                         SharedPreferences.Editor editor =pref.edit();
                         editor.putInt("color", color);
@@ -166,39 +167,46 @@ public class KidsMindDrawActivity extends FragmentActivity {
 	  
 	                }*/ 
 				break;
-			case R.id.newpage2://���� �Է����� �ٲ�
+			case R.id.newpage2://
 				doClear();
 				//board.newImage();
 				//board.clear();
 				break;
-			case R.id.undoBtn://���
+			case R.id.undoBtn://
 				
 				board.undo(); 
 				break;
 		
 				
 				
-			case R.id.transfor://����Ʈ �ѱ��
-				
+			case R.id.transfor://
+				if(9960<=time){
+					 popupImage(KidsMindDrawActivity.this);        
+				}else{
+					
+					  timer.cancel();
+					  Bitmap bitmap2=board.Save(fos);
+						
+					  savename=board.startActivity();
+						SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
+						SharedPreferences.Editor editor=pref.edit();
+						editor.putString("savename", savename);
+						editor.commit();
+						
+						
+						Intent i=new Intent(KidsMindDrawActivity.this,KidsMindAnalyzeActivity.class);
+						i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+						
+						i.putExtra("savename",savename);
+						i.putExtra("where","1");
+						//i.putExtra("img",bitmap2);
+						startActivity(i);
+						
+						
+				}
 				//ft(R.id.boardLayout, frag5);
 				
-				
-		        Bitmap bitmap2=board.Save(fos);
-				savename=board.startActivity();
-				SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
-				SharedPreferences.Editor editor=pref.edit();
-				editor.putString("savename", savename);
-				editor.commit();
-				
-				
-				Intent i=new Intent(KidsMindDrawActivity.this,KidsMindAnalyzeActivity.class);
-				i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-				
-				i.putExtra("savename",savename);
-				i.putExtra("where","1");
-				//i.putExtra("img",bitmap2);
-				startActivity(i);
-				
+		      
 				
 				
 				break;
@@ -222,7 +230,8 @@ public class KidsMindDrawActivity extends FragmentActivity {
     boolean eraserSelected = false; 
     FileOutputStream fos;
 
-    
+    public CountDownTimer timer;
+	public int time;
 
 
 
@@ -238,8 +247,23 @@ public class KidsMindDrawActivity extends FragmentActivity {
         pref=getSharedPreferences("pref", MODE_PRIVATE);
         mColor=pref.getInt("color", 0xff000000);
         mSize=pref.getInt("csize", 2);
-        
-        popupImage(KidsMindDrawActivity.this);        
+        timer=new CountDownTimer(10000*1000,1000) {
+    		
+    		@Override
+    		public void onTick(long millisUntilFinished) {
+    			// TODO Auto-generated method stub
+    			time=(int)millisUntilFinished/1000;
+    			Log.v(TAG,"time"+time+"");
+    		}
+    		
+    		@Override
+    		public void onFinish() {
+    			// TODO Auto-generated method stub
+    			
+    		}
+    	};
+    	timer.start();
+       
         //LinearLayout toolsLayout = (LinearLayout) findViewById(R.id.toolsLayout); 
        // LinearLayout boardLayout = (LinearLayout) findViewById(R.id.boardLayout); 
         fram=(FrameLayout)findViewById(R.id.boardLayout);
@@ -262,6 +286,7 @@ public class KidsMindDrawActivity extends FragmentActivity {
         // RadioButton referenced 
         frag5=new DrawFragment();
         board=new BestPaintBoard(this);
+        
         fm=getSupportFragmentManager();
         ft =fm.beginTransaction();
         ft.add(R.id.boardLayout, frag5);
@@ -331,7 +356,29 @@ public class KidsMindDrawActivity extends FragmentActivity {
 				dialog.dismiss();
 			}
 		});
-		
+dialog.findViewById(R.id.button2).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				  timer.cancel();
+				  Bitmap bitmap2=board.Save(fos);
+					savename=board.startActivity();
+					SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
+					SharedPreferences.Editor editor=pref.edit();
+					editor.putString("savename", savename);
+					editor.commit();
+					
+					
+					Intent i=new Intent(KidsMindDrawActivity.this,KidsMindAnalyzeActivity.class);
+					i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+					
+					i.putExtra("savename",savename);
+					i.putExtra("where","1");
+					//i.putExtra("img",bitmap2);
+					startActivity(i);
+					dialog.dismiss();
+			}
+		});
 		dialog.show();
 	}
      
@@ -345,7 +392,7 @@ public class KidsMindDrawActivity extends FragmentActivity {
 //        ft =fm.beginTransaction();
 //        ft.remove(frag5);
 //        ft.commit();
-        
+      
 		super.onPause();
 	}
 
@@ -379,15 +426,30 @@ void doClear(){
 
 	@Override
 	protected void onResume() {
-		
-    	frag5=new DrawFragment();
-        board=new BestPaintBoard(this);
-        fm=getSupportFragmentManager();
-        ft =fm.beginTransaction();
-        ft.add(R.id.boardLayout, frag5);
-        ft.commit();
-        mColor=pref.getInt("color", 0xff000000);
-        mSize=pref.getInt("csize", 2);
+		 timer=new CountDownTimer(10000*1000,1000) {
+	    		
+	    		@Override
+	    		public void onTick(long millisUntilFinished) {
+	    			// TODO Auto-generated method stub
+	    			time=(int)millisUntilFinished/1000;
+	    			Log.v(TAG,"time"+time+"");
+	    		}
+	    		
+	    		@Override
+	    		public void onFinish() {
+	    			// TODO Auto-generated method stub
+	    			
+	    		}
+	    	};
+	    	timer.start();
+//    	frag5=new DrawFragment();
+//        board=new BestPaintBoard(this);
+//        fm=getSupportFragmentManager();
+//        ft =fm.beginTransaction();
+//        ft.add(R.id.boardLayout, frag5);
+//        ft.commit();
+//        mColor=pref.getInt("color", 0xff000000);
+//        mSize=pref.getInt("csize", 2);
         
 		super.onResume();
 	}

@@ -50,8 +50,7 @@ View.OnClickListener bHandler=new OnClickListener() {
 			
 			break;
 		case R.id.button3:
-			Intent intent=new Intent(KidsMindLastResultActivity.this,KidsmindYoutubeActivity.class);
-			startActivity(intent);
+			
 			break;
 		}
 	}
@@ -131,7 +130,7 @@ public void asynccommentJson(String msg) {
 	
 //	openWaitDialog();
 
-	String url = Const.ADVICE_COMMENT;
+	String url = Const.USER_COMMENT;
 
 	HashMap<String, String> map = new HashMap<String, String>();
 	map.put("comment", msg);

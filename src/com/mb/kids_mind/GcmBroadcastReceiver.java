@@ -20,6 +20,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.util.Log;
 
 
 /**
@@ -32,9 +33,10 @@ import android.support.v4.content.WakefulBroadcastReceiver;
  */
 
 public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
-
+private static final String TAG = "MainActivity";
     @Override
     public void onReceive(Context context, Intent intent) {
+    	Log.v(TAG,"1");
         // Explicitly specify that GcmIntentService will handle the intent.
         ComponentName comp = new ComponentName(context.getPackageName(),
                 GcmIntentService.class.getName());
