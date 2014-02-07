@@ -130,6 +130,7 @@ public class KidsMindAnalyzeActivity extends Activity {
 		img=(ImageView)findViewById(R.id.imageView1);
 		SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
 		SharedPreferences.Editor editor =pref.edit();
+		editor.putString("whe", "");
 		editor.putString("list", "");
 		editor.putString("list2", "");
 		editor.putString("list3", "");

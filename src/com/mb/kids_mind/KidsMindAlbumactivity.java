@@ -45,6 +45,25 @@ ArrayList<AlbumItem> albumitem;
 		finish();	
 		}
 	});
+	findViewById(R.id.textView1).setOnClickListener(new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+		finish();	
+		}
+	});
+findViewById(R.id.home).setOnClickListener(new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			Intent intent=new Intent(KidsMindAlbumactivity.this,MainActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.putExtra("check", "1");
+			startActivity(intent);
+		}
+	});
 	 helper = new MyHelper(this, "kidsmind.db", null, 1);
 	ListView list=(ListView)findViewById(R.id.albumlist);
 	 list.setDivider(null);
@@ -162,8 +181,8 @@ ArrayList<AlbumItem> albumitem;
  		(new ColorDrawable(android.graphics.Color.TRANSPARENT));
  		dialog.setCancelable(false);
  		dialog.setCanceledOnTouchOutside(false);
- 		dialog.setContentView(R.layout.profile);
- 		dialog.findViewById(R.id.regpic).setOnClickListener(
+ 		dialog.setContentView(R.layout.deletedialog);
+ 		dialog.findViewById(R.id.enter).setOnClickListener(
  				new OnClickListener() {
 
  					@Override
@@ -181,7 +200,7 @@ ArrayList<AlbumItem> albumitem;
  						dialog.dismiss();
  					}
  				});
- 		dialog.findViewById(R.id.canpic).setOnClickListener(
+ 		dialog.findViewById(R.id.cancel).setOnClickListener(
  				new OnClickListener() {
 
  					@Override

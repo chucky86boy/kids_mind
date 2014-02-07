@@ -4,6 +4,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -21,6 +22,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -61,15 +63,44 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 			
 			@Override
 			public void onClick(View v) {
-				Intent in =new Intent(KidsMindTotalResultActivity.this,KidsMindLastResultActivity.class);
-				in.putExtra("savename",savename);
-				in.putExtra("where","1");
-				startActivity(in);
+//				Intent in =new Intent(KidsMindTotalResultActivity.this,KidsMindLastResultActivity.class);
+//				in.putExtra("savename",savename);
+//				in.putExtra("where","1");
+//				startActivity(in);
+				SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
+				SharedPreferences.Editor editor =pref.edit();
+				editor.putString("whe", "1");
+				editor.commit();
 				// TODO Auto-generated method stub
 			finish();	
 			}
 		});
-	    contents=(TextView)findViewById(R.id.contents);
+		findViewById(R.id.textView1).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
+				SharedPreferences.Editor editor =pref.edit();
+				editor.putString("whe", "1");
+				editor.commit();
+				// TODO Auto-generated method stub
+			finish();
+			}
+		});
+	findViewById(R.id.home).setOnClickListener(new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			Intent intent=new Intent(KidsMindTotalResultActivity.this,MainActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.putExtra("check", "1");
+			startActivity(intent);
+				
+		}
+	});
+		contents=(TextView)findViewById(R.id.contents);
 		Intent intent=getIntent();
 		//if("1".equals(intent.getStringExtra("where"))){
 		// Bitmap bit=intent.getParcelableExtra("img");
@@ -133,12 +164,18 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 						currentPage = position; 
 						DetailListItem item=list.get(position);
 						contents.setText(item.getDetail_content());
-						switch (position%2){
+						switch (position%4){
 						case 0:
 							img.setImageResource(R.drawable.re_dotor1);
 							break;
 						case 1:
 							img.setImageResource(R.drawable.re_dotor2);
+							break;
+						case 2:
+							img.setImageResource(R.drawable.re_dotor3);
+							break;
+						case 3:
+							img.setImageResource(R.drawable.re_dotor4);
 							break;
 						
 						}
@@ -181,6 +218,19 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 		}.execute(view);
 		
 
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK ) {
+	    	SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
+			SharedPreferences.Editor editor =pref.edit();
+			editor.putString("whe", "1");
+			editor.commit();
+			// TODO Auto-generated method stub
+		finish();	
+	    }
+	    return super.onKeyDown(keyCode, event);
 	}
 	public void selectDb(String cha){
 

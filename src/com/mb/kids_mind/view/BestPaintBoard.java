@@ -450,10 +450,12 @@ public void clear(){
     String savename;
     File f=null;
     public Bitmap Save(OutputStream outstream) {
-		try {
+		DirPath = Environment.getExternalStorageDirectory().getAbsolutePath();       
+		DirPath = DirPath + "/" + "KidsMind" + "/";	         
+		
+    	
+    	try {
 			
-			DirPath = Environment.getExternalStorageDirectory().getAbsolutePath();       
-			DirPath = DirPath + "/" + "KidsMind" + "/";	         
 
 			File cameraDir = new File(DirPath);
 			if( !cameraDir.exists() ){
@@ -472,7 +474,7 @@ public void clear(){
 			f = new File(cameraDir, savename);
 			Log.v(TAG,"4");
 			outstream = new FileOutputStream( f );
-			Log.v(TAG,"5");
+			Log.v(TAG,"f"+f);
 
 
 			mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outstream);
@@ -486,6 +488,9 @@ public void clear(){
 	}
 	public String startActivity(){
 		return savename;
+	}
+	public String start(){
+		return DirPath+savename;
 	}
 	
 }

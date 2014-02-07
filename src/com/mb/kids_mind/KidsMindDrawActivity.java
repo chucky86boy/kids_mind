@@ -180,17 +180,23 @@ public class KidsMindDrawActivity extends FragmentActivity {
 				
 				
 			case R.id.transfor://
-				if(9960<=time){
+				SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
+				SharedPreferences.Editor editor=pref.edit();
+				String a=pref.getString("c", "");
+				
+				if(9960<=time&& "".equals(a)){
+					editor.putString("c","1");
+					editor.commit();
 					 popupImage(KidsMindDrawActivity.this);        
 				}else{
 					
-					  timer.cancel();
+					
 					  Bitmap bitmap2=board.Save(fos);
 						
 					  savename=board.startActivity();
-						SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
-						SharedPreferences.Editor editor=pref.edit();
+					  String name=board.start();
 						editor.putString("savename", savename);
+						editor.putString("presave",name);
 						editor.commit();
 						
 						
@@ -245,8 +251,12 @@ public class KidsMindDrawActivity extends FragmentActivity {
 
         setContentView(R.layout.drawpain); 
         pref=getSharedPreferences("pref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
         mColor=pref.getInt("color", 0xff000000);
         mSize=pref.getInt("csize", 2);
+        editor.putString("c","");
+		editor.commit();
+		
         timer=new CountDownTimer(10000*1000,1000) {
     		
     		@Override
@@ -259,7 +269,7 @@ public class KidsMindDrawActivity extends FragmentActivity {
     		@Override
     		public void onFinish() {
     			// TODO Auto-generated method stub
-    			
+    			Log.v(TAG,"timer_finish");
     		}
     	};
     	timer.start();
@@ -392,7 +402,8 @@ dialog.findViewById(R.id.button2).setOnClickListener(new OnClickListener() {
 //        ft =fm.beginTransaction();
 //        ft.remove(frag5);
 //        ft.commit();
-      
+    
+	 timer.cancel();
 		super.onPause();
 	}
 
@@ -426,21 +437,7 @@ void doClear(){
 
 	@Override
 	protected void onResume() {
-		 timer=new CountDownTimer(10000*1000,1000) {
-	    		
-	    		@Override
-	    		public void onTick(long millisUntilFinished) {
-	    			// TODO Auto-generated method stub
-	    			time=(int)millisUntilFinished/1000;
-	    			Log.v(TAG,"time"+time+"");
-	    		}
-	    		
-	    		@Override
-	    		public void onFinish() {
-	    			// TODO Auto-generated method stub
-	    			
-	    		}
-	    	};
+		
 	    	timer.start();
 //    	frag5=new DrawFragment();
 //        board=new BestPaintBoard(this);

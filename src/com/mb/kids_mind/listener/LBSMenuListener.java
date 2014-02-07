@@ -3,6 +3,7 @@ package com.mb.kids_mind.listener;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
@@ -16,39 +17,47 @@ import com.mb.kids_mind.R;
 public class LBSMenuListener implements OnClickListener {
 	Activity activity;
 	boolean first = true, animating;
-	View sideMenu, container;
+	View sideMenu,hide;
 	ViewPager pager;
+	int height;
 	private static final String TAG="MainActivity";
 	@Override
 	public void onClick(View v) {
 		activity = (Activity) v.getContext();
-
+		SharedPreferences pref =activity.getSharedPreferences("pref", activity.MODE_PRIVATE);
+		SharedPreferences.Editor editor=pref.edit();
+		height=pref.getInt("height", 0);
 		if(first){
-			sideMenu = activity.findViewById(R.id.side);
-			container = activity.findViewById(R.id.contain);
-			
-			sideMenu.setY(-300);
+			sideMenu = activity.findViewById(R.id.placeinfo);
+			hide=activity.findViewById(R.id.hide);
+						
+						Log.v(TAG,"높이"+height+"");
+		//	sideMenu.setY(height);
 			sideMenu.requestLayout();
 			sideMenu.setVisibility(View.GONE);
+		
+			
+			
 			first = false;
 			Log.v(TAG,"first");
 			//((MainActivity)activity).text.setImageResource(R.drawable.navi_btn01_on);
-			((KidsmindMapActivity)activity).text.setText("map on");
 			
 		}
 
 		switch(sideMenu.getVisibility()){
 		case View.VISIBLE :
 			Log.v(TAG,"visible");
+			
 			//((MainActivity)activity).toggle.setImageResource(R.drawable.navi_btn01);
-			animateMenu(-300, View.GONE);
+			animateMenu(0, View.GONE);
 			//((MainActivity)activity).toggle.setImageResource(R.drawable.navi_btn01);
 			
 			break;
 		case View.GONE :
 			Log.v(TAG,"Gone");
+			hide.setVisibility(View.GONE);
 			
-				animateMenu(300, View.VISIBLE);
+				animateMenu(0, View.VISIBLE);
 				
 				
 			break;
@@ -59,13 +68,11 @@ public class LBSMenuListener implements OnClickListener {
 		if(!animating){
 			animating = true;
 			if(sideMenu.getVisibility() == View.GONE) sideMenu.setVisibility(View.VISIBLE);
-			container.animate()
-				.translationYBy(animationLength)
-				.setDuration(500)
-				.setInterpolator(new DecelerateInterpolator());
+		
+		
 			sideMenu.animate()
 				.translationYBy(animationLength)
-				.setDuration(500)
+				.setDuration(100)
 				.setInterpolator(new DecelerateInterpolator())
 				
 				.setListener(new AnimatorListenerAdapter() {
@@ -77,7 +84,15 @@ public class LBSMenuListener implements OnClickListener {
 						super.onAnimationStart(animation);
 						Log.v(TAG,"start");
 						//((MainActivity)activity).toggle.setImageResource(R.drawable.navi_btn01_on);
+						switch(sideMenu.getVisibility())
+						{
+						case View.VISIBLE:
+										
+							break;
+						case View.GONE:
 						
+							break;
+						}
 					}
 
 					@Override
@@ -89,12 +104,11 @@ public class LBSMenuListener implements OnClickListener {
 						switch(sideMenu.getVisibility())
 						{
 						case View.VISIBLE:
-						
+							hide.setVisibility(View.GONE);
 										
 							break;
 						case View.GONE:
-						
-							
+							hide.setVisibility(View.VISIBLE);
 							break;
 						}
 						animating = false;

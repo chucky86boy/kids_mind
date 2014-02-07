@@ -30,14 +30,17 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.mb.kids_mind.KidsMindAnalyzeActivity;
 import com.mb.kids_mind.KidsMindDrawActivity;
+import com.mb.kids_mind.KidsMindInfoActivity;
 import com.mb.kids_mind.R;
 import com.mb.kids_mind.Helper.KidsMindDBHelper;
 import com.mb.kids_mind.task.ViewResizeTask;
@@ -45,7 +48,7 @@ public class SingleSketchMenu extends Fragment{
 	private static final String TAG="MainActivity";
 	public int[] menuImage;
 	private int position;
-	public ImageView img; 
+	public LinearLayout img; 
 	
 	FragmentManager fm;
 	Activity activity;
@@ -96,6 +99,12 @@ public class SingleSketchMenu extends Fragment{
 				startActivity(i);
 				dialog.dismiss();
 				break;
+			case R.id.button1:
+				
+				Intent in2=new Intent(activity,KidsMindInfoActivity.class);
+				startActivity(in2);
+				dialog.dismiss();
+				break;
 			}
 
 		}
@@ -137,10 +146,14 @@ public class SingleSketchMenu extends Fragment{
 		
 	
 		Log.v(TAG,"iscale"+iscale+"");
-		img = (ImageView) view.findViewById(R.id.singeMenu);
+		img = (LinearLayout) view.findViewById(R.id.singeMenu);
 		
+		Button btn=(Button)view.findViewById(R.id.button1);
+		if(position==0){
+		btn.setBackgroundResource(R.drawable.startnode);
+		}
 		new ViewResizeTask(img, 7f/10f, 7f/10f,this).execute();
-		img.setImageDrawable(getActivity().getResources().getDrawable(menuImage[position]));
+		img.setBackgroundResource(menuImage[position]);
 		img.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -149,6 +162,7 @@ public class SingleSketchMenu extends Fragment{
 					//doAction(v);
 					break;
 				case MotionEvent.ACTION_UP:
+				if(position!=0){
 					SharedPreferences pref=activity.getSharedPreferences("pref",activity.MODE_PRIVATE);
 					SharedPreferences.Editor editor=pref.edit();
 					int count=pref.getInt("babycount", 0);
@@ -199,16 +213,87 @@ public class SingleSketchMenu extends Fragment{
 
 						popupImage(activity);
 						//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
-
+					}
 						break;
 					}
 					}
+				else{
+					
+					//popupIntro(activity);
+					
+					
+				}
 					break;
 				case MotionEvent.ACTION_MOVE:
 					break;
 
 				}
 				return true;
+			}
+		});
+btn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(position!=0){
+				SharedPreferences pref=activity.getSharedPreferences("pref",activity.MODE_PRIVATE);
+				SharedPreferences.Editor editor=pref.edit();
+				int count=pref.getInt("babycount", 0);
+				if(count==0){
+					Toast.makeText(activity, "아이를 추가해 주세요", Toast.LENGTH_SHORT).show();
+				}else{
+				
+				editor.putInt("qposition", position);
+				editor.putInt("dbpath", position+1);
+				editor.commit();
+
+				switch (position)
+				{
+				case 0:
+					editor.putInt("qp", position);
+					editor.putString("qposition","Q1");
+					editor.commit();
+
+					popupImage(activity);
+					
+					//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
+					break;
+				case 1:
+					editor.putInt("qp", position);
+					
+					editor.putString("qposition","Q2");
+					editor.commit();
+
+					popupImage(activity);
+					//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
+
+					break;
+				case 2:
+					editor.putInt("qp", position);
+					
+					editor.putString("qposition","Q3");
+					editor.commit();
+
+					popupImage(activity);
+					//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
+
+					break;
+				case 3:
+					editor.putInt("qp", position);
+					
+					editor.putString("qposition","Q4");
+					editor.commit();
+
+					popupImage(activity);
+					//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
+
+					break;
+				}
+				}
+				}
+				else{
+					popupIntro(activity);
+				}
 			}
 		});
 		return view;
@@ -232,6 +317,13 @@ public class SingleSketchMenu extends Fragment{
 		dialog.findViewById(R.id.camera).setOnClickListener(bHandler);
 		dialog.findViewById(R.id.picture).setOnClickListener(bHandler);
 		dialog.findViewById(R.id.album).setOnClickListener(bHandler);
+		dialog.show();
+	}
+	
+	void popupIntro(Activity context)
+	{
+		dialog.setContentView(R.layout.infodialog);
+		dialog.findViewById(R.id.button1).setOnClickListener(bHandler);
 		dialog.show();
 	}
 	FileOutputStream fos;

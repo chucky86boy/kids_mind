@@ -14,8 +14,9 @@ View.OnClickListener bHandler =new OnClickListener() {
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()){
-		case R.id.account://계정생성
+		case R.id.createaccount://계정생성
 			Intent in=new Intent(KidsMindLoginSelectActivity.this,KidsMindLoginActivity.class);
+			in.putExtra("wh", "c");
 			startActivityForResult(in, 0);
 			
 			break;
@@ -23,6 +24,14 @@ View.OnClickListener bHandler =new OnClickListener() {
 			
 		break;
 		case R.id.googleaccount://구글 로긴
+			
+			break;
+		case R.id.loginaccount:
+			
+			Intent in2=new Intent(KidsMindLoginSelectActivity.this,KidsMindLoginActivity.class);
+			in2.putExtra("wh", "l");
+			startActivityForResult(in2, 0);
+			
 			
 			break;
 		}
@@ -33,10 +42,10 @@ View.OnClickListener bHandler =new OnClickListener() {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.loginselect);
-	    findViewById(R.id.account).setOnClickListener(bHandler);
+	    findViewById(R.id.createaccount).setOnClickListener(bHandler);
 	    findViewById(R.id.facebook).setOnClickListener(bHandler);
 	    findViewById(R.id.googleaccount).setOnClickListener(bHandler);
-	    
+	    findViewById(R.id.loginaccount).setOnClickListener(bHandler);
 	    // TODO Auto-generated method stub
 	}
 

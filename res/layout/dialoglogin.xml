@@ -9,7 +9,7 @@
  <LinearLayout
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
-     android:background="@drawable/navi_"
+     android:background="@drawable/navi_bar"
      android:gravity="center_vertical" >
 
         <Button
@@ -24,7 +24,7 @@
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="2dp"
             android:text="Log in"
           android:textSize="20sp" />
 
@@ -33,6 +33,7 @@
     
 
         <LinearLayout
+            android:id="@+id/bg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_sign_up"

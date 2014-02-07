@@ -1,8 +1,11 @@
 package com.mb.kids_mind.fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -29,15 +32,17 @@ public class SketchMenu extends Fragment {
 	Activity activity;
 	public ViewPager pager; 
 	public ScreenSlidePagerAdapter mPagerAdapter;
-	
-	private int[] menuImage = {R.drawable.menu_01,R.drawable.menu_02,R.drawable.menu_03,R.drawable.menu_04};
+	public Dialog dialog=null;
+	private int[] menuImage = {R.drawable.note_01,R.drawable.menu_01,R.drawable.menu_02,R.drawable.menu_03,R.drawable.menu_04};
 	private int currentPage;
 	private ImageView doctor;
 	@Override
 		public void onAttach(Activity activity) {
 			this.activity = activity;
+			
 			super.onAttach(activity);
 		}
+	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data){
 		super.onActivityResult(requestCode,resultCode,data);
@@ -60,6 +65,9 @@ public class SketchMenu extends Fragment {
 		SharedPreferences.Editor editor=pref.edit();
 		View view = inflater.inflate(R.layout.menu_selector, null);
 			doctor=(ImageView)view.findViewById(R.id.docbtn);
+
+			
+		
 			
 			doctor.setOnClickListener(new OnClickListener() {
 				

@@ -16,6 +16,7 @@ public class DetailListItem implements Serializable {
 	String tag_id;
 	int position;
 	boolean flag;
+	
 	public boolean isFlag() {
 		return flag;
 	}

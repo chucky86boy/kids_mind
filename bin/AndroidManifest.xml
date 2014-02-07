@@ -116,6 +116,7 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAF5DE0gWn23Aaw3aD1Ijf2xgHUIynsUN0" />
         <activity android:name=".KidsMindMypageActivity"></activity>
+        <activity android:name="KidsMindInfoActivity"></activity>
     </application>
 
 </manifest>
