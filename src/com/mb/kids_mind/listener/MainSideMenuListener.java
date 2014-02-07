@@ -14,7 +14,7 @@ import com.mb.kids_mind.R;
 public class MainSideMenuListener implements OnClickListener {
 	Activity activity;
 	boolean first = true, animating;
-	View sideMenu, fragmentHolder,info;
+	View sideMenu,info;
 	private static final String TAG="MainActivity";
 	@Override
 	public void onClick(View v) {
@@ -33,7 +33,6 @@ public class MainSideMenuListener implements OnClickListener {
 		
 		if(first){
 			sideMenu = activity.findViewById(R.id.sideMenu);
-			fragmentHolder = activity.findViewById(R.id.fragmentHolder);
 			info=activity.findViewById(R.id.info);
 			sideMenu.setX(-300);
 			sideMenu.requestLayout();
@@ -81,10 +80,7 @@ public class MainSideMenuListener implements OnClickListener {
 			animating = true;
 			if(sideMenu.getVisibility() == View.GONE) sideMenu.setVisibility(View.VISIBLE);
 			
-			fragmentHolder.animate()
-				.translationXBy(animationLength)
-				.setDuration(500)
-				.setInterpolator(new DecelerateInterpolator());
+		
 			sideMenu.animate()
 				.translationXBy(animationLength)
 				.setDuration(500)

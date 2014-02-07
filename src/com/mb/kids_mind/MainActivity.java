@@ -13,8 +13,14 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -58,9 +64,9 @@ public class MainActivity extends FragmentActivity {
 
 				break;
 			case R.id.add:
-				Intent in = new Intent(MainActivity.this,
+				Intent in2 = new Intent(MainActivity.this,
 						KidsMindAddActivity.class);
-				startActivityForResult(in, 0);
+				startActivityForResult(in2, 0);
 				// adapter notifydatachaged 해주기
 				break;
 			case R.id.notic:// 이벤트 공지사항
@@ -73,7 +79,15 @@ public class MainActivity extends FragmentActivity {
 				startActivity(intent);
 				break;
 			case R.id.myalbum:
-				
+				Intent in = new Intent(MainActivity.this,
+						KidsMindMypageActivity.class);
+				in.putExtra("user_id", mUser_id);
+				in.putExtra("image_path", mImage_path);
+				in.putExtra("name", mName);
+				in.putExtra("date", mDate);
+				in.putExtra("sex", mSex);
+			
+				startActivity(in);
 				break;
 			// case R.id.login:
 			// popuplogin(MainActivity.this);
@@ -121,6 +135,26 @@ public class MainActivity extends FragmentActivity {
 		addlist.setDivider(null);
 
 		selectAll();
+		if(babyitem.size()!=0){
+		BabyInformationItem info = babyitem.get(0);
+		mUser_id=info.getUser_id();
+		mName=info.getName();
+		mDate=info.getBirth();
+		mSex=info.getSex();
+		mImage_path=info.getImage_path();
+		if("none".equals(mImage_path)){
+			if("boy".equals(mSex)){
+				myalbum.setImageResource(R.drawable.btn_boy_push);	
+			}else if("girl".equals(mSex)){
+				myalbum.setImageResource(R.drawable.btn_girl_push);
+				
+			}
+			
+		}else{
+		readimage(mImage_path, myalbum);
+		//holder.image.setImageBitmap(bm);
+		}
+		}
 		int height = (getResources().getDimensionPixelSize(
 				R.dimen.list_item_size) + 1)
 				* babyitem.size();
@@ -146,21 +180,24 @@ public class MainActivity extends FragmentActivity {
 				SharedPreferences.Editor editor = pref.edit();
 				editor.putString("userid", info.getUser_id());
 				editor.commit();
+			
 				mUser_id=info.getUser_id();
-				mImage_path=info.getImage_path();
-				
 				mName=info.getName();
 				mDate=info.getBirth();
 				mSex=info.getSex();
-				Intent in = new Intent(MainActivity.this,
-						KidsMindMypageActivity.class);
-				in.putExtra("user_id", info.getUser_id());
-				in.putExtra("image_path", info.getImage_path());
-				in.putExtra("name", info.getName());
-				in.putExtra("date", info.getBirth());
-				in.putExtra("sex", info.getSex());
-			
-				startActivity(in);
+				mImage_path=info.getImage_path();
+				if("none".equals(mImage_path)){
+					if("boy".equals(mSex)){
+						myalbum.setImageResource(R.drawable.btn_boy_push);	
+					}else if("girl".equals(mSex)){
+						myalbum.setImageResource(R.drawable.btn_girl_push);
+						
+					}
+					
+				}else{
+				readimage(mImage_path, myalbum);
+				//holder.image.setImageBitmap(bm);
+				}
 				Log.v(TAG, "userid" + info.getUser_id());
 				// 시작 앨범으로 시작~~ 그해당 userid를 통해 km_check 테이블에서 해당 image_id뽑아내고
 				// 그다음 image_id를 통해 detail_id를 이용해서 선택항목 추출
@@ -242,12 +279,157 @@ public class MainActivity extends FragmentActivity {
 		}
 
 	}
+	Bitmap bitmap;
+
+	void readimage(String path,ImageView img){
+		if ( Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+
+try{
+			//DbUse dbuse=new DbUse(MindDrawingResultActivity.this);
+			//insertRec2(path2, "0");
+			BitmapFactory.Options options =new BitmapFactory.Options();
+			options.inJustDecodeBounds=true;
+			bitmap=BitmapFactory.decodeFile(path,options);
+			options =getBitmapSize(options);
+			bitmap=BitmapFactory.decodeFile(path,options);
+			Log.v(TAG,"이미지를 읽어오기위한 경로2"+path);
+			bitmap = getBitmapResizePrc(bitmap, 150, 150);
+			profile=new RoundedAvatarDrawable(bitmap);
+			img.setImageDrawable(profile);
+}catch(OutOfMemoryError e){
+	Log.v(TAG,"outofmemoryerror");
+}
+			//						if(bitmap!=null){
+//				Log.v(TAG,"이미지 로딩");
+//				img.setImageBitmap(bitmap);
+//			}else{
+//			}
+
+		}
+	}
+	RoundedAvatarDrawable profile;
+	public Bitmap getBitmapResizePrc(Bitmap Src, int newHeight, int newWidth) {
+		BitmapDrawable result = null;
+		int width, height;
+		SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+		SharedPreferences.Editor editor = pref.edit();
+
+		if (Src != null) {
+			width = Src.getWidth();
+			height = Src.getHeight();
+			editor.putInt("width", width);
+			editor.putInt("height", height);
+			editor.commit();
+		} else {
+			width = pref.getInt("width", 0);
+			height = pref.getInt("height", 0);
+
+		}
+
+		// calculate the scale - in this case = 0.4f
+		float scaleWidth = ((float) newWidth) / width;
+		float scaleHeight = ((float) newHeight) / height;
+
+		// createa matrix for the manipulation
+		Matrix matrix = new Matrix();
+		// resize the bit map
+
+		matrix.postScale(scaleWidth, scaleHeight);
+
+		// rotate the Bitmap ȸ�� ��Ű���� �ּ� ����!
+		// matrix.postRotate(45);
+
+		// recreate the new Bitmap
+		Bitmap resizedBitmap = Bitmap.createBitmap(Src, 0, 0, width, height,
+				matrix, true);
+
+		// check
+		width = resizedBitmap.getWidth();
+		height = resizedBitmap.getHeight();
+
+		Log.i("ImageResize",
+				"Image Resize Result : "
+						+ Boolean.toString((newHeight == height)
+								&& (newWidth == width)));
+
+		// make a Drawable from Bitmap to allow to set the BitMap
+		// to the ImageView, ImageButton or what ever
+
+		return resizedBitmap;
+	}
+	 public Options getBitmapSize(Options options){ 
+
+	        int targetWidth = 0; 
+
+	        int targetHeight = 0; 
+
+	          
+
+	        if(options.outWidth > options.outHeight){     
+
+	            targetWidth = (int)(600 * 1.3); 
+
+	            targetHeight = 600; 
+
+	        }else{ 
+
+	            targetWidth = 600; 
+
+	            targetHeight = (int)(600 * 1.3); 
+
+	        } 
+
+	  
+
+	        Boolean scaleByHeight = Math.abs(options.outHeight - targetHeight) >= Math.abs(options.outWidth - targetWidth); 
+
+	        if(options.outHeight * options.outWidth * 2 >= 16384){ 
+
+	            double sampleSize = scaleByHeight 
+
+	                ? options.outHeight / targetHeight 
+
+	                : options.outWidth / targetWidth; 
+
+	            options.inSampleSize = (int) Math.pow(2d, Math.floor(Math.log(sampleSize)/Math.log(2d))); 
+
+	        } 
+
+	        options.inJustDecodeBounds = false; 
+
+	        options.inTempStorage = new byte[16*1024]; 
+
+	          
+
+	        return options; 
+
+	    }
 
 	public static BackListener listener2;
 
 	@Override
 	protected void onResume() {
 		selectAll();
+		if(babyitem.size()!=0){
+		BabyInformationItem info = babyitem.get(0);
+		mUser_id=info.getUser_id();
+		mName=info.getName();
+		mDate=info.getBirth();
+		mSex=info.getSex();
+		mImage_path=info.getImage_path();
+		if("none".equals(mImage_path)){
+			if("boy".equals(mSex)){
+				myalbum.setImageResource(R.drawable.btn_boy_push);	
+			}else if("girl".equals(mSex)){
+				myalbum.setImageResource(R.drawable.btn_girl_push);
+				
+			}
+			
+		}else{
+		readimage(mImage_path, myalbum);
+		//holder.image.setImageBitmap(bm);
+		}
+		}
 		Log.v(TAG, "size" + babyitem.size() + "");
 		int height = (getResources().getDimensionPixelSize(
 				R.dimen.list_item_size) + 1)
@@ -294,6 +476,25 @@ public class MainActivity extends FragmentActivity {
 					editor.commit();
 					Log.v(TAG, "logout성공");
 					selectAll();
+					BabyInformationItem info = babyitem.get(0);
+					mUser_id=info.getUser_id();
+					mName=info.getName();
+					mDate=info.getBirth();
+					mSex=info.getSex();
+					mImage_path=info.getImage_path();
+					if("none".equals(mImage_path)){
+						if("boy".equals(mSex)){
+							myalbum.setImageResource(R.drawable.btn_boy_push);	
+						}else if("girl".equals(mSex)){
+							myalbum.setImageResource(R.drawable.btn_girl_push);
+							
+						}
+						
+					}else{
+					readimage(mImage_path, myalbum);
+					//holder.image.setImageBitmap(bm);
+					}
+					
 					Log.v(TAG, "size" + babyitem.size() + "");
 					int height = (getResources().getDimensionPixelSize(
 							R.dimen.list_item_size) + 1)
@@ -323,8 +524,32 @@ public class MainActivity extends FragmentActivity {
 			// Log.
 			if (requestCode == 0) {
 				Log.v(TAG, "리절트 왔어요");
-
+				SharedPreferences pref = getSharedPreferences("pref",
+						MODE_PRIVATE);
+				SharedPreferences.Editor editor = pref.edit();
+				
 				selectAll();
+				BabyInformationItem info = babyitem.get(0);
+				mUser_id=info.getUser_id();
+				editor.putString("userid", info.getUser_id());
+				editor.commit();
+				mName=info.getName();
+				mDate=info.getBirth();
+				mSex=info.getSex();
+				mImage_path=info.getImage_path();
+				if("none".equals(mImage_path)){
+					if("boy".equals(mSex)){
+						myalbum.setImageResource(R.drawable.btn_boy_push);	
+					}else if("girl".equals(mSex)){
+						myalbum.setImageResource(R.drawable.btn_girl_push);
+						
+					}
+					
+				}else{
+				readimage(mImage_path, myalbum);
+				//holder.image.setImageBitmap(bm);
+				}
+				
 				Log.v(TAG, "size" + babyitem.size() + "");
 				int height = (getResources().getDimensionPixelSize(
 						R.dimen.list_item_size) + 1)
@@ -338,7 +563,31 @@ public class MainActivity extends FragmentActivity {
 				// 리스트뷰 어댑터에 이미지를 추가해 주고 setdata -> notifydata changed
 			} else if (requestCode == 1) {
 				// 로그인완료
+				SharedPreferences pref = getSharedPreferences("pref",
+						MODE_PRIVATE);
+				SharedPreferences.Editor editor = pref.edit();
 				selectAll();
+				BabyInformationItem info = babyitem.get(0);
+				editor.putString("userid", info.getUser_id());
+				editor.commit();
+				mUser_id=info.getUser_id();
+				mName=info.getName();
+				mDate=info.getBirth();
+				mSex=info.getSex();
+				mImage_path=info.getImage_path();
+				if("none".equals(mImage_path)){
+					if("boy".equals(mSex)){
+						myalbum.setImageResource(R.drawable.btn_boy_push);	
+					}else if("girl".equals(mSex)){
+						myalbum.setImageResource(R.drawable.btn_girl_push);
+						
+					}
+					
+				}else{
+				readimage(mImage_path, myalbum);
+				//holder.image.setImageBitmap(bm);
+				}
+				
 				login.setImageResource(R.drawable.btn_logout);
 				Log.v(TAG, "size" + babyitem.size() + "");
 				int height = (getResources().getDimensionPixelSize(

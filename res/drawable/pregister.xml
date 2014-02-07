@@ -2,13 +2,13 @@
  <selector xmlns:android="http://schemas.android.com/apk/res/android">
  <!-- selected -->
  <item android:state_selected="true"
- android:drawable="@drawable/btn_pic_ok_push" />
+ android:drawable="@drawable/btn_pic_ok" />
  <!-- pressed -->
  <item android:state_pressed="true"
- android:drawable="@drawable/btn_pic_ok_push" />
+ android:drawable="@drawable/btn_pic_ok" />
  <!-- focused -->
  <item android:state_focused="true"
- android:drawable="@drawable/btn_pic_ok_push" />
+ android:drawable="@drawable/btn_pic_ok" />
  <!-- default -->
- <item android:drawable="@drawable/btn_pic_ok" />
+ <item android:drawable="@drawable/btn_pic_ok_push" />
  </selector>

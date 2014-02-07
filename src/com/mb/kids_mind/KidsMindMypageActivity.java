@@ -235,6 +235,7 @@ MyHelper myhelper;
 			
 			photo = BitmapFactory.decodeFile(outFilePath);
 			// RoundedAvatarDrawable profile
+			photo = getBitmapResizePrc(photo, 150, 150);
 			profile3 = new RoundedAvatarDrawable(photo);
 			if ("boy".equals(babysex)) {
 

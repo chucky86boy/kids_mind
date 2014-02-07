@@ -261,8 +261,14 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 				//Log.v(Debugc.getTaga(), c.getString(0)+ c.getString(1)+ c.getString(2)+c.getString(3)+c.getString(4));
 				//	c.getString(0);
 			}
+//			item=new DetailListItem();
+//			item.setDetail_image("1");
+//			item.setDetail_tilte("최종 소견서 보러가기");
+//			item.setDetail_content("최종 소견서 보기");
+//			list.add(item);
 		}catch(SQLException e){
 			Log.v(TAG,"selec error"+e);
+			
 		}finally{
 			Log.v(TAG,"dbopen3");
 			closeDB();

@@ -259,7 +259,7 @@ public class KidsMindResultActivity extends Activity {
 
 			siteList.add(site);
 		}
-
+		
 		Log.v(TAG, siteList.toString());
 		adapter.notifyDataSetChanged();
 	}	

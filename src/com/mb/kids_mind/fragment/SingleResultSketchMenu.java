@@ -76,25 +76,25 @@ public class SingleResultSketchMenu extends Fragment{
 		TextView title=(TextView)view.findViewById(R.id.resulttitle);
 		Log.v(TAG,"position"+position+"dlist.size()"+dlist.size());
 		
-		if(position==(dlist.size()-1)){
-			Log.v(TAG,"참");
-			
-			Button btn2=new Button(activity);
-			btn2.setText("결과보기");
-			btn2.setWidth(66);
-			btn2.setId(position);
-			btn.addView(btn2);
-			btn2.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-				
-					Intent in =new Intent (activity,KidsMindLastResultActivity.class);
-					startActivity(in);
-				}
-			});
-		}
+//		if(position==(dlist.size()-1)){
+//			Log.v(TAG,"참");
+//			
+//			Button btn2=new Button(activity);
+//			btn2.setText("결과보기");
+//			btn2.setWidth(66);
+//			btn2.setId(position);
+//			btn.addView(btn2);
+//			btn2.setOnClickListener(new OnClickListener() {
+//				
+//				@Override
+//				public void onClick(View v) {
+//					// TODO Auto-generated method stub
+//				
+//					Intent in =new Intent (activity,KidsMindLastResultActivity.class);
+//					startActivity(in);
+//				}
+//			});
+//		}
 		
 		new ViewResizeTask(resultContainer, 0.7f, 0.7f,this).execute();
 		setHashMap();
@@ -110,26 +110,46 @@ public class SingleResultSketchMenu extends Fragment{
 		//layoutParams.height = (int)(size.y * 0.7);
 		if(key!=null)
 		imageView.setImageResource(key);
-		imageView.setOnTouchListener(new OnTouchListener() {
+		imageView.setOnClickListener(new OnClickListener() {
 			
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch(event.getAction()){
-				case MotionEvent.ACTION_DOWN:
-
-					//doAction(v);
-					break;
-				case MotionEvent.ACTION_UP:
-					
-					break;	
-				case MotionEvent.ACTION_MOVE:
-					
-					break;
-				
-			}
-				return false;
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(position==(dlist.size()-1)){
+					Log.v(TAG,"참");
+				Intent in =new Intent (activity,KidsMindLastResultActivity.class);
+				startActivity(in);
+				}	
 			}
 		});
+//		imageView.setOnTouchListener(new OnTouchListener() {
+//			
+//			@Override
+//			public boolean onTouch(View v, MotionEvent event) {
+//				switch(event.getAction()){
+//				case MotionEvent.ACTION_DOWN:
+//
+//					//doAction(v);
+//					break;
+//				case MotionEvent.ACTION_UP:
+//					Log.v(TAG,"참"+position);
+//					if(position==(dlist.size()-1)){
+//						Log.v(TAG,"참");
+//						
+//							
+//								Intent in =new Intent (activity,KidsMindLastResultActivity.class);
+//								startActivity(in);
+//							
+//					}
+//					break;	
+//				case MotionEvent.ACTION_MOVE:
+//					
+//					break;
+//				
+//			}
+//				return false;
+//			}
+//		});
 		return view;
 	}
 	void setHashMap(){

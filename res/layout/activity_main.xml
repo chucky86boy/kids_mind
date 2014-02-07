@@ -129,7 +129,7 @@
                             android:id="@+id/myalbum"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/btn_boy_push"
+                            
                             
                             android:layout_marginTop="5dp" />
                     </LinearLayout>
@@ -139,13 +139,14 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:paddingBottom="20dp"
-                        android:paddingTop="20dp" >
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp" >
 
                         <ListView
                             android:id="@+id/listView1"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" >
+                            android:layout_height="wrap_content" 
+                            android:transcriptMode="disabled">
                         </ListView>
                     </LinearLayout>
 

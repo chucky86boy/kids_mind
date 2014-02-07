@@ -3,16 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-   
+    android:background="@drawable/box_popup_delete"
     android:gravity="bottom"
     android:orientation="vertical" >
-  <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-         android:background="@drawable/box_popup_delete"
-        
-        android:orientation="vertical" >
-    </LinearLayout>
+
      <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
