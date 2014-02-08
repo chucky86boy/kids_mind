@@ -2,6 +2,7 @@ package com.mb.kids_mind;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,11 +10,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -22,6 +25,7 @@ import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -160,7 +164,7 @@ public class KidsMindLastResultActivity extends Activity {
 			public void onClick(View v) {
 
 				//의뢰페이지로 전달
-
+				popupadvice(KidsMindLastResultActivity.this);
 			}
 		});
 		aquery = new AQuery(this);
@@ -168,6 +172,35 @@ public class KidsMindLastResultActivity extends Activity {
 		savename=in.getStringExtra("savename");
 		helper=new MyHelper(KidsMindLastResultActivity.this,"kidsmind.db" , null, 1);
 		// TODO Auto-generated method stub
+	}
+	void popupadvice(Activity context) {
+		// Create dialog
+		final Dialog dialog = new Dialog(context);
+		dialog.getWindow().setBackgroundDrawable
+
+		(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+		dialog.setCanceledOnTouchOutside(false);
+
+		dialog.setContentView(R.layout.advicedialog);
+		dialog.findViewById(R.id.button1).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// datapicker에서 받아오는 날짜를 등록
+				// date등록
+				dialog.dismiss();
+			}
+		});
+		dialog.findViewById(R.id.button2).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+			}
+		});
+
+		dialog.show();
 	}
 	private File uploadFile ;
 	private void asyncImageUploadJson(String msg) {

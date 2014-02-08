@@ -241,7 +241,7 @@ public class SingleResultSketchMenu extends Fragment{
 		map.put("d105.png",R.drawable.d105);
 		map.put("d106.png",R.drawable.d106);
 		map.put("d107.png",R.drawable.d107);
-
+		map.put("1",R.drawable.btn_last);
 
 	}
 	

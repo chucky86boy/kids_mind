@@ -1,7 +1,10 @@
 package com.mb.kids_mind;
 
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,8 +29,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
 
 import com.mb.kids_mind.Helper.KidsMindDBHelper;
 import com.mb.kids_mind.Helper.MyHelper;
@@ -51,6 +56,10 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 	TextView contents;
 	private String savename;
 	boolean mNeedsRedraw = false;
+	ImageView icon;
+	LinearLayout set;
+	TextView title;
+	TextView date;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +67,11 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 	    setContentView(R.layout.result_page);
 	    View view = findViewById(R.id.menu_pager);
 	    img=(ImageView)findViewById(R.id.doctor);
-		drawimage=(ImageView)findViewById(R.id.drawimage);
+		drawimage=(ImageView)findViewById(R.id.imageView1);
+		set=(LinearLayout)findViewById(R.id.set);
+		title=(TextView)findViewById(R.id.title);
+		date=(TextView)findViewById(R.id.date);
+		icon=(ImageView)findViewById(R.id.icon);
 		findViewById(R.id.back_btn).setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -118,6 +131,11 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 			selectDb(cha);
 
 		}
+		item=new DetailListItem();
+		item.setDetail_image("1");
+		//item.setDetail_tilte("최종 소견서 보러가기");
+		item.setDetail_content("최종 소견서 보기");
+		list.add(item);
 		if(list.size()!=0)
 		contents.setText(list.get(0).getDetail_content());
 		Log.v(TAG,"here");
@@ -261,11 +279,7 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 				//Log.v(Debugc.getTaga(), c.getString(0)+ c.getString(1)+ c.getString(2)+c.getString(3)+c.getString(4));
 				//	c.getString(0);
 			}
-//			item=new DetailListItem();
-//			item.setDetail_image("1");
-//			item.setDetail_tilte("최종 소견서 보러가기");
-//			item.setDetail_content("최종 소견서 보기");
-//			list.add(item);
+			
 		}catch(SQLException e){
 			Log.v(TAG,"selec error"+e);
 			
@@ -340,6 +354,42 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 
 			if(bitmap!=null){
 				Log.v(TAG,"이미지 로딩");
+				if(bitmap.getWidth()>bitmap.getHeight()){
+					set.setVisibility(View.GONE);
+					LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+					params.weight=0;
+					set.setLayoutParams(params);
+					
+				}else{
+					LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+							0, LayoutParams.WRAP_CONTENT);
+					params.weight=1;
+					set.setLayoutParams(params);
+					set.setVisibility(View.VISIBLE);
+					icon.setImageResource(R.drawable.icon_fish);
+					SharedPreferences pref=getSharedPreferences("pref", MODE_PRIVATE);
+					String Q=pref.getString("qposition", "");
+					if("Q1".equals(Q)){
+						title.setText("물고기 그리기");
+						
+					}else if("Q2".equals(Q)){
+						title.setText("사람 그리기");
+						
+					}else if("Q3".equals(Q)){
+						title.setText("나무 그리기");
+						
+					}else if("Q4".equals(Q)){
+						title.setText("집 그리기");
+						
+					}
+
+SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat ( "yyyy.MM.dd", Locale.KOREA );
+Date currentTime = new Date ( );
+String mTime = mSimpleDateFormat.format ( currentTime );
+
+					date.setText(mTime);
+				}
 				drawimage.setImageBitmap(bitmap);
 			}else{
 				Toast.makeText(getApplicationContext(), "에러", Toast.LENGTH_SHORT).show();

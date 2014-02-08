@@ -60,7 +60,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.maps.GeoPoint;
 import com.mb.kids_mind.R;
 import com.mb.kids_mind.Helper.KidsMindDBHelper;
 import com.mb.kids_mind.Item.LBSitem;

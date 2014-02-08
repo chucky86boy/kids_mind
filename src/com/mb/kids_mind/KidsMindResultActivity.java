@@ -20,13 +20,15 @@ import android.graphics.BitmapFactory.Options;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
 
 import com.mb.kids_mind.Adapter.SiteAdapter;
 import com.mb.kids_mind.Helper.KidsMindDBHelper;
@@ -94,13 +96,20 @@ public class KidsMindResultActivity extends Activity {
 			}
 		}
 	};
-	ImageView img;
+	ImageView img,icon;
+	LinearLayout set;
+	TextView title;
+	TextView date;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.result);
 		Button btn=(Button)findViewById(R.id.button1);
 		img=(ImageView)findViewById(R.id.imageView1);
+		set=(LinearLayout)findViewById(R.id.set);
+		title=(TextView)findViewById(R.id.title);
+		date=(TextView)findViewById(R.id.date);
+		icon=(ImageView)findViewById(R.id.icon);
 		pref=getSharedPreferences("pref",MODE_PRIVATE);
 		findViewById(R.id.back_btn).setOnClickListener(bHandler);
 		findViewById(R.id.textView1).setOnClickListener(bHandler);
@@ -157,10 +166,47 @@ public class KidsMindResultActivity extends Activity {
 			options =getBitmapSize(options);
 			bitmap=BitmapFactory.decodeFile(path2,options);
 			Log.v(TAG,"이미지를 읽어오기위한 경로2"+path2);
-
+			
 			if(bitmap!=null){
 				Log.v(TAG,"이미지 로딩");
+				if(bitmap.getWidth()>bitmap.getHeight()){
+					set.setVisibility(View.GONE);
+					LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+					params.weight=0;
+					set.setLayoutParams(params);
+					
+				}else{
+					LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+							0, LayoutParams.WRAP_CONTENT);
+					params.weight=1;
+					set.setLayoutParams(params);
+					set.setVisibility(View.VISIBLE);
+					icon.setImageResource(R.drawable.icon_fish);
+					SharedPreferences pref=getSharedPreferences("pref", MODE_PRIVATE);
+					String Q=pref.getString("qposition", "");
+					if("Q1".equals(Q)){
+						title.setText("물고기 그리기");
+						
+					}else if("Q2".equals(Q)){
+						title.setText("사람 그리기");
+						
+					}else if("Q3".equals(Q)){
+						title.setText("나무 그리기");
+						
+					}else if("Q4".equals(Q)){
+						title.setText("집 그리기");
+						
+					}
+
+SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat ( "yyyy.MM.dd", Locale.KOREA );
+Date currentTime = new Date ( );
+String mTime = mSimpleDateFormat.format ( currentTime );
+
+					date.setText(mTime);
+				}
 				img.setImageBitmap(bitmap);
+				
 			}else{
 				Toast.makeText(getApplicationContext(), "에러", Toast.LENGTH_SHORT).show();
 			}

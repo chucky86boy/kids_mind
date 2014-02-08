@@ -148,10 +148,10 @@ public class SingleSketchMenu extends Fragment{
 		Log.v(TAG,"iscale"+iscale+"");
 		img = (LinearLayout) view.findViewById(R.id.singeMenu);
 		
-		Button btn=(Button)view.findViewById(R.id.button1);
-		if(position==0){
-		btn.setBackgroundResource(R.drawable.startnode);
-		}
+//		Button btn=(Button)view.findViewById(R.id.button1);
+//		if(position==0){
+//		btn.setBackgroundResource(R.drawable.startnode);
+//		}
 		new ViewResizeTask(img, 7f/10f, 7f/10f,this).execute();
 		img.setBackgroundResource(menuImage[position]);
 		img.setOnTouchListener(new OnTouchListener() {
@@ -162,67 +162,65 @@ public class SingleSketchMenu extends Fragment{
 					//doAction(v);
 					break;
 				case MotionEvent.ACTION_UP:
-				if(position!=0){
-					SharedPreferences pref=activity.getSharedPreferences("pref",activity.MODE_PRIVATE);
-					SharedPreferences.Editor editor=pref.edit();
-					int count=pref.getInt("babycount", 0);
-					if(count==0){
-						Toast.makeText(activity, "아이를 추가해 주세요", Toast.LENGTH_SHORT).show();
-					}else{
-					
-					editor.putInt("qposition", position);
-					editor.putInt("dbpath", position+1);
-					editor.commit();
-
-					switch (position)
-					{
-					case 0:
-						editor.putInt("qp", position);
-						editor.putString("qposition","Q1");
+					if(position!=0){
+						SharedPreferences pref=activity.getSharedPreferences("pref",activity.MODE_PRIVATE);
+						SharedPreferences.Editor editor=pref.edit();
+						int count=pref.getInt("babycount", 0);
+						if(count==0){
+							Toast.makeText(activity, "아이를 추가해 주세요", Toast.LENGTH_SHORT).show();
+						}else{
+						
+						editor.putInt("qposition", position);
+						editor.putInt("dbpath", position+1);
 						editor.commit();
 
-						popupImage(activity);
-						
-						//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
-						break;
-					case 1:
-						editor.putInt("qp", position);
-						
-						editor.putString("qposition","Q2");
-						editor.commit();
+						switch (position)
+						{
+						case 0:
+							editor.putInt("qp", position);
+							editor.putString("qposition","Q1");
+							editor.commit();
 
-						popupImage(activity);
-						//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
+							popupImage(activity);
+							
+							//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
+							break;
+						case 1:
+							editor.putInt("qp", position);
+							
+							editor.putString("qposition","Q2");
+							editor.commit();
 
-						break;
-					case 2:
-						editor.putInt("qp", position);
-						
-						editor.putString("qposition","Q3");
-						editor.commit();
+							popupImage(activity);
+							//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
 
-						popupImage(activity);
-						//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
+							break;
+						case 2:
+							editor.putInt("qp", position);
+							
+							editor.putString("qposition","Q3");
+							editor.commit();
 
-						break;
-					case 3:
-						editor.putInt("qp", position);
-						
-						editor.putString("qposition","Q4");
-						editor.commit();
+							popupImage(activity);
+							//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
 
-						popupImage(activity);
-						//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
-					}
-						break;
-					}
-					}
-				else{
-					
-					//popupIntro(activity);
-					
-					
-				}
+							break;
+						case 3:
+							editor.putInt("qp", position);
+							
+							editor.putString("qposition","Q4");
+							editor.commit();
+
+							popupImage(activity);
+							//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
+
+							break;
+						}
+						}
+						}
+						else{
+							popupIntro(activity);
+						}
 					break;
 				case MotionEvent.ACTION_MOVE:
 					break;
@@ -231,71 +229,71 @@ public class SingleSketchMenu extends Fragment{
 				return true;
 			}
 		});
-btn.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if(position!=0){
-				SharedPreferences pref=activity.getSharedPreferences("pref",activity.MODE_PRIVATE);
-				SharedPreferences.Editor editor=pref.edit();
-				int count=pref.getInt("babycount", 0);
-				if(count==0){
-					Toast.makeText(activity, "아이를 추가해 주세요", Toast.LENGTH_SHORT).show();
-				}else{
-				
-				editor.putInt("qposition", position);
-				editor.putInt("dbpath", position+1);
-				editor.commit();
-
-				switch (position)
-				{
-				case 0:
-					editor.putInt("qp", position);
-					editor.putString("qposition","Q1");
-					editor.commit();
-
-					popupImage(activity);
-					
-					//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
-					break;
-				case 1:
-					editor.putInt("qp", position);
-					
-					editor.putString("qposition","Q2");
-					editor.commit();
-
-					popupImage(activity);
-					//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
-
-					break;
-				case 2:
-					editor.putInt("qp", position);
-					
-					editor.putString("qposition","Q3");
-					editor.commit();
-
-					popupImage(activity);
-					//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
-
-					break;
-				case 3:
-					editor.putInt("qp", position);
-					
-					editor.putString("qposition","Q4");
-					editor.commit();
-
-					popupImage(activity);
-					//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
-
-					break;
-				}
-				}
-				}
-				else{
-					popupIntro(activity);
-				}
-			}
-		});
+//btn.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+////				if(position!=0){
+////				SharedPreferences pref=activity.getSharedPreferences("pref",activity.MODE_PRIVATE);
+////				SharedPreferences.Editor editor=pref.edit();
+////				int count=pref.getInt("babycount", 0);
+////				if(count==0){
+////					Toast.makeText(activity, "아이를 추가해 주세요", Toast.LENGTH_SHORT).show();
+////				}else{
+////				
+////				editor.putInt("qposition", position);
+////				editor.putInt("dbpath", position+1);
+////				editor.commit();
+////
+////				switch (position)
+////				{
+////				case 0:
+////					editor.putInt("qp", position);
+////					editor.putString("qposition","Q1");
+////					editor.commit();
+////
+////					popupImage(activity);
+////					
+////					//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
+////					break;
+////				case 1:
+////					editor.putInt("qp", position);
+////					
+////					editor.putString("qposition","Q2");
+////					editor.commit();
+////
+////					popupImage(activity);
+////					//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
+////
+////					break;
+////				case 2:
+////					editor.putInt("qp", position);
+////					
+////					editor.putString("qposition","Q3");
+////					editor.commit();
+////
+////					popupImage(activity);
+////					//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
+////
+////					break;
+////				case 3:
+////					editor.putInt("qp", position);
+////					
+////					editor.putString("qposition","Q4");
+////					editor.commit();
+////
+////					popupImage(activity);
+////					//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
+////
+////					break;
+////				}
+////				}
+////				}
+////				else{
+////					popupIntro(activity);
+////				}
+//			}
+//		});
 		return view;
 	}
 	

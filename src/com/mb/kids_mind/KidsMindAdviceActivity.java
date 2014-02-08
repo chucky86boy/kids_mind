@@ -81,6 +81,7 @@ public class KidsMindAdviceActivity extends Activity {
 
 		
 
+			
 
 		// uploadFileExecute(uploadFile);
 		SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
