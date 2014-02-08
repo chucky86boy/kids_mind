@@ -136,6 +136,9 @@ public class MainActivity extends FragmentActivity {
 
 		selectAll();
 		if(babyitem.size()!=0){
+			String check=pref.getString("item", "");
+			
+			if("".equals(check)){
 		BabyInformationItem info = babyitem.get(0);
 		mUser_id=info.getUser_id();
 		mName=info.getName();
@@ -154,6 +157,30 @@ public class MainActivity extends FragmentActivity {
 		readimage(mImage_path, myalbum);
 		//holder.image.setImageBitmap(bm);
 		}
+			}else{
+		
+				
+				mUser_id=pref.getString("mUser_id", "");
+				mName=pref.getString("mName", "");
+				mDate=pref.getString("mDate", "");
+				mSex=pref.getString("mSex", "");
+				mImage_path=pref.getString("mImage_path", "");
+				
+			
+				if("none".equals(mImage_path)){
+					if("boy".equals(mSex)){
+						myalbum.setImageResource(R.drawable.btn_boy_push);	
+					}else if("girl".equals(mSex)){
+						myalbum.setImageResource(R.drawable.btn_girl_push);
+						
+					}
+					
+				}else{
+				readimage(mImage_path, myalbum);
+				//holder.image.setImageBitmap(bm);
+				}
+				
+			}
 		}
 		int height = (getResources().getDimensionPixelSize(
 				R.dimen.list_item_size) + 1)
@@ -178,6 +205,7 @@ public class MainActivity extends FragmentActivity {
 				SharedPreferences pref = getSharedPreferences("pref",
 						MODE_PRIVATE);
 				SharedPreferences.Editor editor = pref.edit();
+				editor.putString("item", "on");
 				editor.putString("userid", info.getUser_id());
 				editor.commit();
 			
@@ -186,6 +214,13 @@ public class MainActivity extends FragmentActivity {
 				mDate=info.getBirth();
 				mSex=info.getSex();
 				mImage_path=info.getImage_path();
+				Log.v(TAG,"mImage_path"+mImage_path);
+				editor.putString("mUser_id", mUser_id);
+				editor.putString("mName", mName);
+				editor.putString("mDate", mDate);
+				editor.putString("mSex", mSex);
+				editor.putString("mImage_path", mImage_path);
+				editor.commit();
 				if("none".equals(mImage_path)){
 					if("boy".equals(mSex)){
 						myalbum.setImageResource(R.drawable.btn_boy_push);	
@@ -410,7 +445,13 @@ try{
 	@Override
 	protected void onResume() {
 		selectAll();
+		SharedPreferences pref = getSharedPreferences("pref",
+				MODE_PRIVATE);
+		SharedPreferences.Editor editor = pref.edit();
 		if(babyitem.size()!=0){
+			String check=pref.getString("item", "");
+			Log.v(TAG,"체크아이템onresum"+check);
+			if("".equals(check)){
 		BabyInformationItem info = babyitem.get(0);
 		mUser_id=info.getUser_id();
 		mName=info.getName();
@@ -429,6 +470,31 @@ try{
 		readimage(mImage_path, myalbum);
 		//holder.image.setImageBitmap(bm);
 		}
+			}else{
+		
+				
+				mUser_id=pref.getString("mUser_id", "");
+				mName=pref.getString("mName", "");
+				mDate=pref.getString("mDate", "");
+				mSex=pref.getString("mSex", "");
+				mImage_path=pref.getString("mImage_path", "");
+				Log.v(TAG,"mImage_pathonresum"+mImage_path);
+				
+			
+				if("none".equals(mImage_path)){
+					if("boy".equals(mSex)){
+						myalbum.setImageResource(R.drawable.btn_boy_push);	
+					}else if("girl".equals(mSex)){
+						myalbum.setImageResource(R.drawable.btn_girl_push);
+						
+					}
+					
+				}else{
+				readimage(mImage_path, myalbum);
+				//holder.image.setImageBitmap(bm);
+				}
+				
+			}
 		}
 		Log.v(TAG, "size" + babyitem.size() + "");
 		int height = (getResources().getDimensionPixelSize(
@@ -529,6 +595,7 @@ try{
 				SharedPreferences.Editor editor = pref.edit();
 				
 				selectAll();
+				editor.putString("item", "");
 				BabyInformationItem info = babyitem.get(0);
 				mUser_id=info.getUser_id();
 				editor.putString("userid", info.getUser_id());
@@ -567,6 +634,7 @@ try{
 						MODE_PRIVATE);
 				SharedPreferences.Editor editor = pref.edit();
 				selectAll();
+				editor.putString("item", "");
 				BabyInformationItem info = babyitem.get(0);
 				editor.putString("userid", info.getUser_id());
 				editor.commit();

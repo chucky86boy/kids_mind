@@ -798,25 +798,25 @@ public class ParentMapfragment extends Fragment implements
 
 	}
 
-	private GeoPoint findGeoPoint(String address) {
-		Geocoder geocoder = new Geocoder(activity);
-		Address addr;
-		GeoPoint location = null;
-		try {
-			List<Address> listAddress = geocoder
-					.getFromLocationName(address, 1);
-			if (listAddress.size() > 0) { // 주소값이 존재 하면
-				addr = listAddress.get(0); // Address형태로
-				int lat = (int) (addr.getLatitude() * 1E6);
-				int lng = (int) (addr.getLongitude() * 1E6);
-				location = new GeoPoint(lat, lng);
-
-				Log.d(TAG, "주소로부터 취득한 위도 : " + lat + ", 경도 : " + lng);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return location;
-	}
+//	private GeoPoint findGeoPoint(String address) {
+//		Geocoder geocoder = new Geocoder(activity);
+//		Address addr;
+//		GeoPoint location = null;
+//		try {
+//			List<Address> listAddress = geocoder
+//					.getFromLocationName(address, 1);
+//			if (listAddress.size() > 0) { // 주소값이 존재 하면
+//				addr = listAddress.get(0); // Address형태로
+//				int lat = (int) (addr.getLatitude() * 1E6);
+//				int lng = (int) (addr.getLongitude() * 1E6);
+//				location = new GeoPoint(lat, lng);
+//
+//				Log.d(TAG, "주소로부터 취득한 위도 : " + lat + ", 경도 : " + lng);
+//			}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		return location;
+//	}
 
 }
