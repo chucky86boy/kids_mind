@@ -25,8 +25,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
-            android:text="Log in"
-          android:textSize="20sp" />
+            android:text="로그인"
+            android:textColor="#ffffffff"
+          android:textSize="17sp" />
 
     </LinearLayout>
 
@@ -39,27 +40,31 @@
             android:background="@drawable/bg_sign_up"
             android:gravity="center|bottom"
             android:layout_marginTop="20dp"
-            android:paddingBottom="40dp"
+            android:paddingBottom="30dp"
             android:orientation="vertical" >
 
             <EditText
                 android:id="@+id/editText1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/box_email"
                 android:ems="10"
-                android:gravity="center_vertical|center"
+                android:paddingLeft="45dp"
+                android:textSize="13sp"
+                android:gravity="center_vertical"
                 android:hint="info@km.com" />
 
             <EditText
                 android:id="@+id/editText2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/box_pwl"
                 android:ems="10"
-                android:gravity="center_vertical|center"
+                 android:textSize="13sp"
+               android:paddingLeft="45dp"
+                android:gravity="center_vertical"
                 android:hint="Password"
                 android:inputType="textPassword" />
 

@@ -19,14 +19,21 @@ package com.mb.kids_mind;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.PendingIntent.CanceledException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 
 /**
  * This {@code IntentService} does the actual handling of the GCM message.
@@ -77,6 +84,35 @@ public class GcmIntentService extends IntentService {
                 Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
                 // Post notification of received message.
                 sendNotification("Received: " + extras.toString());
+            	
+                if(PushWakeLock.ScreenOn(this)){
+                	Log.v(TAG,"toast");
+                	  mHandler.post(new ToastRunnable("",this));
+                  
+                	
+                }else{
+                	 PushWakeLock.acquireCpuWakeLock(this);
+
+                	 Bundle bun = new Bundle();
+                	 int start=extras.toString().indexOf("adviceId=");
+                	 int size=extras.toString().length();
+                	 String text=extras.toString().substring(start+9);
+                	 //int size=text.length();
+                	 text=extras.toString().substring(start+9,size-2);
+                	 Log.v(TAG,"text"+text);
+                	 bun.putString("notiMessage",text );
+
+                     Intent popupIntent = new Intent(getApplicationContext(), KidsMindNotiActivity.class);
+                     popupIntent.putExtras(bun);
+                    
+                     PendingIntent pie= PendingIntent.getActivity(getApplicationContext(), 0, popupIntent, PendingIntent.FLAG_ONE_SHOT);
+                     try {
+                      pie.send();
+                     } catch (CanceledException e) {
+                  
+                     }
+                     Log.v(TAG,"일어나");
+                }
                 Log.i(TAG, "Received: " + extras.toString());
             }
         }
@@ -91,18 +127,75 @@ public class GcmIntentService extends IntentService {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), 0);
+//        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+//                new Intent(this, MainActivity.class), 0);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-        .setSmallIcon(R.drawable.icon_birth)
-        .setContentTitle("GCM Notification")
+        .setSmallIcon(R.drawable.launcher)
+        .setContentTitle("전문가 알림")
+        .setTicker("전문가 메세지 도착")
+        .setAutoCancel(true)
         .setStyle(new NotificationCompat.BigTextStyle()
         .bigText(msg))
-        .setContentText(msg);
+        .setContentText("전문가 메세지 도착");
 
-        mBuilder.setContentIntent(contentIntent);
+//        mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
+    boolean flag = false;
+  public void ToastAll(Context context,String msg) {
+
+
+	LayoutInflater inflater = (LayoutInflater) context
+			.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	View layout = inflater.inflate(R.layout.toast_layout,
+			null);
+
+	Toast mToast = new Toast(context.getApplicationContext());
+
+
+
+	mToast.setGravity(Gravity.CENTER_VERTICAL, 0, 2);
+	mToast.setDuration(Toast.LENGTH_SHORT);
+	mToast.setView(layout);         
+	if(flag == false){
+		flag = true;
+		mToast.show();
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				flag = false;
+			}
+		}, 2000);//토스트 켜져있는 시간동안 핸들러 지연 대충 숏이 2초 조금 넘는거 같다.
+	} else{
+		Log.e("","토스트 켜져있음");
+	}
+
+}
+  private Handler mHandler;
+
+@Override
+public int onStartCommand(Intent intent, int flags, int startId) {
+	mHandler = new Handler();
+
+	return super.onStartCommand(intent, flags, startId);
+}
+private class ToastRunnable implements Runnable {
+    String mText;
+    Context context;
+
+    public ToastRunnable(String text,Context context) {
+        mText = text;
+        this.context=context;
+    }
+
+    @Override
+    public void run(){
+    	ToastAll(context,mText);
+    }
+}
+
+
+  
 }

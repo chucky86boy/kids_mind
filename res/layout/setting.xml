@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_doctor_list"
+    android:orientation="vertical" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/navi_bar"
+        android:gravity="center_vertical" >
+
+        <Button
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+             
+            android:background="@drawable/back3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+               android:layout_marginLeft="2dp"
+               android:textColor="#ffffffff"
+               android:textSize="17sp"
+            android:text="설 정" />
+
+    </LinearLayout>
+
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/box_setting"
+        android:gravity="center_vertical" >
+
+     
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+               android:layout_marginLeft="12dp"
+               android:textColor="#ff000000"
+               android:textSize="18sp"
+            android:text="푸쉬 알림" />
+<LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+  
+     android:gravity="right" >
+
+        <CheckBox
+            android:id="@+id/push"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:button="@drawable/set"
+            android:paddingLeft="5dp"
+            
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
+            />
+
+     
+
+    </LinearLayout>
+    </LinearLayout>
+    
+      <TextView
+           
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+               android:layout_marginLeft="2dp"
+               
+               android:layout_marginBottom="10dp"
+               android:paddingTop="10dp"
+               android:paddingLeft="10dp"
+               android:paddingRight="10dp"
+            android:text="Kids Mind에 대한 정보나 공지 알림등에 관한 내용을 받아 보실 수 있습니다." />
+     
+          <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/box_setting"
+        android:gravity="center_vertical" >
+
+     
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+               android:layout_marginLeft="12dp"
+               android:textColor="#ff000000"
+               android:textSize="18sp"
+            android:text="팝업 설정" />
+<LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+  
+     android:gravity="right" >
+
+        <CheckBox
+            android:id="@+id/pop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+           android:button="@drawable/pop"
+            android:paddingLeft="5dp"
+            
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
+            />
+
+     
+
+    </LinearLayout>
+    </LinearLayout>
+    <TextView
+           
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+               android:layout_marginLeft="2dp"
+               
+               android:layout_marginBottom="10dp"
+               android:paddingTop="10dp"
+               android:paddingLeft="10dp"
+               android:paddingRight="10dp"
+            android:text="전문가의 답변이 달리면 팝업으로 소식을 받아 보실 수 있습니다." />
+          
+               <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:layout_marginTop="10dp"
+        android:background="@drawable/box_setting"
+        android:gravity="center_vertical" >
+
+     
+
+        <TextView
+         
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           
+               android:layout_marginLeft="12dp"
+               android:textColor="#ff000000"
+               android:textSize="18sp"
+            android:text="사운드" />
+<LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+ 
+  
+     android:gravity="right" >
+
+        <CheckBox
+            android:id="@+id/sound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:button="@drawable/sound"
+            android:paddingLeft="5dp"
+            
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
+            />
+
+     
+
+    </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

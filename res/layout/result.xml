@@ -26,8 +26,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
-            android:text="Result"
-            android:textSize="20sp" />
+            android:textColor="#ffffffff"
+            android:text="결과"
+            android:textSize="17sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,14 +36,14 @@
             android:gravity="right" >
 
             <Button
-                android:id="@+id/home"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/home"
-                android:paddingBottom="5dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp" />
+            android:id="@+id/home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/home"
+            
+            />
+
         </LinearLayout>
     </LinearLayout>
 
@@ -52,6 +53,7 @@
         android:gravity="center"
         android:orientation="vertical"
         android:paddingLeft="10dp"
+        android:paddingBottom="5dp"
         android:paddingRight="10dp" >
 
         <LinearLayout
@@ -59,19 +61,33 @@
             android:layout_height="0dp"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:layout_weight="5"
-            android:orientation="horizontal" >
-
+         
+            android:layout_weight="4"
+            android:orientation="horizontal"
+          	android:paddingLeft="10dp"
+          	android:paddingRight="10dp"
+             >
+   <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+             android:background="@drawable/box_select"
+           
+            android:orientation="horizontal"
+         	android:padding="5dp"
+             >
             <LinearLayout
                 android:id="@+id/set"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/box_sketch_result"
+                
+                android:background="@drawable/box_sketch"
                 android:gravity="center"
                 android:orientation="vertical" >
 
-                <ImageView
+                 <ImageView
                     android:id="@+id/icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -83,7 +99,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:text="Title"
-                    android:textSize="20sp" />
+                    android:textColor="#ff000000"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/date"
@@ -91,22 +108,25 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:text="Date"
-                    android:textSize="15sp" />
+                    android:textSize="13sp" />
             </LinearLayout>
   <LinearLayout
                
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/box_sketch"
                 android:gravity="center"
+                
                 android:orientation="vertical" >
             <ImageView
                 android:id="@+id/imageView1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/box_sketch" />
+                android:layout_height="match_parent"
+                android:layout_margin="2dp"
+               />
         </LinearLayout>
+           </LinearLayout>
   </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

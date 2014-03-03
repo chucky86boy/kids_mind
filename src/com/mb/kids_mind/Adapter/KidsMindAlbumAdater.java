@@ -10,6 +10,7 @@ import android.graphics.AvoidXfermode.Mode;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.opengl.Visibility;
 import android.os.Environment;
 import android.util.Log;
@@ -73,7 +74,6 @@ public class KidsMindAlbumAdater extends BaseAdapter {
 			cView=LayoutInflater.from(context).inflate(layout, parent,false);
 			holder = new ViewHolder();
 			holder.image=(ImageView)cView.findViewById(R.id.image);
-			holder.title=(TextView)cView.findViewById(R.id.title);
 			holder.question=(TextView)cView.findViewById(R.id.question);
 			holder.date=(TextView)cView.findViewById(R.id.date);
 			holder.newmessage=(ImageView)cView.findViewById(R.id.newmessage);
@@ -86,7 +86,7 @@ public class KidsMindAlbumAdater extends BaseAdapter {
 		}
 	String image_path=contents.getImage_path();
 	readimage(image_path, holder.image);
-	holder.title.setText(contents.getTitle());
+	holder.question.setText(contents.getQuestioin());
 	if("Q1".equals(contents.getQuestioin())){
 		holder.question.setText("-집 그리기");
 			
@@ -105,6 +105,7 @@ public class KidsMindAlbumAdater extends BaseAdapter {
 		holder.newmessage.setVisibility(View.GONE);		
 	}else if("1".equals(contents.getNewmessage())){
 		//메세지 체크 쉐어드로 넣어서 셋해주자
+		holder.newmessage.setVisibility(View.VISIBLE);
 		holder.newmessage.setImageResource(R.drawable.btn_doctor_image);
 		
 	}
@@ -129,7 +130,8 @@ try{
 			bitmap=BitmapFactory.decodeFile(path2,options);
 			Log.v(TAG,"이미지를 읽어오기위한 경로2"+path2);
 			bitmap=getBitmapResizePrc(bitmap,412,650);
-			img.setImageBitmap(bitmap);
+			Drawable drawable = new BitmapDrawable(bitmap);
+			img.setBackgroundDrawable(drawable);
 }catch(OutOfMemoryError e){
 	Log.v(TAG,"outofmemoryerror");
 }

@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mb.kids_mind.KidsMindLastResultActivity;
+import com.mb.kids_mind.KidsMindTotalResultActivity;
 import com.mb.kids_mind.R;
 import com.mb.kids_mind.Item.DetailListItem;
 import com.mb.kids_mind.task.ViewResizeTask;
@@ -33,7 +34,7 @@ import com.mb.kids_mind.task.ViewResizeTask;
 public class SingleResultSketchMenu extends Fragment{
 	ArrayList<DetailListItem> dlist;
 	Hashtable<String,Integer>map=new Hashtable<String,Integer>();
-	
+	TextView title;
 	int[] menuImage={R.drawable.d001,R.drawable.d002,R.drawable.d004,R.drawable.d003};
 	private int position;
 	Activity activity;
@@ -57,7 +58,7 @@ public class SingleResultSketchMenu extends Fragment{
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.result_sketch, null);
 		View resultContainer = view.findViewById(R.id.resultSketchContainer);
-		LinearLayout btn=(LinearLayout)view.findViewById(R.id.btn);
+		
 		activity.getFragmentManager();
 		Display display = getActivity().getWindowManager().getDefaultDisplay();
 		@SuppressWarnings("unused")
@@ -73,7 +74,7 @@ public class SingleResultSketchMenu extends Fragment{
 		}
 		
 		ImageView imageView = (ImageView) view.findViewById(R.id.singeMenu);
-		TextView title=(TextView)view.findViewById(R.id.resulttitle);
+	 title=(TextView)view.findViewById(R.id.resulttitle);
 		Log.v(TAG,"position"+position+"dlist.size()"+dlist.size());
 		
 //		if(position==(dlist.size()-1)){
@@ -99,7 +100,15 @@ public class SingleResultSketchMenu extends Fragment{
 		new ViewResizeTask(resultContainer, 0.7f, 0.7f,this).execute();
 		setHashMap();
 		DetailListItem item=dlist.get(position);
+		if(position==(dlist.size()-1)){
+			Log.v(TAG,"" +
+					"참");
+			title.setVisibility(View.GONE);}
+		else{
+			title.setVisibility(View.VISIBLE);
 		title.setText(item.getDetail_tilte());
+		}
+		
 		String image = item.getDetail_image();
 		//String ImageUrl = Const.QUESTION_IMAGE_PATH;
 		int count=dlist.size();
@@ -116,8 +125,13 @@ public class SingleResultSketchMenu extends Fragment{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if(position==(dlist.size()-1)){
-					Log.v(TAG,"참");
+					Log.v(TAG,"" +
+							"참");
+					title.setVisibility(View.GONE);
 				Intent in =new Intent (activity,KidsMindLastResultActivity.class);
+				in.putExtra("savename", ((KidsMindTotalResultActivity)activity).savename);
+				in.putExtra("date", ((KidsMindTotalResultActivity)activity).idate);
+				
 				startActivity(in);
 				}	
 			}

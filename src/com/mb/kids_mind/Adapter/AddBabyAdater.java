@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mb.kids_mind.R;
@@ -72,6 +73,8 @@ public class AddBabyAdater extends BaseAdapter {
 			holder.sex=(ImageView)cView.findViewById(R.id.sex);
 			holder.name=(TextView)cView.findViewById(R.id.name);
 			holder.name.setTextColor(0xff000000);
+			holder.mask=(LinearLayout)cView.findViewById(R.id.mask);
+			holder.linear=(LinearLayout)cView.findViewById(R.id.linear);
 			cView.setTag(holder);
 			//	Log.v(TAG,"cvew==null");
 		} else {
@@ -89,15 +92,25 @@ public class AddBabyAdater extends BaseAdapter {
 		}
 		String image_path=contents.getImage_path();
 		if("none".equals(image_path)){
+			holder.mask.setVisibility(View.INVISIBLE);
 			if("boy".equals(se)){
+//				Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.box_last_sketch_1);
+//				bm=getBitmapResizePrc(bm, 285, 285);
+//				BitmapDrawable background =new BitmapDrawable(bm);
+//				holder.linear.setBackgroundDrawable(background);
 				holder.image.setImageResource(R.drawable.btn_boy_push);	
 			}else if("girl".equals(se)){
+//				Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.box_last_sketch_1);
+//				bm=getBitmapResizePrc(bm, 285, 285);
+//				BitmapDrawable background =new BitmapDrawable(bm);
+//				holder.linear.setBackgroundDrawable(background);
 				holder.image.setImageResource(R.drawable.btn_girl_push);
 				
 			}
 			
 		}else{
-		readimage(image_path, holder.image);
+			holder.mask.setVisibility(View.VISIBLE);
+		readimage(image_path, holder.linear);
 		//holder.image.setImageBitmap(bm);
 		}
 		
@@ -105,7 +118,7 @@ public class AddBabyAdater extends BaseAdapter {
 	}
 	Bitmap bitmap;
 	private static final String TAG="MainActivity";
-	void readimage(String path,ImageView img){
+	void readimage(String path,LinearLayout img){
 		if ( Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 
 try{
@@ -117,9 +130,10 @@ try{
 			options =getBitmapSize(options);
 			bitmap=BitmapFactory.decodeFile(path,options);
 			Log.v(TAG,"이미지를 읽어오기위한 경로2"+path);
-			bitmap = getBitmapResizePrc(bitmap, 150, 150);
-			profile=new RoundedAvatarDrawable(bitmap);
-			img.setImageDrawable(profile);
+			//bitmap = getBitmapResizePrc(bitmap, 300, 300);
+			//profile=new RoundedAvatarDrawable(bitmap);
+			BitmapDrawable drawable=new BitmapDrawable(bitmap);
+			img.setBackgroundDrawable(drawable);
 }catch(OutOfMemoryError e){
 	Log.v(TAG,"outofmemoryerror");
 }
@@ -231,6 +245,7 @@ try{
 		public ImageView image;
 		public ImageView sex;
 		public TextView name;
-		
+		public LinearLayout mask;
+		public LinearLayout linear;
 	}
 }

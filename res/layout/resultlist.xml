@@ -9,6 +9,9 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:textColor="#fff58220"
+        android:textStyle="bold"
         android:text="TextView" />
 
 <com.mb.kids_mind.view.TwoWayView
@@ -17,6 +20,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/list"
     style="@style/TwoWayView"
+    android:paddingLeft="15dp"
+    
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:drawSelectorOnTop="false"

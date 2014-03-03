@@ -3,12 +3,18 @@ package com.mb.kids_mind;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.IntentSender.SendIntentException;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -18,6 +24,7 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Matrix;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -29,13 +36,40 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxStatus;
+import com.facebook.FacebookException;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.model.GraphUser;
+import com.facebook.widget.LoginButton;
+import com.facebook.widget.LoginButton.OnErrorListener;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
+import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.plus.PlusClient;
 import com.mb.kids_mind.Helper.MyHelper;
+import com.mb.kids_mind.Item.Const;
 
-public class KidsMindMypageActivity extends Activity {
+public class KidsMindMypageActivity extends Activity implements
+ConnectionCallbacks, OnConnectionFailedListener {
 private static final String TAG ="MainActivity";
 TextView name,date;
 ImageView sex,profile;
+private LoginButton authButton;
+private PlusClient mPlusClient;
+private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
+ private String user_name3,user_pwd3;
+  private ProgressDialog mConnectionProgressDialog;
+  private AQuery aquery;
+  private ConnectionResult mConnectionResult;
+private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
+/** Called when the activity is first created. */
 View.OnClickListener bHandler =new OnClickListener() {
 	
 	@Override
@@ -53,13 +87,82 @@ View.OnClickListener bHandler =new OnClickListener() {
 		break;
 		case R.id.myalbum:
 			Intent in= new Intent(KidsMindMypageActivity.this,KidsMindAlbumactivity.class);
-			in.putExtra("user_id", user_id);
+			in.putExtra("user_id", suser_id);
+			
 			startActivity(in);
 			break;
 		case R.id.cousel:
-			Intent in2= new Intent(KidsMindMypageActivity.this,KidsMindAlbumactivity.class);
-			in2.putExtra("user_id", user_id);
-			startActivity(in2);
+			SharedPreferences pref=getSharedPreferences("pref", MODE_PRIVATE);
+			SharedPreferences.Editor editor=pref.edit();
+			editor.putString("muser_id", suser_id);
+			editor.commit();
+							String ch=pref.getString("login_check", "");	
+			if(!ch.equals("")){
+				//로그인상태
+				Log.v(TAG,"1");
+				
+				Intent in2= new Intent(KidsMindMypageActivity.this,KidsMindAlbumactivity.class);
+				in2.putExtra("user_id",suser_id);
+				in2.putExtra("where", "advice");
+				startActivity(in2);
+				
+			}else{
+				
+			Log.v(TAG, "login");
+			
+			
+			String sel=pref.getString("select", "");
+			if(sel.equals("")){
+				
+			Intent intent = new Intent(KidsMindMypageActivity.this,
+					KidsMindLoginSelectActivity.class);
+			editor.putString("lastresult","on");
+			editor.commit();
+			startActivityForResult(intent, 30);
+			}
+			else{
+				String loginsel=pref.getString("wlogin", "");
+				Log.v(TAG,"로그인 어디서 했니"+loginsel);
+				//자동로그인
+				if("facebook".equals(loginsel)){
+					authButton.performClick();
+					editor.putString("auth", "");
+					editor.commit();
+				}else if("google".equals(loginsel)){
+					editor.putString("auth", "");
+					editor.commit();
+
+					mPlusClient.connect();
+					if (!mPlusClient.isConnected()) {
+						if (mConnectionResult == null) {
+							Log.v(TAG,"null");
+							loading(KidsMindMypageActivity.this);
+						} else {
+							try {
+								mConnectionResult.startResolutionForResult(KidsMindMypageActivity.this, REQUEST_CODE_RESOLVE_ERR);
+							} catch (SendIntentException e) {
+								// Try connecting again.
+								mConnectionResult = null;
+								mPlusClient.connect();
+							}
+						}
+					}
+			}else{
+				Intent intent3 = new Intent(KidsMindMypageActivity.this,
+						KidsMindLoginActivity.class);
+				startActivityForResult(intent3,13);
+				 
+			}
+			}
+			
+			
+			
+		}
+			
+			
+			
+		
+			
 			break;
 		case R.id.name:
 			break;
@@ -68,13 +171,35 @@ View.OnClickListener bHandler =new OnClickListener() {
 		}
 	}
 };
-String user_id,image_path,babyname,babydate,babysex;
+Dialog dialog2=null;
+void loading(Activity context)
+{
+	// Create dialog
+	 dialog2 = new Dialog(context);
+	dialog2.getWindow().setBackgroundDrawable
+
+	(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+	dialog2.setCancelable(false);
+	dialog2.setCanceledOnTouchOutside(false);
+	dialog2.setContentView(R.layout.progress);
+	dialog2.findViewById(R.id.imageView1);
+	dialog2.findViewById(R.id.imageView1).setVisibility(ImageView.VISIBLE);
+	dialog2.findViewById(R.id.imageView1).setBackgroundResource(R.anim.progress);
+
+	AnimationDrawable frameAnimation = (AnimationDrawable) dialog2.findViewById(R.id.imageView1).getBackground();
+	frameAnimation.start();
+	//라디오 버튼 
+	dialog2.show();
+}
+
+String suser_id,image_path,babyname,babydate,babysex;
 MyHelper myhelper;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.mypage);
+	    aquery = new AQuery(this);
 	    findViewById(R.id.home).setOnClickListener(bHandler);
 	    findViewById(R.id.myalbum).setOnClickListener(bHandler);
 	    findViewById(R.id.cousel).setOnClickListener(bHandler);
@@ -88,7 +213,8 @@ MyHelper myhelper;
 	    date=(TextView)findViewById(R.id.date);
 	    date.setOnClickListener(bHandler);
 	    Intent in= getIntent();
-	    user_id=in.getStringExtra("user_id");
+	    suser_id=in.getStringExtra("user_id");
+	    
 	    image_path=in.getStringExtra("image_path");
 	    babyname=in.getStringExtra("name");
 	    babydate=in.getStringExtra("date");
@@ -118,7 +244,66 @@ MyHelper myhelper;
 			sex.setImageResource(R.drawable.icon_girl);
 			
 		}
+	    authButton = (LoginButton)findViewById(R.id.authButton);
+		authButton.setVisibility(View.GONE);
 
+		authButton.setOnErrorListener(new OnErrorListener() {      
+			@Override
+			public void onError(FacebookException error) {
+				Log.v(TAG, "로그인 에러 : " + error);
+			}
+		});
+		//        shareButton.setVisibility(View.VISIBLE);
+		authButton.setReadPermissions(Arrays.asList("basic_info","email"));
+
+
+		authButton.setSessionStatusCallback(new Session.StatusCallback() {
+			@Override
+			public void call(Session session, SessionState state, Exception exception) { 
+				if (session.isOpened()) {
+
+
+
+					Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+						@Override
+						public void onCompleted(GraphUser user,Response response) {    
+							if (user != null) { 
+
+								// 로그인 성공 (user에 정보가 들어있음.)
+								Log.v(TAG,"User ID "+ user.getId());
+								Log.v(TAG,"Email "+ user.asMap().get("email"));
+								Log.v(TAG,"name "+ user.asMap().get("name"));
+								user_name3= user.asMap().get("email").toString();
+								user_pwd3="Qce5cPoBrUhZu5LF5UFADzGUno";
+								Log.v(TAG,"facebook23");
+								//asyncLoginJson(user_name3,user_pwd3);
+								SharedPreferences pref =getSharedPreferences("pref", MODE_PRIVATE);
+								SharedPreferences.Editor editor= pref.edit();
+//								editor.putString("where", "indirect");
+//								editor.putString("date", date);
+//								editor.putString("savename", savename);
+//								editor.putString("advice_type", advice_type);
+					
+								editor.putString("lfacebook", "onefef");
+								editor.putString("auth","auth");
+								editor.putString("wlogin", "facebook");
+								editor.putString("user_name", user_name3);
+								editor.putString("user_pwd", user_pwd3);
+								editor.commit();
+
+							}
+						}
+					});
+				}else{
+
+				}
+			}
+		});
+		mPlusClient = new PlusClient.Builder(this, this, this)
+		.setActions("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
+		.setScopes(Scopes.PLUS_LOGIN)  // recommended login scope for social features
+		// .setScopes("profile")       // alternative basic login scope
+		.build();
 	}
 	Dialog dialog=null; 
 	void popupImage(Activity context) {
@@ -213,17 +398,24 @@ MyHelper myhelper;
 	@Override
 	// 카메라 또는 앨범
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode != RESULT_OK) { // ����ó��
-			if (data == null) {
-
-				if (requestCode == PICK_FROM_CAMERA && mImageCaptureUri != null) {
-					File f = new File(mImageCaptureUri.getPath());
-					if (f.exists()) {
-						// f.delete();
-					}
-				}
+		super.onActivityResult(requestCode,resultCode,data);
+		if(Session.getActiveSession()!=null)
+			Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+		if (resultCode != RESULT_OK) {
+			if(requestCode==30||requestCode==13){
+				
+				
+				Intent in2= new Intent(KidsMindMypageActivity.this,KidsMindAlbumactivity.class);
+				in2.putExtra("user_id", suser_id);
+				in2.putExtra("where", "advice");
+				startActivity(in2);
+				//startActivity(intent);
+			}		
+		}else {
+			 if(requestCode ==REQUEST_CODE_RESOLVE_ERR){
+				mConnectionResult = null;
+				mPlusClient.connect();
 			}
-			return;
 		}
 		// 크롭 사용안함
 
@@ -235,7 +427,10 @@ MyHelper myhelper;
 			
 			photo = BitmapFactory.decodeFile(outFilePath);
 			// RoundedAvatarDrawable profile
-			photo = getBitmapResizePrc(photo, 150, 150);
+		
+			int wi=pref.getInt("bwidth", 0);
+			int he=pref.getInt("bheight", 0);
+			photo = getBitmapResizePrc(photo, 234, 234);
 			profile3 = new RoundedAvatarDrawable(photo);
 			if ("boy".equals(babysex)) {
 
@@ -270,9 +465,9 @@ MyHelper myhelper;
 				String path = getRealPathFromURI(mImageCaptureUri);
 				
 			
-				updateRec(user_id,path);
+				updateRec(suser_id,path);
 				Log.v(TAG,"앨범에서"+path);
-				editor.putString("image_path", path);
+				editor.putString("mImage_path", path);
 				editor.commit();
 				try {
 					BitmapFactory.Options options = new BitmapFactory.Options();
@@ -307,7 +502,10 @@ MyHelper myhelper;
 					photo = BitmapFactory.decodeFile(uploadImagePath, options);// Uri
 					// 비트맵으로
 					// 바꾸기
-					photo = getBitmapResizePrc(photo, 150, 150);
+				
+					int wi=pref.getInt("bwidth", 0);
+					int he=pref.getInt("bheight", 0);
+					photo = getBitmapResizePrc(photo, 234, 234);
 					pref.getInt("exifD", 0);
 					if ("camera".equals(pref.getString("where", "error")))
 						photo = rotate(photo, pref.getInt("exifD", 0));
@@ -345,31 +543,37 @@ MyHelper myhelper;
 				return;
 			}
 
-			try {
-				// Launch picker to choose photo for selected contact
-				Intent intent = new Intent("com.android.camera.action.CROP");
-				intent.setDataAndType(getTempUri(), "image/*");
-				intent.putExtra("crop", "true");
-				intent.putExtra("outputX", 320);
-				intent.putExtra("outputY", 320);
-				intent.putExtra("aspectX", 320);
-				intent.putExtra("aspectY", 320);
-				intent.putExtra("scale", true);
-				intent.putExtra("return-data", true);
-				intent.putExtra(MediaStore.EXTRA_OUTPUT, getTempUri());
-				intent.putExtra("outputFormat",
-						Bitmap.CompressFormat.JPEG.toString());
-				intent.putExtra("noFaceDetection", true);
-				intent.putExtra("circleCrop", false);
-
-				 startActivityForResult(intent, CROP_FROM_CAMERA);
-			} catch (ActivityNotFoundException e) {
-				Log.e("crop_from_camera", e.toString());
-			}
+//			try {
+//				// Launch picker to choose photo for selected contact
+//				Intent intent = new Intent("com.android.camera.action.CROP");
+//				intent.setDataAndType(getTempUri(), "image/*");
+//				intent.putExtra("crop", "true");
+//				intent.putExtra("outputX", 320);
+//				intent.putExtra("outputY", 320);
+//				intent.putExtra("aspectX", 320);
+//				intent.putExtra("aspectY", 320);
+//				intent.putExtra("scale", true);
+//				intent.putExtra("return-data", true);
+//				intent.putExtra(MediaStore.EXTRA_OUTPUT, getTempUri());
+//				intent.putExtra("outputFormat",
+//						Bitmap.CompressFormat.JPEG.toString());
+//				intent.putExtra("noFaceDetection", true);
+//				intent.putExtra("circleCrop", false);
+//
+//				 startActivityForResult(intent, CROP_FROM_CAMERA);
+//			} catch (ActivityNotFoundException e) {
+//				Log.e("crop_from_camera", e.toString());
+//			}
 			break;
 		}
 		}
 	}
+	@Override
+	protected void onResume() {
+		
+		super.onResume();
+	}
+
 	public String getRealPathFromURI(Uri contentUri) {
 		String[] proj = { MediaStore.Images.Media.DATA };
 		Cursor cursor = managedQuery(contentUri, proj, null, null, null);
@@ -532,7 +736,10 @@ try{
 			options =getBitmapSize(options);
 			bitmap=BitmapFactory.decodeFile(path,options);
 			Log.v(TAG,"이미지를 읽어오기위한 경로2"+path);
-			bitmap = getBitmapResizePrc(bitmap, 150, 150);
+			SharedPreferences pref= getSharedPreferences("pref", MODE_PRIVATE);
+			int wi=pref.getInt("bwidth", 0);
+			int he=pref.getInt("bheight", 0);
+			bitmap = getBitmapResizePrc(bitmap, 234, 234);
 			profile2=new RoundedAvatarDrawable(bitmap);
 			img.setImageDrawable(profile2);
 }catch(OutOfMemoryError e){
@@ -546,5 +753,274 @@ try{
 
 		}
 	}
-	
+	private Session.StatusCallback callback = new Session.StatusCallback() {
+		@Override
+		public void call(Session session, SessionState state, Exception exception) {
+			onSessionStateChange(session, state, exception);
+		}
+	};
+	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+		if (state.isOpened()) {
+			Log.i(TAG, "Logged in...");
+		} else if (state.isClosed()) {
+			Log.i(TAG, "Logged out...");
+		}
+	}
+	@Override
+	protected void onStart() {
+		super.onStart();
+		//  mPlusClient.connect();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		mPlusClient.disconnect();
+	}
+
+	@Override
+	public void onConnectionFailed(ConnectionResult result) {
+		//	      if (mConnectionProgressDialog.isShowing()) {
+		// The user clicked the sign-in button already. Start to resolve
+		// connection errors. Wait until onConnected() to dismiss the
+		// connection dialog.
+		if (result.hasResolution()) {
+			try {
+				result.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
+			} catch (SendIntentException e) {
+				mPlusClient.connect();
+			}
+		}
+		//	      }
+		// Save the result and resolve the connection failure upon a user click.
+		mConnectionResult = result;
+	}
+
+
+	String accountName;
+	@Override
+	public void onConnected(Bundle connectionHint) {
+		accountName = mPlusClient.getAccountName();
+		Toast.makeText(this, accountName + " is connected.", Toast.LENGTH_LONG).show();
+		user_name3=accountName;
+		user_pwd3="AIzaSyAlkq6NLiwn";
+
+		SharedPreferences pref =getSharedPreferences("pref", MODE_PRIVATE);
+		SharedPreferences.Editor editor= pref.edit();
+		editor.putString("wlogin", "google");
+		editor.putString("user_pwd", user_pwd3);
+		editor.putString("auth","");
+		editor.commit();
+
+		asyncLoginJson(user_name3, user_pwd3);
+		//	        
+		//	        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
+		//	            @Override
+		//	            protected String doInBackground(Void... params) {
+		//	                String token = null;
+		//
+		//	                try {
+		//	                    token = GoogleAuthUtil.getToken(
+		//	                            KidsMindLoginSelectActivity.this,
+		//	                            mPlusClient.getAccountName(),
+		//	                            SCOPE);
+		//	                } catch (IOException transientEx) {
+		//	                    // Network or server error, try later
+		//	                    Log.e(TAG, transientEx.toString());
+		//	                } catch (UserRecoverableAuthException e) {
+		//	                    // Recover (with e.getIntent())
+		//	                    Log.e(TAG, e.toString());
+		//	                    Intent recover = e.getIntent();
+		//	                   // startActivityForResult(recover, REQUEST_CODE_TOKEN_AUTH);
+		//	                } catch (GoogleAuthException authEx) {
+		//	                    // The call is not ever expected to succeed
+		//	                    // assuming you have already verified that 
+		//	                    // Google Play services is installed.
+		//	                    Log.e(TAG, authEx.toString());
+		//	                }
+		//
+		//	                return token;
+		//	            }
+		//
+		//	            @Override
+		//	            protected void onPostExecute(String token) {
+		//	                Log.i(TAG, "Access token retrieved:" + token);
+		//	            }
+		//
+		//	        };
+		//	        task.execute();
+
+		//getTask(KidsMindLoginSelectActivity.this, accountName, SCOPE).execute();
+
+	}
+
+	public void asyncLoginJson(String user_name, String user_pwd) {
+		//openWaitDialog();
+
+		String url = Const.LOGIN_PATH;
+
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("user_name", user_name);
+		map.put("user_pwd", user_pwd);
+
+		aquery.ajax(url, map, JSONObject.class, this, "jsonLoginCallback");
+
+		//sendView.setText(url);
+	}
+
+	public void jsonLoginCallback(String url, JSONObject json, AjaxStatus status) {
+		if (json != null) {
+			try {
+				aquery.ajaxCancel();
+				//closeWaitDialog();
+				dialog2.dismiss();
+				boolean isSuccess = json.getString("result").equals(Const.SUCCESS);
+
+				if (isSuccess) {
+					
+					Log.v(TAG,"재로그인 성공");
+					int user_id = json.getInt("user_id");
+					String user_name = json.getString("user_name");
+					String authkey = json.getString("authkey");
+
+					//asyncLoginJson(user_name3, user_pwd3);
+					SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
+					SharedPreferences.Editor editor=pref.edit();
+					editor.putString("login_check", "checked");
+					editor.putInt("user_id",user_id );
+					editor.putString("user_name", user_name);
+					editor.putString("authkey", authkey);
+					editor.commit();
+					//String path=pref.getString("path", null);
+//					String whe=pref.getString("last", "");
+//					if("".equals(whe)){
+//					Intent intent=new Intent(KidsMindLoginActivity.this,MainActivity.class);
+//					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//					startActivity(intent);
+//					}else{
+//						KidsMindLoginActivity.this.setResult(RESULT_OK);
+//							
+//					}
+					Intent in2= new Intent(KidsMindMypageActivity.this,KidsMindAlbumactivity.class);
+					in2.putExtra("user_id", suser_id);
+					in2.putExtra("where", "advice");
+					startActivity(in2);
+//					Log.v(TAG,"2");
+//					Intent intent= new Intent(KidsMindMypageActivity.this,KidsMindAdviceActivity.class);
+//					intent.putExtra("where", "indirect");
+//					intent.putExtra("date", date);
+//					intent.putExtra("savename", savename);
+//					intent.putExtra("advice_type", advice_type);
+//					startActivity(intent);
+					
+
+
+					//resultView.setText(json.toString());
+				} else {
+					Log.v(TAG,"재로그인 실패");
+					String error = json.getString("error");
+					SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
+					SharedPreferences.Editor editor=pref.edit();
+					editor.putString("acheck", null);
+					editor.commit();
+					if(error.contains("이미")){
+						asyncLogoutJson(user_name3, user_pwd3);
+					}else{
+						openInfoMessageDialogBox(error);
+						
+					}
+					
+				}
+			} catch (JSONException e) {
+				openErrorDialog();
+				e.printStackTrace();
+				Log.v(TAG,"json execption");
+			}
+		} else {
+			Log.v(TAG,"json null");
+			openErrorDialog();
+		}
+	}
+	public void openInfoMessageDialogBox(String message) {
+		Toast.makeText(KidsMindMypageActivity.this, message, Toast.LENGTH_SHORT).show();
+	}
+
+	protected void openErrorDialog() { 
+		//closeWaitDialog();
+		aquery.ajaxCancel();
+
+		openInfoMessageDialogBox("error.");
+	}
+	public void asyncLogoutJson(String user_name, String user_pwd) {
+		// openWaitDialog();
+
+		String url = Const.LOGOUT_PATH;
+
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("user_name", user_name);
+		map.put("user_pwd", user_pwd);
+
+		aquery.ajax(url, map, JSONObject.class, this, "jsonLogoutCallback");
+
+		// sendView.setText(url);
+	}
+
+	public void jsonLogoutCallback(String url, JSONObject json,
+			AjaxStatus status) {
+		if (json != null) {
+			try {
+				aquery.ajaxCancel();
+				// closeWaitDialog();
+
+				boolean isSuccess = json.getString("result").equals(
+						Const.SUCCESS);
+
+				if (isSuccess) {
+					
+					Log.v(TAG, "logout성공");
+					asyncLoginJson(user_name3, user_pwd3);
+					
+				} else {
+					String error = json.getString("error");
+
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} else {
+		}
+	}
+
+	@Override
+	public void onDisconnected() {
+		// TODO Auto-generated method stub
+		
+	}
+//	@Override
+//	public void onActivityResult(int requestCode, int resultCode, Intent data){
+//		
+//		if(resultCode==RESULT_OK){
+//			//Log.
+//			if(requestCode==30||requestCode==13){
+//				SharedPreferences pref=getSharedPreferences("pref", MODE_PRIVATE);
+//				SharedPreferences.Editor editor=pref.edit();
+//				
+//				savename=pref.getString("fname", "");
+//				date=pref.getString("date", "");
+//				advice_type=pref.getString("advice_type", "");
+//				
+//				Intent intent= new Intent(KidsMindLastResultActivity.this,KidsMindAdviceActivity.class);
+//				Log.v(TAG,"3");
+//				intent.putExtra("where", "indirect");
+//				intent.putExtra("date", date);
+//				intent.putExtra("savename", savename);
+//				intent.putExtra("advice_type", advice_type);
+//				startActivity(intent);
+//				//startActivity(intent);
+//			}	else if(requestCode ==REQUEST_CODE_RESOLVE_ERR){
+//				mConnectionResult = null;
+//				mPlusClient.connect();
+//			}
+//		}
+//	}
 }

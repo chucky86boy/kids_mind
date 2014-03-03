@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-     android:paddingLeft="@dimen/viewpager_margin_fix"
-    android:paddingRight="@dimen/viewpager_margin_fix"
+    android:padding="10dp"
     android:orientation="vertical"
 	 >
 
@@ -14,12 +13,23 @@
     <LinearLayout
 		android:id="@+id/singeMenu"
         
-        android:layout_width="288dp"
-        android:layout_height="285dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical" 
-        android:background="@drawable/menu_01"
-        android:gravity="bottom|center_horizontal"
+     
+        
+        
         >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+              android:background="@drawable/menu_01" />
 	
     </LinearLayout>
 

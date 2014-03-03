@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -30,9 +31,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.LinearLayout.LayoutParams;
 
 import com.mb.kids_mind.Helper.KidsMindDBHelper;
 import com.mb.kids_mind.Helper.MyHelper;
@@ -54,12 +55,22 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 	private ArrayList<DetailListItem>list=new ArrayList<DetailListItem>() ;
 	DetailListItem item;
 	TextView contents;
-	private String savename;
+	public String savename;
 	boolean mNeedsRedraw = false;
 	ImageView icon;
 	LinearLayout set;
 	TextView title;
 	TextView date;
+	String first="M113, M068";
+	String second="M008, M009, M011, M012, M014, M017, M113";
+	String third="M043, M050,M082,M088";
+	String forth="M102,";
+	String first2="그림에서 근거해서 보면 아동이 소극적이고 자신감이 부족한 것으로 보입니다. 문제가 있다고 보기는 어렵지만 소극적인 아동은 평소에는 조용하고 순한 아동으로 보여져 방치되다가 후에 사회성에 문제가 생길 수 있습니다. 만약 부모님께서 아이에게 필요한 것을 모두 해주시거나 혹은 아이의 행동을 간섭하고 질책하신다면 아이를 더욱 소극적으로 만들 수 있습니다. 그러니 평소에 아동이 자신의 주장을 잘 할 수 있도록 도와주고 안정감을 가질 수 있도록 격려해주셔서 아이의 자신감을 키워주시는 것이 중요합니다";	
+	String second2="문제가 있다고 보기는 어렵지만, 그림에 근거해서 보면 아동에게 사회성이 부족할 수 있습니다. 이러한 경우 아동이 지나치게 소극적이거나 과격해서 상호작용이 어렵거나 혹은 자기자신에게만 몰두해 주변 상황에 무관심한 경우가 많습니다. 부모님께서 아동을 잘 관찰하실 필요가 있으며, 아동이 소극적이거나 자기 자신에게만 몰두하는 경우 부모님께서 아이가 다양한 사람들을 만날 수 있는 경험을 제공해주시고 다른 사람들 앞에서 많은 칭찬을 하여 자신감을 갖도록 하는 것이 중요합니다.";
+	String third2="혹시 아동이 평소에 신경질적이거나 공격적인 행동을 보이지는 않나요? 문제가 크지는 않지만 신경질적인 아동은 상처를 쉽게 받고 사소한 일에도 투정과 짜증을 내어서 사회성에 문제가 생길 수 있습니다. 이런 아동은 보통 과잉보호나 애정결핍으로 인한 심리적 불안정이 성격에 영향을 끼친 경우가 많습니다. 부모님의 양육방식에 대한 점검이 필요하며, 아이가 안정된 환경에서 밝은 기분을 가질 수 있도록 만드는 것이 중요합니다. 아이에게 도움이 되는 놀이치료 방법은 아래의 추천하는 놀이를 참고해주시기 바랍니다.";
+	String forth2="그림에 근거해서 보면 아동이 현재 안정감을 충분히 느끼지 못하는 것으로 보입니다. 아이가불안과 불안정감을 계속 느끼면 감정이 외면화되어 공격적이거나 여러 심리적 문제가 발생할 수 있으니 부모님의 세심한 배려가 필요합니다. 부모님께서는 충분한 관심과 사랑, 정서적인 지지를 주어야 하며 아이와의 안정 애착을 형성하는데는 신체적 접촉이 이루어지는 놀이가 도움이 되니 아래의 추천하는 놀이치료를 참고해주시기 바랍니다.";
+	String fifth="그림분석결과 특이사항이 나타나지 않았으며 아이가 안정된 상태로 보입니다. 그러나 한 장의 그림으로는 심리를 정확하게 분석하기 어려우니 여러 그림을 지속적으로 분석하여 아이의 심리상태를 잘 파악하는 것이 중요합니다.";
+	public String idate;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -106,6 +117,10 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
+			SharedPreferences pref =getSharedPreferences("pref", MODE_PRIVATE);
+		    SharedPreferences.Editor editor=pref.edit();
+		    editor.putString("noti", "");
+		    editor.commit();
 			Intent intent=new Intent(KidsMindTotalResultActivity.this,MainActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intent.putExtra("check", "1");
@@ -115,12 +130,14 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 	});
 		contents=(TextView)findViewById(R.id.contents);
 		Intent intent=getIntent();
+		idate=intent.getStringExtra("date");
 		//if("1".equals(intent.getStringExtra("where"))){
 		// Bitmap bit=intent.getParcelableExtra("img");
 		// img.setImageBitmap(bit);
 	   khelper=new KidsMindDBHelper(KidsMindTotalResultActivity.this);
 		helper = new MyHelper(this, "kidsmind.db", null, 1);
 		String image_id=intent.getStringExtra("savename");
+		
 		savename=image_id;
 		readimage(image_id);
 		selectAll(image_id);
@@ -129,8 +146,64 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 		for(String cha:detail){
 			Log.v(TAG,"자른아이디"+cha);
 			selectDb(cha);
+			
 
 		}
+		String[] last=first.split(",");
+		int cnt=0;
+		for(String f:last){
+		
+			if(detail_id.contains(f)){
+			Log.v(TAG,"first"+cnt+"");
+			if(cnt==0)	
+			updateRec(savename,"1",first2);
+			++cnt;
+			}
+			
+		}
+		String[] last2=second.split(",");
+		int cnt2=0;
+		for(String f:last2){
+		
+			if(detail_id.contains(f)){
+			Log.v(TAG,"last2"+cnt+"");
+			if(cnt2==0)	
+			updateRec(savename,"1",second2);
+			++cnt2;
+			}
+			
+		}
+		String[] last3=third.split(",");
+		int cnt3=0;
+		for(String f:last3){
+		
+			if(detail_id.contains(f)){
+			Log.v(TAG,"last3"+cnt3+"");
+			if(cnt3==0)
+				updateRec(savename,"1",third2);
+			++cnt3;
+			}
+			
+		}
+		String[] last4=forth.split(",");
+		int cnt4=0;
+		for(String f:last4){
+		
+			if(detail_id.contains(f)){
+			Log.v(TAG,"last4"+cnt4+"");
+			if(cnt4==0)	
+			updateRec(savename,"1",forth2);
+			++cnt4;
+			}
+			
+		}
+		if(cnt==0&&cnt2==0&&cnt3==0&&cnt4==0){
+			updateRec(savename,"5",fifth);
+			
+		}
+		
+			
+		
 		item=new DetailListItem();
 		item.setDetail_image("1");
 		//item.setDetail_tilte("최종 소견서 보러가기");
@@ -237,6 +310,29 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 		
 
 	}
+	void updateRec(String image_id, String advice_type,String advice_talk){
+		openDB();
+		//String sql="update tmember set age =32 where fname like '%k%';";
+		Log.v(TAG,"updatestart"+advice_talk+advice_type);
+		ContentValues values = new ContentValues();
+		values.put("advice_talk", advice_talk);
+		
+		values.put("advice_type", advice_type);
+		String whereClause="fName like ?";
+		String[] whereArgs={"%" + image_id + "%"};
+		
+		try{
+		Log.v(TAG,"시작");
+			int cnt=db.update("km_check", values, whereClause, whereArgs);
+	Log.v(TAG,"pass/fail"+cnt+"");
+	Log.v(TAG,"성공");
+		
+		}catch(SQLException e){
+			
+		}
+		
+		closeDB();
+	}
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -258,7 +354,7 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 		Cursor c=null;
 		String wStr="detail_id=?";
 		String[] wherStr={cha};
-		String[] colNames={"detail_image","detail_title","detail_content"};
+		String[] colNames={"detail_image","detail_title","detail_contents"};
 		
 		try{
 			c=db2.query("km_question_detail", colNames, wStr, wherStr, null, null, null);
@@ -267,7 +363,7 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 				item=new DetailListItem();
 				item.setDetail_image(c.getString(c.getColumnIndex("detail_image")));
 				item.setDetail_tilte(c.getString(c.getColumnIndex("detail_title")));
-				item.setDetail_content(c.getString(c.getColumnIndex("detail_content")));
+				item.setDetail_content(c.getString(c.getColumnIndex("detail_contents")));
 				list.add(item);
 				Log.v(TAG,"listsize"+list.size()+"");
 				//titem=new TagList();
@@ -370,16 +466,16 @@ public class KidsMindTotalResultActivity extends FragmentActivity {
 					icon.setImageResource(R.drawable.icon_fish);
 					SharedPreferences pref=getSharedPreferences("pref", MODE_PRIVATE);
 					String Q=pref.getString("qposition", "");
-					if("Q1".equals(Q)){
+					if("Q4".equals(Q)){
 						title.setText("물고기 그리기");
 						
-					}else if("Q2".equals(Q)){
+					}else if("Q3".equals(Q)){
 						title.setText("사람 그리기");
 						
-					}else if("Q3".equals(Q)){
+					}else if("Q2".equals(Q)){
 						title.setText("나무 그리기");
 						
-					}else if("Q4".equals(Q)){
+					}else if("Q1".equals(Q)){
 						title.setText("집 그리기");
 						
 					}

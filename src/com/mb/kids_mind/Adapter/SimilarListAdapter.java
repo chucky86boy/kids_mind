@@ -16,35 +16,55 @@
 
 package com.mb.kids_mind.Adapter;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxStatus;
+import com.androidquery.callback.BitmapAjaxCallback;
 import com.mb.kids_mind.R;
-import com.mb.kids_mind.Adapter.KidsMindAlbumAdater.ViewHolder;
-import com.mb.kids_mind.Item.DetailListItem;
-import com.mb.kids_mind.Item.KidsMindFlagItem;
+import com.mb.kids_mind.Item.Const;
 import com.mb.kids_mind.Item.SimilarItem;
+import com.mb.kids_mind.fragment.SketchMenu.ScreenSlidePagerAdapter;
+import com.mb.kids_mind.task.NetManager;
 
 
 public class SimilarListAdapter extends BaseAdapter {
 	private static final String TAG="MainActivity";
 	private final Context mContext;
 	ArrayList<SimilarItem> list;
+	public ScreenSlidePagerAdapter mPagerAdapter;
 	Hashtable<String,Integer>map=new Hashtable<String,Integer>();
 	public int temp,si;
 	SharedPreferences pref;
@@ -82,7 +102,7 @@ public class SimilarListAdapter extends BaseAdapter {
 
 
 	public void setList(ArrayList<SimilarItem> list) {
-		Log.v(TAG,"setlist"+list0.size()+"");
+	
 		this.list = list;
 	}
 
@@ -116,9 +136,7 @@ public class SimilarListAdapter extends BaseAdapter {
 			cView=LayoutInflater.from(mContext).inflate(layout, parent,false);
 			holder = new ViewHolder();
 			holder.image=(ImageView)cView.findViewById(R.id.image);
-			holder.title=(TextView)cView.findViewById(R.id.title);
-			holder.question=(TextView)cView.findViewById(R.id.question);
-			holder.date=(TextView)cView.findViewById(R.id.date);
+			
 			cView.setTag(holder);
 			//	Log.v(TAG,"cvew==null");
 		} else {
@@ -127,13 +145,168 @@ public class SimilarListAdapter extends BaseAdapter {
 			//	Log.v(TAG,"cvew!=null");
 		}
 	
-		holder.image.setImageResource(contents.getRes());
-		holder.title.setText(contents.getImage_title());
-		holder.question.setText(contents.getAdvice_contents());
-		holder.date.setText(contents.getUser_age());
+		//holder.image.setImageResource(contents.getRes());
+//		String DirPath = Environment.getExternalStorageDirectory()
+//				.getAbsolutePath();
+//		DirPath = DirPath + "/" + "KidsMind2" + "/";
+//
+//		File cameraDir = new File(DirPath);
+//		if (!cameraDir.exists()) {
+//
+//			cameraDir.mkdirs();
+//		}
+//		File f1 = new File(cameraDir, contents.advice_image);
+//		if (f1.exists()) {
+//			 holder.image.setImageURI(Uri.fromFile(f1)); 
+//			//mLoader.DisplayImage(f1.getAbsolutePath(), holder.imageView);
+//
+//		} else {
+//			new DownTask().execute(
+//					(Const.IMAGE_LOAD_URL+"/" + contents.advice_image).trim(),f1,holder.image);
+//
+//			}
+	
+		requestMyImage(holder.image, contents.advice_image);
+		
+		
 		return cView;
 	}
+	public void requestMyImage(ImageView image, String userImagePath) {
+		AQuery aq = new AQuery(image);
 
+		if (userImagePath.equals("")) {
+			// aq.id(R.id.my_image).image(R.drawable.photo1); ����Ʈ �̹���
+		} else {
+			String url = Const.IMAGE_LOAD_URL + "/" + userImagePath;
+			url=url.trim();
+			aq.image(url, false, false, 0, 0, new BitmapAjaxCallback() { // my_image <== ImageView
+						@Override
+						public void callback(String url, ImageView iv, Bitmap bm, AjaxStatus status) {
+							
+							
+							if (bm != null) {
+								iv.setImageBitmap(bm);
+							}
+						}
+					});
+		}
+	}
+	class DownTask extends AsyncTask<Object, Void, Bitmap> {
+		 ImageView img;
+
+		@Override
+		protected Bitmap doInBackground(Object... params) {
+
+			Bitmap bitmap = null;
+			File ft;
+			HttpClient client = null;
+			HttpGet request = null;
+			HttpResponse response = null;
+			int code = 0;
+			InputStream is = null;
+			int length = 0;
+			byte[] imgArr = null;
+ft=(File)params[1];
+			//img = (ImageView) params[1];
+			 img = (ImageView)params[2];
+			Log.v(TAG, "add : " + params[0]);
+			try {
+				client = NetManager.getHttpClient();
+				request = NetManager.getGet(params[0].toString());
+				response = client.execute(request);
+				code = response.getStatusLine().getStatusCode();
+				switch (code) {
+				case 200:
+					is = response.getEntity().getContent();
+
+					length = (int) response.getEntity().getContentLength();
+					if (length != -1) {
+						int iData = 0;
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						while ((iData = is.read()) != -1) {
+							baos.write(iData);
+						}
+						imgArr = baos.toByteArray();
+						bitmap = BitmapFactory.decodeByteArray(imgArr, 0,
+								(int) imgArr.length);
+
+						Log.v(TAG, "loading success: "
+								+ imgArr.length);
+					} else {
+						imgArr = new byte[length];
+						DataInputStream dis = new DataInputStream(is);
+						dis.readFully(imgArr, 0, length);
+						bitmap = BitmapFactory.decodeByteArray(imgArr, 0,
+								(int) imgArr.length);
+					}
+
+					FileOutputStream fs =  mContext.openFileOutput(ft.toString(), mContext.MODE_PRIVATE);
+					fs.write(imgArr);
+					fs.flush();
+					fs.close();
+
+					bitmap.compress(CompressFormat.PNG, 100,
+						fs);
+					Log.v(TAG, "Image Loading success! ");
+					break;
+				}
+			} catch (Exception e) {
+				Log.v(TAG, "Image Load error : " + e);
+			} finally {
+				if (is != null) {
+					try {
+						is.close();
+					} catch (IOException e) {
+
+					}
+				}
+
+			}
+			return bitmap;
+		}
+
+		@Override
+		protected void onPostExecute(Bitmap result) {
+
+			if (result != null) {
+//				Drawable drawable = new BitmapDrawable(result);
+//				 img.setBackgroundDrawable(drawable);
+			}
+
+			
+			super.onPostExecute(result);
+		}
+
+		@Override
+		protected void onPreExecute() {
+
+			// pDialog = ProgressDialog.show(MainActivity.this, "",
+			// "Loading...");
+			super.onPreExecute();
+		}
+
+	}
+
+	
+	Dialog dialog =null;
+//	void popupImage(Context mContext2,int position)
+//	{
+//		// Create dialog
+//		Activity activity=(Activity)mContext2;
+//		 dialog = new Dialog(activity);
+//		dialog.getWindow().setBackgroundDrawable
+//
+//		(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+//		
+//		dialog.setContentView(R.layout.lastpopup);
+//		ViewPager pager=(ViewPager)dialog.findViewById(R.id.lastpager);
+//		
+//		mPagerAdapter=new ScreenSlidePagerAdapter(((KidsMindLastResultActivity)mContext2).getSupportFragmentManager());
+//		pager.setAdapter(mPagerAdapter);
+//		
+//		//라디오 버튼 
+//		dialog.show();
+//	}
 	public void doRemoveItem(int size,List<Integer> list,int position){
 		if(size!=0){
 			//list0=new LinkedList<Integer>();
@@ -269,4 +442,6 @@ public class SimilarListAdapter extends BaseAdapter {
 		public TextView date;
 		
 	}
+
+
 }

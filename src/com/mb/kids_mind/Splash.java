@@ -24,7 +24,10 @@ public class Splash extends Activity{
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.splash);
 	    overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_out);
-
+	    SharedPreferences pref =getSharedPreferences("pref", MODE_PRIVATE);
+	    SharedPreferences.Editor editor=pref.edit();
+	    editor.putString("noti", "");
+	    editor.commit();
 	    myDbHelper=new KidsMindDBHelper(Splash.this);
 		 
 		try{
@@ -62,7 +65,10 @@ public class Splash extends Activity{
 	        public void run() {
 	        	if(!activityStarted){
 	        		activityStarted = true;
-	        		
+	        		SharedPreferences pref =getSharedPreferences("pref", MODE_PRIVATE);
+	    		    SharedPreferences.Editor editor=pref.edit();
+	    		    editor.putString("noti", "");
+	    		    editor.commit();
 	        		Intent startMainPage = new Intent(Splash.this, MainActivity.class);
 		            startActivity(startMainPage);
 	        	}

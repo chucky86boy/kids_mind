@@ -9,6 +9,7 @@
   <LinearLayout
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
+    
      android:background="@drawable/navi_bar"
      android:gravity="center_vertical" >
 
@@ -24,32 +25,43 @@
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:text="Add Baby"
-         	android:textSize="20sp" />
+            android:layout_marginLeft="5dp"
+            android:textColor="#ffffffff"
+            android:text="아이 등록"
+         	android:textSize="17sp" />
 
     </LinearLayout>
-
+<LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="0dp"
+     android:layout_weight="1"
+     android:gravity="center" >
       <EditText
           android:id="@+id/name"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="20dp"
           android:background="@drawable/box_name"
           android:ems="10"
-          android:gravity="center"
+          android:gravity="center_vertical"
           android:hint="아이 이름을 적어 주세요"
           android:inputType="textPersonName"
-          android:paddingTop="15dp" >
+          android:paddingTop="15dp" 
+          android:paddingLeft="35dp">
 
           <requestFocus />
       </EditText>
-
+</LinearLayout>
+<LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="0dp"
+     android:layout_weight="1"
+     android:gravity="center" 
+     android:orientation="vertical">
       <ImageView
           android:id="@+id/birth"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="25dp"
+        
           android:src="@drawable/icon_birth" />
 
       <TextView
@@ -58,30 +70,39 @@
           android:layout_height="wrap_content"
           android:layout_marginTop="5dp"
           android:text="생일을 등록해 주세요" />
-
+</LinearLayout>
+<LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="0dp"
+     android:layout_weight="1"
+     android:gravity="center" 
+     android:orientation="vertical">
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
             android:orientation="horizontal" 
-            android:layout_marginTop="25dp">
+            >
            <LinearLayout
           android:layout_width="0dp"
-          android:layout_height="wrap_content"
+          android:layout_height="match_parent"
           android:layout_weight="1"
            android:gravity="center"
             android:orientation="vertical" >
              <ImageView
                     android:id="@+id/boy"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
                      android:layout_marginTop="10dp"
                    android:src="@drawable/btn_boy"
                      />
                
                    <TextView
                     
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
                      android:layout_marginTop="5dp"
                      android:textColor="#ff000000"
                    
@@ -91,21 +112,24 @@
        <LinearLayout
           android:layout_width="0dp"
           
-          android:layout_height="wrap_content"
+          android:layout_height="match_parent"
           android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center" >
               <ImageView
                     android:id="@+id/girl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                   android:layout_height="0dp"
+                    android:layout_weight="4"
                      android:layout_marginTop="10dp"
                    android:src="@drawable/btn_girl"
                      />
                
                    <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                     android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
                      android:layout_marginTop="5dp"
                      android:textColor="#ff000000"
                    
@@ -114,11 +138,19 @@
            
       </LinearLayout>
       </LinearLayout>
+      </LinearLayout>
+      <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="0dp"
+     android:layout_weight="1"
+     android:gravity="center" 
+     android:orientation="vertical">
  <Button
                     android:id="@+id/register"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                     android:layout_marginTop="10dp"
+                
                    android:background="@drawable/register"
                      />
+ </LinearLayout>
 </LinearLayout>

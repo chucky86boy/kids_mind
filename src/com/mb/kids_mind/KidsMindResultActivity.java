@@ -60,6 +60,7 @@ public class KidsMindResultActivity extends Activity {
 			case R.id.button1:
 				Intent in =new Intent(KidsMindResultActivity.this,KidsMindTotalResultActivity.class);
 				in.putExtra("savename",savename);
+				in.putExtra("date", date.getText().toString());
 				in.putExtra("where","1");
 				startActivity(in);
 				String detail_id=pref.getString("checked", "");
@@ -69,7 +70,7 @@ public class KidsMindResultActivity extends Activity {
 				Log.v(TAG,"check"+check);
 				if("".equals(check)){
 					Log.v(TAG,"insert");
-					insertRec(savename, detail_id, "0", 0, question_id,userid);
+					insertRec(savename, detail_id, "0", -1, question_id,userid,"","");
 						
 				}else{
 					Log.v(TAG,"update");
@@ -88,6 +89,10 @@ public class KidsMindResultActivity extends Activity {
 				KidsMindResultActivity.this.finish();
 				break;
 			case R.id.home:
+				SharedPreferences pref =getSharedPreferences("pref", MODE_PRIVATE);
+    		    SharedPreferences.Editor editor=pref.edit();
+    		    editor.putString("noti", "");
+    		    editor.commit();
 				Intent intent=new Intent(KidsMindResultActivity.this,MainActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				intent.putExtra("check", "1");
@@ -185,16 +190,16 @@ public class KidsMindResultActivity extends Activity {
 					icon.setImageResource(R.drawable.icon_fish);
 					SharedPreferences pref=getSharedPreferences("pref", MODE_PRIVATE);
 					String Q=pref.getString("qposition", "");
-					if("Q1".equals(Q)){
+					if("Q4".equals(Q)){
 						title.setText("물고기 그리기");
 						
-					}else if("Q2".equals(Q)){
+					}else if("Q3".equals(Q)){
 						title.setText("사람 그리기");
 						
-					}else if("Q3".equals(Q)){
+					}else if("Q2".equals(Q)){
 						title.setText("나무 그리기");
 						
-					}else if("Q4".equals(Q)){
+					}else if("Q1".equals(Q)){
 						title.setText("집 그리기");
 						
 					}
@@ -310,7 +315,7 @@ String mTime = mSimpleDateFormat.format ( currentTime );
 		adapter.notifyDataSetChanged();
 	}	
 	public void insertRec(String image_id, String detail_id,
-			String detail_check, int advice_id, String question_id,String user_id) {
+			String detail_check, int advice_id, String question_id,String user_id,String advice_type,String advice_talk) {
 		// if(selectDb(detail_id)){
 		openDB();
 		Log.v(TAG,"오픈 디비 ");
@@ -336,6 +341,8 @@ String mTime = mSimpleDateFormat.format ( currentTime );
 			values.put("question_id", question_id);
 			values.put("user_id",user_id);
 			values.put("date", date);
+			values.put("advice_type", advice_type);
+			values.put("advice_talk", advice_talk);
 			long id = db2.insert("km_check", null, values);
 
 			Log.v(TAG, id > 0 ? "success" : "fail");

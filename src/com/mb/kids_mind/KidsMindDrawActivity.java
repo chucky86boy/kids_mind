@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -187,7 +188,8 @@ public class KidsMindDrawActivity extends FragmentActivity {
 				if(9960<=time&& "".equals(a)){
 					editor.putString("c","1");
 					editor.commit();
-					 popupImage(KidsMindDrawActivity.this);        
+					info.setVisibility(View.VISIBLE);
+					 //popupImage(KidsMindDrawActivity.this);        
 				}else{
 					
 					
@@ -242,7 +244,8 @@ public class KidsMindDrawActivity extends FragmentActivity {
 
 
 
-
+public LinearLayout info;
+Button more,keep;
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) { 
@@ -250,6 +253,42 @@ public class KidsMindDrawActivity extends FragmentActivity {
         this.overridePendingTransition(0, 0);
 
         setContentView(R.layout.drawpain); 
+        info=(LinearLayout)findViewById(R.id.infopop);
+        more=(Button)findViewById(R.id.button1);
+        more.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				info.setVisibility(View.GONE);
+			}
+		});
+        keep=(Button)findViewById(R.id.button2);
+        keep.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				  timer.cancel();
+				  Bitmap bitmap2=board.Save(fos);
+					savename=board.startActivity();
+					SharedPreferences pref=getSharedPreferences("pref",MODE_PRIVATE);
+					SharedPreferences.Editor editor=pref.edit();
+					editor.putString("savename", savename);
+					editor.commit();
+					
+					
+					Intent i=new Intent(KidsMindDrawActivity.this,KidsMindAnalyzeActivity.class);
+					i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+					
+					i.putExtra("savename",savename);
+					i.putExtra("where","1");
+					//i.putExtra("img",bitmap2);
+					startActivity(i);
+					info.setVisibility(View.GONE);
+			}
+		});
+        info.setVisibility(View.GONE);
         pref=getSharedPreferences("pref", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         mColor=pref.getInt("color", 0xff000000);
@@ -432,7 +471,21 @@ void doClear(){
     ft.commit();
 
 }
-
+@Override
+public boolean onKeyDown(int keyCode, KeyEvent event) {
+	if (keyCode == KeyEvent.KEYCODE_BACK) {
+		
+		switch(info.getVisibility()){
+		case View.VISIBLE:
+			info.setVisibility(View.GONE);
+			break;
+		case View.GONE:
+			finish();
+			break;
+		}
+	}
+	return true;
+}
 
 
 	@Override

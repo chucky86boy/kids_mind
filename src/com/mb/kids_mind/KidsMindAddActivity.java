@@ -107,7 +107,7 @@ OnDateChangedListener {
 					}
 			        Log.v(TAG," insert username"+user_name);
 			        Log.v(TAG,"imagepath"+imagepath);
-					insertRec(user_name,user,babyname, birthdate, sex, imagepath);
+					insertRec("kidsmind",user,babyname, birthdate, sex, imagepath);
 					//유저 내임 가입시 아이디가 키고 유저는 아이 사진 
 					KidsMindAddActivity.this.setResult(RESULT_OK);
 					finish();
@@ -167,7 +167,10 @@ OnDateChangedListener {
 
 			photo = BitmapFactory.decodeFile(outFilePath);
 			// RoundedAvatarDrawable profile
-			photo = getBitmapResizePrc(photo, 150, 150);
+			SharedPreferences pref= getSharedPreferences("pref", MODE_PRIVATE);
+			int wi=pref.getInt("bwidth", 0);
+			int he=pref.getInt("bheight", 0);
+			photo = getBitmapResizePrc(photo, 200, 208);
 			profile = new RoundedAvatarDrawable(photo);
 			if ("boy".equals(sex)) {
 
@@ -241,7 +244,10 @@ OnDateChangedListener {
 					photo = BitmapFactory.decodeFile(uploadImagePath, options);// Uri
 					// 비트맵으로
 					// 바꾸기
-					photo = getBitmapResizePrc(photo, 150, 150);
+					SharedPreferences pref= getSharedPreferences("pref", MODE_PRIVATE);
+					int wi=pref.getInt("bwidth", 0);
+					int he=pref.getInt("bheight", 0);
+					photo = getBitmapResizePrc(photo, 200, 208);
 					pref.getInt("exifD", 0);
 					if ("camera".equals(pref.getString("where", "error")))
 						photo = rotate(photo, pref.getInt("exifD", 0));
@@ -278,27 +284,27 @@ OnDateChangedListener {
 				return;
 			}
 
-			try {
-				// Launch picker to choose photo for selected contact
-				Intent intent = new Intent("com.android.camera.action.CROP");
-				intent.setDataAndType(getTempUri(), "image/*");
-				intent.putExtra("crop", "true");
-				intent.putExtra("outputX", 320);
-				intent.putExtra("outputY", 320);
-				intent.putExtra("aspectX", 320);
-				intent.putExtra("aspectY", 320);
-				intent.putExtra("scale", true);
-				intent.putExtra("return-data", true);
-				intent.putExtra(MediaStore.EXTRA_OUTPUT, getTempUri());
-				intent.putExtra("outputFormat",
-						Bitmap.CompressFormat.JPEG.toString());
-				intent.putExtra("noFaceDetection", true);
-				intent.putExtra("circleCrop", false);
-
-				 startActivityForResult(intent, CROP_FROM_CAMERA);
-			} catch (ActivityNotFoundException e) {
-				Log.e("crop_from_camera", e.toString());
-			}
+//			try {
+//				// Launch picker to choose photo for selected contact
+//				Intent intent = new Intent("com.android.camera.action.CROP");
+//				intent.setDataAndType(getTempUri(), "image/*");
+//				intent.putExtra("crop", "true");
+//				intent.putExtra("outputX", 320);
+//				intent.putExtra("outputY", 320);
+//				intent.putExtra("aspectX", 320);
+//				intent.putExtra("aspectY", 320);
+//				intent.putExtra("scale", true);
+//				intent.putExtra("return-data", true);
+//				intent.putExtra(MediaStore.EXTRA_OUTPUT, getTempUri());
+//				intent.putExtra("outputFormat",
+//						Bitmap.CompressFormat.JPEG.toString());
+//				intent.putExtra("noFaceDetection", true);
+//				intent.putExtra("circleCrop", false);
+//
+//				 startActivityForResult(intent, CROP_FROM_CAMERA);
+//			} catch (ActivityNotFoundException e) {
+//				Log.e("crop_from_camera", e.toString());
+//			}
 			break;
 		}
 		}
@@ -451,6 +457,7 @@ OnDateChangedListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.addbaby);
+		
 		name = (EditText) findViewById(R.id.name);
 		birth = (ImageView) findViewById(R.id.birth);
 		birthtext=(TextView)findViewById(R.id.birthtext);

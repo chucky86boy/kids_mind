@@ -117,9 +117,7 @@ public class RecommendListAdapter extends BaseAdapter {
 			cView=LayoutInflater.from(mContext).inflate(layout, parent,false);
 			holder = new ViewHolder();
 			holder.image=(ImageView)cView.findViewById(R.id.image);
-			holder.title=(TextView)cView.findViewById(R.id.title);
-			holder.question=(TextView)cView.findViewById(R.id.question);
-			holder.date=(TextView)cView.findViewById(R.id.date);
+			
 			cView.setTag(holder);
 			//	Log.v(TAG,"cvew==null");
 		} else {
@@ -129,9 +127,11 @@ public class RecommendListAdapter extends BaseAdapter {
 		}
 	
 		holder.image.setImageResource(contents.getRes());
-		holder.title.setText(contents.getTitle());
-		holder.question.setText(contents.getContents());
-		holder.date.setText(contents.getTitle());
+//		if(layout==R.layout.similarlistview){
+//	
+//		holder.question.setText(contents.getContents());
+//		holder.date.setText(contents.getTitle());
+//		}
 		return cView;
 	}
 

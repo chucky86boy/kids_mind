@@ -16,6 +16,21 @@ public class AlbumItem implements Serializable {
 	public String date;
 	public String questioin;
 	public String newmessage;
+	public int advice_id;
+	public String advicetalk;
+	
+	public String getAdvicetalk() {
+		return advicetalk;
+	}
+	public void setAdvicetalk(String advicetalk) {
+		this.advicetalk = advicetalk;
+	}
+	public int getAdvice_id() {
+		return advice_id;
+	}
+	public void setAdvice_id(int advice_id) {
+		this.advice_id = advice_id;
+	}
 	public String getImage_path() {
 		return image_path;
 	}

@@ -26,8 +26,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
-            android:text="Result"
-         	android:textSize="20sp" />
+            android:text="결과"
+            android:textColor="#ffffffff"
+         	android:textSize="17sp" />
 <LinearLayout
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
@@ -38,32 +39,50 @@
             android:id="@+id/home"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/home"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="5dp"
+            
             />
 
      
 
     </LinearLayout>
     </LinearLayout>
+ <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        
+        
+       
+         >
 
+     <LinearLayout
+        android:layout_width="match_parent"
+         android:layout_height="0dp"
+        android:gravity="center"
+         android:layout_weight="0.65"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" >
   <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-          android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:orientation="horizontal" >
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/box_select"
+           
+            android:orientation="horizontal"
+            android:padding="5dp"
+              >
 
             <LinearLayout
                 android:id="@+id/set"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/box_sketch_result"
+                android:background="@drawable/box_sketch"
                 android:gravity="center"
                 android:orientation="vertical" >
 
@@ -78,8 +97,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
+                    android:textColor="#ff000000"
                     android:text="Title"
-                    android:textSize="20sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/date"
@@ -87,12 +107,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:text="Date"
-                    android:textSize="15sp" />
+                    android:textSize="13sp" />
             </LinearLayout>
   <LinearLayout
                
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/box_sketch"
                 android:gravity="center"
@@ -100,10 +120,12 @@
             <ImageView
                 android:id="@+id/imageView1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/box_sketch" />
+                android:layout_height="match_parent"
+                android:layout_margin="2dp"
+               />
         </LinearLayout>
   </LinearLayout>
+   </LinearLayout>
  
  
  
@@ -116,14 +138,17 @@
  
  
  
- 
- 
-  
+     <LinearLayout
+            android:layout_width="match_parent"
+        	android:layout_height="0dp"
+        	android:layout_weight="1"
+        	
+       		android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2" >
+        android:layout_height="match_parent"
+         >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -133,18 +158,43 @@
 		        android:id="@+id/menu_pager"
 		        android:layout_width="match_parent"
 		    	android:layout_height="0dp"
-		    	android:layout_weight="1"
+		    	android:layout_weight="2"
 		        android:layout_gravity="center_horizontal"/>
-	   		<TextView 
-	   		      android:id="@+id/contents"
+       		 <LinearLayout
+            android:layout_width="match_parent"
+        	android:layout_height="0dp"
+		    	android:layout_weight="1"
+		    	android:gravity="center"
+		    	
+        	  android:background="@drawable/bg_rp_speaking"
+       		android:orientation="vertical">
+       		  <ScrollView
+        android:id="@+id/scrollView1"
+      	android:padding="5dp"
+        android:layout_width="match_parent"
+       
+        android:layout_height="wrap_content" >
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+	   		<TextView
+	   		    android:id="@+id/contents"
 	   		    android:layout_width="match_parent"
-	   		    android:layout_height="wrap_content"
-	   		    android:background="@drawable/bg_rp_speaking"
-	   		    android:gravity="center"
+	   		    android:layout_height="match_parent"
+	   		    android:layout_marginTop="5dp"
+	   		    android:gravity="center_vertical"
 	   		    android:paddingLeft="150dp"
 	   		    android:text="-해당 항목을 선택해 주세요-"
 	   		    android:textColor="@android:color/white"
-	   		    android:textSize="14sp"/>
+	   		    android:textSize="14sp" />
+
+	   		 </LinearLayout>
+    </ScrollView>
+	   		  </LinearLayout>
         </LinearLayout>
         <ImageView 
             android:id="@+id/doctor"
@@ -152,8 +202,9 @@
             android:layout_gravity="bottom|left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="15dp"
             android:src="@drawable/re_dotor1"/>
     </FrameLayout>
-
+     </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

@@ -8,54 +8,67 @@ public class SimilarItem implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 7676789635640642918L;
-
-	
-	String image_path;
-	String image_title;
-	String advice_contents;
-	String user_age;
-	String detail_id;
-	int res;
-	public int getRes() {
-		return res;
+	public String question_id;
+	public String date;
+	public String getDate() {
+		return date;
 	}
-	public void setRes(int res) {
-		this.res = res;
+	public void setDate(String date) {
+		this.date = date;
 	}
-	public String getImage_path() {
-		return image_path;
+	public String getQuestion_id() {
+		return question_id;
 	}
-	public void setImage_path(String image_path) {
-		this.image_path = image_path;
+	public void setQuestion_id(String question_id) {
+		this.question_id = question_id;
 	}
-	public String getImage_title() {
-		return image_title;
+	public String advice_image;
+	public String detail_id;
+	public int advice_id;
+	public int advice_user_id;
+	public int getAdvice_user_id() {
+		return advice_user_id;
 	}
-	public void setImage_title(String image_title) {
-		this.image_title = image_title;
+	public void setAdvice_user_id(int advice_user_id) {
+		this.advice_user_id = advice_user_id;
 	}
-	public String getAdvice_contents() {
-		return advice_contents;
+	public int user_id;
+	public String comment_text;
+	public String getAdvice_image() {
+		return advice_image;
 	}
-	public void setAdvice_contents(String advice_contents) {
-		this.advice_contents = advice_contents;
-	}
-	public String getUser_age() {
-		return user_age;
-	}
-	@Override
-	public String toString() {
-		return "SimilarItem [image_path=" + image_path + ", image_title="
-				+ image_title + ", advice_contents=" + advice_contents
-				+ ", user_age=" + user_age + ", detail_id=" + detail_id + "]";
-	}
-	public void setUser_age(String user_age) {
-		this.user_age = user_age;
+	public void setAdvice_image(String advice_image) {
+		this.advice_image = advice_image;
 	}
 	public String getDetail_id() {
 		return detail_id;
 	}
 	public void setDetail_id(String detail_id) {
 		this.detail_id = detail_id;
-	};
+	}
+	public int getAdvice_id() {
+		return advice_id;
+	}
+	public void setAdvice_id(int advice_id) {
+		this.advice_id = advice_id;
+	}
+	public int getUser_id() {
+		return user_id;
+	}
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
+	}
+	public String getComment_text() {
+		return comment_text;
+	}
+	public void setComment_text(String comment_text) {
+		this.comment_text = comment_text;
+	}
+	@Override
+	public String toString() {
+		return "SimilarItem [advice_image=" + advice_image + ", detail_id="
+				+ detail_id + ", advice_id=" + advice_id + ", user_id="
+				+ user_id + ", comment_text=" + comment_text + "]";
+	}
+	
 }

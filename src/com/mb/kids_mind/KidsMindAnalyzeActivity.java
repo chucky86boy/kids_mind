@@ -2,6 +2,7 @@ package com.mb.kids_mind;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -24,6 +26,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 
 public class KidsMindAnalyzeActivity extends Activity {
 	//	  private MatOfInt             mHistSize;
@@ -86,11 +92,27 @@ public class KidsMindAnalyzeActivity extends Activity {
 	//			}
 	//		}
 	//	};
+	AdView adView;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.scan);
+		LinearLayout linear=(LinearLayout)findViewById(R.id.ad22);
+		adView=new AdView(KidsMindAnalyzeActivity.this);
+		 adView.setAdUnitId("a15310cae8ca108");
+		 adView.setAdSize(AdSize.BANNER);
+		 linear.addView(adView);
+		 final TelephonyManager tm =(TelephonyManager)getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+
+		 String deviceid = tm.getDeviceId();
+		 Log.v("MainActivity",deviceid);
+		 AdRequest adRequest = new AdRequest.Builder()
+		    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+		    
+		    .addTestDevice(deviceid)
+		    .build();
+		adView.loadAd(adRequest);
 		//		if (!OpenCVLoader.initDebug()) {
 
 		//	} else{
@@ -243,6 +265,24 @@ public class KidsMindAnalyzeActivity extends Activity {
 	}
 	// TODO Auto-generated method stub
 	//}
+
+	@Override
+	protected void onDestroy() {
+		 if (adView != null) {
+		      adView.destroy();
+		    }
+
+		super.onDestroy();
+	}
+
+	@Override
+	protected void onPause() {
+		if (adView != null) {
+		      adView.pause();
+		    }
+
+		super.onPause();
+	}
 
 	@Override 
 
@@ -431,6 +471,10 @@ public class KidsMindAnalyzeActivity extends Activity {
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
+		 if (adView != null) {
+		      adView.resume();
+		    }
+
 		super.onResume();
 		//		if (!OpenCVLoader.initDebug()) {
 		//

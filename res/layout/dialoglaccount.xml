@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_00"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:background="@drawable/navi_bar"
+     android:gravity="center_vertical" >
+
+        <Button
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/back2"
+            />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:text="회원가입"
+            android:textColor="#ffffffff"
+            
+          android:textSize="17sp" />
+
+    </LinearLayout>
+
+    
+
+        <LinearLayout
+            android:id="@+id/bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_join"
+            android:gravity="center|bottom"
+            android:layout_marginTop="20dp"
+            android:paddingBottom="20dp"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/editText1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/box_email"
+                android:ems="10"
+                android:paddingLeft="45dp"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:textSize="13sp"
+                android:hint="info@km.com" />
+
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+               android:layout_marginBottom="5dp"
+                android:background="@drawable/box_pwl"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:paddingLeft="45dp"
+                android:textSize="13sp"
+                android:hint="비밀번호 입력"
+                
+                android:singleLine="true"
+                android:inputType="textPassword" />
+
+             <EditText
+                android:id="@+id/editText3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+              android:layout_marginBottom="10dp"
+              android:textSize="13sp"
+                android:background="@drawable/box_pwl"
+                android:ems="10"
+                android:paddingLeft="45dp"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:hint="비밀번호 확인"
+                android:inputType="textPassword" />
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btnok" />
+        </LinearLayout>
+
+  
+
+</LinearLayout>

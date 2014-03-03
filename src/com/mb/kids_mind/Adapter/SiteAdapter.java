@@ -44,6 +44,7 @@ public class SiteAdapter extends BaseAdapter {
 	List<Integer> list6 ;
 	List<Integer> list7 ;
 	List<Integer> list8 ;
+	List<Integer> list9 ;
 	
 	int numInt;
 	int temp;
@@ -100,7 +101,7 @@ public class SiteAdapter extends BaseAdapter {
 			// This must be done for performance reasons
 			holder = new Holder();
 			holder.title = (TextView) cView.findViewById(R.id.textView1);
-			holder.title.setTextColor(0xff888991);
+			
 			// holder.siteImage = (ImageView)
 			// cView.findViewById(R.id.siteImage);
 			holder.hlView = (TwoWayView) cView.findViewById(R.id.list);
@@ -328,6 +329,26 @@ public class SiteAdapter extends BaseAdapter {
 
 					}
 			break;
+		case 9:
+			Log.v(TAG, "포지션 8인데");
+			
+			String str10 = pref.getString("list10", "");
+			//holder.itemAdapter.list0.clear();
+			//list0.clear();
+		list9 = new ArrayList<Integer>();
+			String[] detail10 = str10.split(",");
+			for (String cha : detail10) {
+				Log.v(TAG, "자른아이디7" + cha);
+				try {
+					numInt = Integer.parseInt(cha);
+					list9.add(numInt);
+				} catch (Exception e) {
+					list9.removeAll(list9);
+				}
+				
+
+			}
+			break;
 		
 		}
 
@@ -360,11 +381,11 @@ public class SiteAdapter extends BaseAdapter {
 		case 0:
 		if("T01".equals(tag_id)){
 			selectTab("T1",ilist,list0,0);
-			}else if("T07".equals(tag_id)){
-				selectTab("T7",ilist,list0,0);
-				}else if("T16".equals(tag_id)){
+			}else if("T08".equals(tag_id)){
+				selectTab("T8",ilist,list0,0);
+				}else if("T18".equals(tag_id)){
 					selectTab(tag_id,ilist,list0,0);
-							}else if("T23".equals(tag_id)){
+							}else if("T26".equals(tag_id)){
 								selectTab(tag_id,ilist,list0,0);
 								}
 
@@ -432,77 +453,84 @@ public class SiteAdapter extends BaseAdapter {
 //			}
 			if("T02".equals(tag_id)){
 				selectTab("T2",ilist,list1,1);
-				}else if("T08".equals(tag_id)){
-					selectTab("T8",ilist,list1,1);
-					}else if("T17".equals(tag_id)){
+				}else if("T09".equals(tag_id)){
+					selectTab("T9",ilist,list1,1);
+					}else if("T19".equals(tag_id)){
 						selectTab(tag_id,ilist,list1,1);
-								}else if("T24".equals(tag_id)){
+								}else if("T27".equals(tag_id)){
 									selectTab(tag_id,ilist,list1,1);
 									}
 			break;
 		case 2:
 			if("T03".equals(tag_id)){
 				selectTab("T3",ilist,list2,2);
-				}else if("T09".equals(tag_id)){
-					selectTab("T9",ilist,list2,2);
-					}else if("T18".equals(tag_id)){
+				}else if("T10".equals(tag_id)){
+					selectTab("T10",ilist,list2,2);
+					}else if("T20".equals(tag_id)){
 						selectTab(tag_id,ilist,list2,2);
-								}else if("T25".equals(tag_id)){
+								}else if("T28".equals(tag_id)){
 									selectTab(tag_id,ilist,list2,2);
 									}
 			break;
 		case 3:
 			if("T04".equals(tag_id)){
 				selectTab("T4",ilist,list3,3);
-				}else if("T10".equals(tag_id)){
+				}else if("T11".equals(tag_id)){
 					selectTab(tag_id,ilist,list3,3);
-					}else if("T19".equals(tag_id)){
+					}else if("T21".equals(tag_id)){
 						selectTab(tag_id,ilist,list3,3);
-								}else if("T26".equals(tag_id)){
+								}else if("T29".equals(tag_id)){
 									selectTab(tag_id,ilist,list3,3);
 									}
 			break;
 		case 4:
 			if("T05".equals(tag_id)){
 				selectTab("T5",ilist,list4,4);
-				}else if("T11".equals(tag_id)){
+				}else if("T12".equals(tag_id)){
 					selectTab(tag_id,ilist,list4,4);
-					}else if("T20".equals(tag_id)){
+					}else if("T22".equals(tag_id)){
 						selectTab(tag_id,ilist,list4,4);
-								}else if("T27".equals(tag_id)){
+								}else if("T30".equals(tag_id)){
 									selectTab(tag_id,ilist,list4,4);
 									}
 			break;
 		case 5:
 			if("T06".equals(tag_id)){
 				selectTab("T6",ilist,list5,5);
-				}else if("T12".equals(tag_id)){
+				}else if("T13".equals(tag_id)){
 					selectTab(tag_id,ilist,list5,5);
-					}else if("T21".equals(tag_id)){
+					}else if("T23".equals(tag_id)){
 						selectTab(tag_id,ilist,list5,5);
-								}else if("T28".equals(tag_id)){
-									selectTab(tag_id,ilist,list5,5);
-									}
+								}
 			break;
 		case 6:
-			 if("T13".equals(tag_id)){
+			if("T07".equals(tag_id)){
+				selectTab("T7", ilist, list6, 6);
+			}
+			else if("T14".equals(tag_id)){
 					selectTab(tag_id,ilist,list6,6);
-					}else if("T22".equals(tag_id)){
+					}else if("T24".equals(tag_id)){
 						selectTab(tag_id,ilist,list6,6);
-								}else if("T28".equals(tag_id)){
-									selectTab(tag_id,ilist,list6,6);
-									}
+								}
 			break;
 		case 7:
-			if("T14".equals(tag_id)){
+			if("T15".equals(tag_id)){
 				selectTab(tag_id,ilist,list7,7);
-				}
+				}else if("T25".equals(tag_id)){
+					selectTab(tag_id,ilist,list7,7);
+					}
 			break;
 		case 8:
-			if("T15".equals(tag_id)){
+			if("T16".equals(tag_id)){
 				selectTab(tag_id,ilist,list8,8);
 				}	
 			break;
+		case 9:
+			if("T17".equals(tag_id)){
+				selectTab(tag_id,ilist,list9,9);
+				}
+			break;
+		
 			
 		}
 
@@ -514,12 +542,12 @@ public class SiteAdapter extends BaseAdapter {
 	public void selectTab(String tag,ArrayList<DetailListItem> ilist,List<Integer> listinteger,int position ) {
 		openDB();
 		Log.v(TAG, "탭 디비 시작");
-
+		Log.v(TAG,"태그값"+tag);
 		Cursor c = null;
 		String wStr = "tag_id=?";
 		String[] wherStr = { tag };
-		String[] colNames = { "detail_id", "detail_title", "detail_content",
-				"detail_image", "tag_id" };
+		String[] colNames = { "detail_id","detail_image", "detail_title", "detail_contents",
+				 "tag_id" };
 		try {
 			c = db.query("km_question_detail", colNames, wStr, wherStr, null,
 					null, null);
@@ -529,10 +557,14 @@ public class SiteAdapter extends BaseAdapter {
 				
 				ditem = new DetailListItem();
 				ditem.setPosition(position);
-				ditem.setDetail_id(c.getString(0));
-				ditem.setDetail_tilte(c.getString(1));
-				// ditem.setDetail_content(c.getString(2));
-				ditem.setDetail_image(c.getString(3));
+				ditem.setDetail_id(c.getString(c.getColumnIndex("detail_id")));
+				Log.v(TAG,"c.getString("+c.getString(c.getColumnIndex("detail_id")));
+				ditem.setDetail_tilte(c.getString(c.getColumnIndex("detail_title")));
+				Log.v(TAG,"c.getString("+c.getString(c.getColumnIndex("detail_title")));
+				
+				ditem.setDetail_image(c.getString(c.getColumnIndex("detail_image")));
+				Log.v(TAG,"c.getString("+c.getString(c.getColumnIndex("detail_image")));
+				
 				int size = listinteger.size();
 
 				if(size !=0){

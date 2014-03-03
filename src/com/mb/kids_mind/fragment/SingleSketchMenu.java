@@ -27,26 +27,30 @@ import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mb.kids_mind.KidsMindAddActivity;
 import com.mb.kids_mind.KidsMindAnalyzeActivity;
 import com.mb.kids_mind.KidsMindDrawActivity;
-import com.mb.kids_mind.KidsMindInfoActivity;
+import com.mb.kids_mind.KidsMindNoticeActivity;
+import com.mb.kids_mind.MainActivity;
 import com.mb.kids_mind.R;
 import com.mb.kids_mind.Helper.KidsMindDBHelper;
 import com.mb.kids_mind.task.ViewResizeTask;
 public class SingleSketchMenu extends Fragment{
 	private static final String TAG="MainActivity";
-	public int[] menuImage;
+	int[] menuImage = {R.drawable.note_01,R.drawable.menu_01,R.drawable.menu_02,R.drawable.menu_03,R.drawable.menu_04};
+	
 	private int position;
 	public LinearLayout img; 
 	
@@ -101,9 +105,9 @@ public class SingleSketchMenu extends Fragment{
 				break;
 			case R.id.button1:
 				
-				Intent in2=new Intent(activity,KidsMindInfoActivity.class);
-				startActivity(in2);
-				dialog.dismiss();
+//				Intent in2=new Intent(activity,KidsMindInfoActivity.class);
+//				startActivity(in2);
+//				dialog.dismiss();
 				break;
 			}
 
@@ -147,14 +151,15 @@ public class SingleSketchMenu extends Fragment{
 	
 		Log.v(TAG,"iscale"+iscale+"");
 		img = (LinearLayout) view.findViewById(R.id.singeMenu);
+		ImageView img2 = (ImageView) view.findViewById(R.id.imageView1);
 		
 //		Button btn=(Button)view.findViewById(R.id.button1);
 //		if(position==0){
 //		btn.setBackgroundResource(R.drawable.startnode);
 //		}
-		new ViewResizeTask(img, 7f/10f, 7f/10f,this).execute();
-		img.setBackgroundResource(menuImage[position]);
-		img.setOnTouchListener(new OnTouchListener() {
+		new ViewResizeTask(img, 7.8f/10f, 7.8f/10f,this).execute();
+		img2.setBackgroundResource(menuImage[position]);
+		img2.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				switch(event.getAction()){
@@ -165,9 +170,18 @@ public class SingleSketchMenu extends Fragment{
 					if(position!=0){
 						SharedPreferences pref=activity.getSharedPreferences("pref",activity.MODE_PRIVATE);
 						SharedPreferences.Editor editor=pref.edit();
+						if(position==menuImage.length-1){
+							editor.putInt("qp", position);
+							editor.putString("qposition","Q5");
+							editor.commit();
+							Intent in=new Intent(activity,KidsMindNoticeActivity.class);
+							startActivity(in);
+						}else{
 						int count=pref.getInt("babycount", 0);
 						if(count==0){
 							Toast.makeText(activity, "아이를 추가해 주세요", Toast.LENGTH_SHORT).show();
+							Intent in=new Intent(activity,KidsMindAddActivity.class);
+							startActivity(in);
 						}else{
 						
 						editor.putInt("qposition", position);
@@ -176,50 +190,53 @@ public class SingleSketchMenu extends Fragment{
 
 						switch (position)
 						{
-						case 0:
-							editor.putInt("qp", position);
-							editor.putString("qposition","Q1");
-							editor.commit();
-
-							popupImage(activity);
-							
-							//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
-							break;
 						case 1:
 							editor.putInt("qp", position);
-							
-							editor.putString("qposition","Q2");
+							editor.putString("qposition","Q4");
 							editor.commit();
 
-							popupImage(activity);
+							popupImage(activity,1,R.drawable.b1);
+							
 							//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
-
 							break;
 						case 2:
 							editor.putInt("qp", position);
 							
-							editor.putString("qposition","Q3");
+							editor.putString("qposition","Q1");
 							editor.commit();
 
-							popupImage(activity);
+							popupImage(activity,2,R.drawable.b2);
 							//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
 
 							break;
 						case 3:
 							editor.putInt("qp", position);
 							
-							editor.putString("qposition","Q4");
+							editor.putString("qposition","Q2");
 							editor.commit();
 
-							popupImage(activity);
+							popupImage(activity,3,R.drawable.b3);
+							//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
+
+							break;
+						case 4:
+							editor.putInt("qp", position);
+							
+							editor.putString("qposition","Q3");
+							editor.commit();
+
+							popupImage(activity,4,R.drawable.b4);
 							//Toast.makeText(activity, "position"+position+"", Toast.LENGTH_SHORT).show();
 
 							break;
 						}
 						}
 						}
+						}
 						else{
-							popupIntro(activity);
+							//popupIntro(activity);
+							((MainActivity)activity).infoview.setVisibility(View.VISIBLE);
+							
 						}
 					break;
 				case MotionEvent.ACTION_MOVE:
@@ -309,10 +326,33 @@ public class SingleSketchMenu extends Fragment{
 			}
 		}
 	}
-	void popupImage(Activity context)
+	TextView ti;
+	void popupImage(Activity context,int position,int res)
 	{
 		dialog.setContentView(R.layout.mydialog);
-		dialog.findViewById(R.id.camera).setOnClickListener(bHandler);
+		LinearLayout linear =(LinearLayout)dialog.findViewById(R.id.pop);
+		linear.setBackgroundResource(res);
+//		ti=(TextView)dialog.findViewById(R.id.textView1);
+//		ti.setTextColor(0xff000000);
+//		ti.setGravity(Gravity.CENTER);
+//		switch(position){
+//		case 1:
+//			ti.setText("종이를 가로로 놓고 어항 속의 물고기 가족을 그리세요."+"(자신의 가족 구성원을 대입하여 그리며 어항 속을 자유롭게 꾸며주세요)");
+//			break;
+//		case 2:
+//			ti.setText("종이를 가로로 놓고 집을 그리세요");
+//			
+//			break;
+//		case 3:
+//			ti.setText("종이를 세로로 놓고 나무를 그리세요");
+//			
+//			break;
+//		case 4:
+//			ti.setText("종이를 세로로 놓고 사람을 그리세요"+"(사람을 그릴 때 막대 인물상이나 만화처럼 그리지 말고 사람 전체를 그리세요)");
+//			
+//			break;
+//		}
+		dialog.findViewById(R.id.camera).setVisibility(View.GONE);
 		dialog.findViewById(R.id.picture).setOnClickListener(bHandler);
 		dialog.findViewById(R.id.album).setOnClickListener(bHandler);
 		dialog.show();

@@ -15,8 +15,10 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.mb.kids_mind.Item.BabyInformationItem;
 import com.mb.kids_mind.Item.Const;
 import com.mb.kids_mind.Item.Debugc;
 
@@ -53,64 +56,12 @@ public class KidsMindLoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 			setContentView(R.layout.dialoglogin);
 			
-			LinearLayout bg= (LinearLayout)findViewById(R.id.bg);
 			
 			
 			id=(EditText)findViewById(R.id.editText1);
 			pw=(EditText)findViewById(R.id.editText2);
 			aquery = new AQuery(this);
-			Intent in=getIntent();
-			String where=in.getStringExtra("wh");
-			if("c".equals(where)){
-			bg.setBackgroundResource(R.drawable.bg_join);
-			pref=getSharedPreferences("pref", MODE_PRIVATE);
-			SharedPreferences.Editor editor=pref.edit();
-		
-			findViewById(R.id.back_btn).setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					finish();	
-				}
-			});
-			findViewById(R.id.button1).setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					user_name3 =id.getText().toString();
-					user_pwd3 = pw.getText().toString();
-
-					if(user_name3.contains("@")&&user_name3.contains(".")){
-						String auth=pref.getString("authkey", "");
-						String first=pref.getString("first", "");
-						int user_id=pref.getInt("user_id", 0);
-						//if("".equals(auth)){
-						Log.v(TAG,"1");
-						Log.v(TAG,"가입시user_name3"+user_name3+"user_pwd"+user_pwd3);
-						asyncNicknameCheckJson(user_name3);
-					}else{
-						Toast.makeText(KidsMindLoginActivity.this, "유효하지 않은 메일 형식 입니다", Toast.LENGTH_SHORT).show();
-					}
-					//			}else{
-					//				Log.v(TAG,"2");
-					//				Log.v(TAG,"로그인시user_name3"+user_id+""+"auth"+auth);
-					//				asyncAutoLoginJson(user_id,auth);
-					//				//asyncLoginJson(user_name3, user_pwd3);
-					//			}
-
-				}
-			});
-			regId = getRegistrationId(this);
-			if(regId.equals("")){
-				Log.v(TAG, "없어요");
-				registerInBackground();
-			}else{
-
-				Log.v(TAG, " regId : " + regId);
-			}
-		}else{
-			pref=getSharedPreferences("pref", MODE_PRIVATE);
+						pref=getSharedPreferences("pref", MODE_PRIVATE);
 			SharedPreferences.Editor editor=pref.edit();
 			findViewById(R.id.back_btn).setOnClickListener(new OnClickListener() {
 
@@ -151,7 +102,7 @@ public class KidsMindLoginActivity extends Activity {
 
 			//asyncLoginJson(user_name, user_pwd);
 
-		}
+		
 
 	}
 	private void unRegisterInBackground() {
@@ -310,6 +261,7 @@ public class KidsMindLoginActivity extends Activity {
 				boolean isSuccess = json.getString("result").equals(Const.SUCCESS);
 
 				if (isSuccess) {
+					
 					int user_id = json.getInt("user_id");
 					String user_name = json.getString("user_name");
 					String authkey = json.getString("authkey");
@@ -322,7 +274,8 @@ public class KidsMindLoginActivity extends Activity {
 					editor.putString("login_check", "checked");
 					editor.putString("user_name", user_name);
 					editor.putInt("user_id", user_id);
-
+					editor.putString("wlogin", "kidsmind");
+					
 					editor.putString("authkey", authkey);
 					editor.putString("user_pwd", user_pwd3);
 					editor.commit();
@@ -390,7 +343,14 @@ public class KidsMindLoginActivity extends Activity {
 					//					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					//					startActivity(intent);
 					//				finish();
-					KidsMindLoginActivity.this.setResult(RESULT_OK);
+					SharedPreferences pref =getSharedPreferences("pref", MODE_PRIVATE);
+	    		    SharedPreferences.Editor editor=pref.edit();
+	    		    editor.putString("noti", "");
+	    		    editor.commit();
+					Intent intent=new Intent(KidsMindLoginActivity.this,MainActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(intent);
+					
 					finish();
 
 					//	resultView.setText(json.toString());
@@ -443,9 +403,21 @@ public class KidsMindLoginActivity extends Activity {
 					editor.putInt("user_id",user_id );
 					editor.putString("user_name", user_name);
 					editor.putString("authkey", authkey);
+					editor.putString("noti", "");
+	    		    editor.commit();
 					editor.commit();
 					//String path=pref.getString("path", null);
-					KidsMindLoginActivity.this.setResult(RESULT_OK);
+//					String whe=pref.getString("last", "");
+//					if("".equals(whe)){
+//					Intent intent=new Intent(KidsMindLoginActivity.this,MainActivity.class);
+//					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//					startActivity(intent);
+//					}else{
+//						KidsMindLoginActivity.this.setResult(RESULT_OK);
+//							
+//					}
+					
+					
 					finish();
 
 
@@ -457,7 +429,13 @@ public class KidsMindLoginActivity extends Activity {
 					SharedPreferences.Editor editor=pref.edit();
 					editor.putString("acheck", null);
 					editor.commit();
-					openInfoMessageDialogBox(error);
+					if(error.contains("이미")){
+						asyncLogoutJson(user_name3, user_pwd3);
+					}else{
+						openInfoMessageDialogBox(error);
+						
+					}
+					
 				}
 			} catch (JSONException e) {
 				openErrorDialog();
@@ -470,12 +448,53 @@ public class KidsMindLoginActivity extends Activity {
 		}
 	}
 
-	/**
-	 * �α׾ƿ�
-	 * 
-	 * @param user_name
-	 * @param user_pwd
-	 */
+	public void asyncLogoutJson(String user_name, String user_pwd) {
+		// openWaitDialog();
 
+		String url = Const.LOGOUT_PATH;
 
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("user_name", user_name);
+		map.put("user_pwd", user_pwd);
+
+		aquery.ajax(url, map, JSONObject.class, this, "jsonLogoutCallback");
+
+		// sendView.setText(url);
+	}
+
+	public void jsonLogoutCallback(String url, JSONObject json,
+			AjaxStatus status) {
+		if (json != null) {
+			try {
+				aquery.ajaxCancel();
+				// closeWaitDialog();
+
+				boolean isSuccess = json.getString("result").equals(
+						Const.SUCCESS);
+
+				if (isSuccess) {
+					
+					Log.v(TAG, "logout성공");
+					asyncLoginJson(user_name3, user_pwd3);
+					
+				} else {
+					String error = json.getString("error");
+
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} else {
+		}
+	}
 }
+
+//	@Override
+//	public boolean onKeyDown(int keyCode, KeyEvent event) {
+//		if (keyCode == KeyEvent.KEYCODE_BACK) {
+//		
+//			SharedPreferences pref =getSharedPreferences(", mode)
+//		}
+//		return true;
+//	}
+//}
